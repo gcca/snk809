@@ -1,0 +1,211 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neom_webtools %}
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:applicant:dashboard' 'Candidatos' %}
+{% neodash_nav_item 'onboard:applicant:list' 'Lista' %}
+{% neodash_nav_item 'onboard:applicant:detail' 'Candidato' applicant_id=object.onboard.applicant.id %}
+{% neodash_nav_mark 'Anclas de Carrera' %}
+{% end_neodash_nav %}
+<h1>Respuestas del Test Anclas de Carrera: {{ object.applicant.name }}</h1>
+<table>
+  <tr>
+    <th>Pregunta</th>
+    <th>Respuesta</th>
+  </tr>
+  <tr>
+    <td>1. Me gustaría ser tan bueno en lo que hago que la gente me pida continuamente consejos y sugerencias.</td>
+    <td>{{ object.q1 }}</td>
+  </tr>
+ <tr>
+    <td>2. Me encuentro más satisfecho con mi trabajo cuando puedo integrar y gestionar los esfuerzos delos demás.</td>
+    <td>{{ object.q2 }}</td>
+  </tr>
+ <tr>
+    <td>3. Me gustaría tener una carrera que me permita autonomía y decidir los plazos</td>
+    <td>{{ object.q3 }}</td>
+  </tr>
+ <tr>
+    <td>4. La seguridad y la estabilidad son más importantes para mí que la libertad y autonomía.</td>
+    <td>{{ object.q4 }}</td>
+  </tr>
+ <tr>
+    <td>5. Siempre estoy buscando ideas que me permitan tener mi propio negocio.</td>
+    <td>{{ object.q5 }}</td>
+  </tr>
+ <tr>
+    <td>6. Considero que alcanzo el éxito en mi carrera sólo si tengo la sensación de haber contribuido al bienestar común.</td>
+    <td>{{ object.q6 }}</td>
+  </tr>
+ <tr>
+    <td>7. Me gustaría una carrera en la que pueda resolver problemas o salir ganando en situaciones muy desafiantes.</td>
+    <td>{{ object.q7 }}</td>
+  </tr>
+ <tr>
+    <td>8. Preferiría dejar mi empresa antes que ocupar un puesto que comprometiera mi atención a mi familia y vida personal.</td>
+    <td>{{ object.q8 }}</td>
+  </tr>
+ <tr>
+    <td>9. Para mí el éxito consiste en desarrollar mis capacidades técnicas o funcionales hasta convertirme en un experto.</td>
+    <td>{{ object.q9 }}</td>
+  </tr>
+ <tr>
+    <td>10. Me gustaría estar a cargo de una organización compleja y tomar decisiones que afecten a muchas personas.</td>
+    <td>{{ object.q10 }}</td>
+  </tr>
+ <tr>
+    <td>11. Estoy más satisfecho cuando tengo plena libertad para definir mis propias actividades, plazos y procedimientos.</td>
+    <td>{{ object.q11 }}</td>
+  </tr>
+ <tr>
+    <td>12. Preferiría dejar mi empresa antes que aceptar un proyecto que afectara mi seguridad dentro de la organización.</td>
+    <td>{{ object.q12 }}</td>
+  </tr>
+ <tr>
+    <td>13. Crear mi propio negocio es más importante que alcanzar un puesto directivo de alto nivel en otra organización.</td>
+    <td>{{ object.q13 }}</td>
+  </tr>
+ <tr>
+    <td>14. Me encuentro más satisfecho con mi carrera cuando puedo poner mi talento al servicio de los demás.</td>
+    <td>{{ object.q14 }}</td>
+  </tr>
+ <tr>
+    <td>15. Alcanzo el éxito en mi carrera sólo si me enfrento y supero grandes desafíos y retos.</td>
+    <td>{{ object.q15 }}</td>
+  </tr>
+ <tr>
+    <td>16. Me gustaría una carrera que me permita integrar mis necesidades personales, familiares y profesionales.</td>
+    <td>{{ object.q16 }}</td>
+  </tr>
+ <tr>
+    <td>17. Me atrae más llegar a ser un directivo senior dentro de mi área funcional antes que llegar a ser Director General.</td>
+    <td>{{ object.q17 }}</td>
+  </tr>
+ <tr>
+    <td>18. Alcanzo el éxito en mi carrera sólo si llego a ser director general de alguna empresa.</td>
+    <td>{{ object.q18 }}</td>
+  </tr>
+ <tr>
+    <td>19. Alcanzo el éxito en mi carrera sólo si logro autonomía y libertad plena.</td>
+    <td>{{ object.q19 }}</td>
+  </tr>
+ <tr>
+    <td>20. Busco trabajo dentro de organizaciones que me proporcionen seguridad y estabilidad.</td>
+    <td>{{ object.q20 }}</td>
+  </tr>
+ <tr>
+    <td>21. Me encuentro más satisfecho con mi carrera cuando he creado algo que es el resultado de mis propias ideas y esfuerzos.</td>
+    <td>{{ object.q21 }}</td>
+  </tr>
+ <tr>
+    <td>22. Es más importante para mí utilizar mis capacidades para crear un mundo donde se viva y trabaje mejor que tener un puesto directivo de alto nivel.</td>
+    <td>{{ object.q22 }}</td>
+  </tr>
+ <tr>
+    <td>23. Me he encontrado más satisfecho en mi carrera cuando he resuelto problemas aparentemente sin solución o he vencido cuando parecía imposible hacerlo.</td>
+    <td>{{ object.q23 }}</td>
+  </tr>
+ <tr>
+    <td>24. Me encuentro satisfecho con mi vida sólo cuando consigo alcanzar un equilibrio entre las exigencias de mi vida personal, familiar y profesional.</td>
+    <td>{{ object.q24 }}</td>
+  </tr>
+  <tr>
+    <td>25. Preferiría dejar mi empresa antes que aceptar un proyecto que me obligara a dejar mi área de especialización.</td>
+    <td>{{ object.q25 }}</td>
+  </tr>
+  <tr>
+    <td>26. Me atrae más llegar a ser director general que un directivo senior dentro de mi área de especialización.</td>
+    <td>{{ object.q26 }}</td>
+  </tr>
+  <tr>
+    <td>27. La oportunidad de realizar un trabajo según mis propios criterios, sin normas y limitaciones es más importante para mí que la seguridad.</td>
+    <td>{{ object.q27 }}</td>
+  </tr>
+  <tr>
+    <td>28. Me encuentro más satisfecho con mi trabajo cuando considero que he alcanzado seguridad financiera y profesional.</td>
+    <td>{{ object.q28 }}</td>
+  </tr>
+  <tr>
+    <td>29. Considero que alcanzo el éxito en mi carrera sólo si consigo crear o construir algo que es completamente mi propio producto o idea.</td>
+    <td>{{ object.q29 }}</td>
+  </tr>
+  <tr>
+    <td>30. Me gustaría tener una carrera que suponga una gran contribución a la humanidad y a la sociedad.</td>
+    <td>{{ object.q30 }}</td>
+  </tr>
+  <tr>
+    <td>31. Busco oportunidades de trabajo que pongan a prueba mi capacidad para resolver problemas o para competir.</td>
+    <td>{{ object.q31 }}</td>
+  </tr>
+  <tr>
+    <td>32. Encontrar el equilibrio entre las exigencias de mi vida personal y profesional es más importante que conseguir un puesto directivo de alto nivel.</td>
+    <td>{{ object.q32 }}</td>
+  </tr>
+  <tr>
+    <td>33. Me encuentro más satisfecho con mi trabajo cuando tengo oportunidad de usar mis capacidades y talentos.</td>
+    <td>{{ object.q33 }}</td>
+  </tr>
+  <tr>
+    <td>34. Preferiría dejar mi empresa antes que aceptar un puesto que me aleje del camino hacia la dirección general.</td>
+    <td>{{ object.q34 }}</td>
+  </tr>
+  <tr>
+    <td>35. Preferiría dejar mi empresa antes que aceptar un puesto que limite mi autonomía y libertad.</td>
+    <td>{{ object.q35 }}</td>
+  </tr>
+  <tr>
+    <td>36. Me gustaría tener una carrera que me permita sentir un cierto nivel de seguridad y estabilidad.</td>
+    <td>{{ object.q36 }}</td>
+  </tr>
+  <tr>
+    <td>37. Me gustaría crear y construir mi propio negocio.</td>
+    <td>{{ object.q37 }}</td>
+  </tr>
+  <tr>
+    <td>38. Preferiría dejar mi empresa antes que aceptar un proyecto que imitara mi capacidad de ayudar a los demás.</td>
+    <td>{{ object.q38 }}</td>
+  </tr>
+  <tr>
+    <td>39. Trabajar con problemas que aparentemente no tienen solución es más importante que alcanzar un puesto directivo de alto nivel.</td>
+    <td>{{ object.q39 }}</td>
+  </tr>
+  <tr>
+    <td>40. He buscado siempre oportunidades profesionales que no interfieran demasiado con mis preocupaciones personales y familiares.</td>
+    <td>{{ object.q40 }}</td>
+  </tr>
+  <tr>
+    <td>Pregunta Favorita 1</td>
+    <td>{{ object.favorite1 }}</td>
+  </tr>
+  <tr>
+    <td>Pregunta Favorita 2</td>
+    <td>{{ object.favorite2 }}</td>
+  </tr>
+  <tr>
+    <td>Pregunta Favorita 3</td>
+    <td>{{ object.favorite3 }}</td>
+  </tr>
+</table>
+<hr>
+<h3>Resultados por ancla: </h3>
+<table>
+  <tr>
+    <th>Ancla</th>
+    <th>Puntuación</th>
+  </tr>
+  <tr>
+    <td>{{ object.TopThreeRanking.0.name }}</td>
+    <td>{{ object.TopThreeRanking.0.score }}</td>
+  </tr>
+  <tr>
+    <td>{{ object.TopThreeRanking.1.name }}</td>
+    <td>{{ object.TopThreeRanking.1.score }}</td>
+  </tr>
+  <tr>
+    <td>{{ object.TopThreeRanking.2.name }}</td>
+    <td>{{ object.TopThreeRanking.2.score }}</td>
+  </tr>
+</table>

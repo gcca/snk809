@@ -1,0 +1,27 @@
+# Copyright Snk809, Inc. All rights reserved.
+# NEODASH TRANSLATIONS.
+# Copyright (C) 2023
+# This file is distributed under the same license as the neompy package.
+# Cristhian Gonzales Castillo <cristhian.gonzales@neomadas.com>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-24 20:57+0000\n"
+"PO-Revision-Date: 2023-01-24 20:58+0000\n"
+"Last-Translator: CRISTHIAN GONZALES <CRISTHIAN.GONZALES@NEOMADAS.COM>\n"
+"Language-Team: Cristhian Gonzales <cristhian.gonzales@neomadas.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: applicating/templates/applicating/affiliation/base.html:53
+msgid "Previous"
+msgstr "Anterior"
+
+#: applicating/templates/applicating/affiliation/base.html:54
+msgid "Next"
+msgstr "Siguiente"

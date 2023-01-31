@@ -1,0 +1,46 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'applicating/affiliation/base.html' %}
+{% block stephead-title %}¡Hola! Bienvenido a Neómadas{% endblock %}
+{% block stephead-subtitle %}Lorem ipsum{% endblock %}
+{% block stephead-count %}Paso 1 de 4{% endblock %}
+{% block stepform-body %}
+<fieldset>
+  <legend>¿Cómo podemos contactarte?</legend>
+  <div>
+    Correo electrónico: {{ form.email }}
+    {{ form.email.errors }}
+  </div>
+  <div>
+    Nombre de pila: {{ form.displayname }}
+    {{ form.displayname.errors }}
+  </div>
+  <div>
+    Nombre completo: {{ form.fullname }}
+    {{ form.fullname.errors }}
+  </div>
+  <div>
+    Número de whatsapp: {{ form.whatsappprefix }} {{ form.whatsappnumber }}
+    {{ form.whatsappnumber.errors }}
+    {{ form.whatsappprefix.errors }}
+  </div>
+</fieldset>
+<fieldset>
+  <legend>¿Cómo podemos contactarte?</legend>
+  <div>
+    País: {{ form.residencecountry }}
+    {{ form.residencecountry.errors }}
+  </div>
+  <div>
+    Ciudad: {{ form.residencecity }}
+    {{ form.residencecity.errors }}
+  </div>
+  <div>
+    Disponible para viajar a otro país: {{ form.allow_to_travel_country }}
+    {{ form.allow_to_travel_country.errors }}
+  </div>
+  <div>
+    Disponible para cambiar de ciudad: {{ form.allow_to_travel_city }}
+    {{ form.allow_to_travel_city.errors }}
+  </div>
+</fieldset>
+{% endblock %}

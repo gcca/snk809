@@ -1,0 +1,12 @@
+# Copyright Snk809, Inc. All rights reserved.
+- model: onboard.applicant
+  pk: 1
+  fields:
+    name: Bruce Wayne
+    email: bruce@wayne.com
+    gender: 1
+- model: onboard.onboard
+  pk: 1
+  fields:
+    slug: ce220ef060bb11edbbd1cf17990de5ba
+    resume: resumes/1/dummy.file

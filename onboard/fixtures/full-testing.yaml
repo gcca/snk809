@@ -1,0 +1,59 @@
+# Copyright Snk809, Inc. All rights reserved.
+- model: onboard.applicant
+  pk: 1
+  fields:
+    name: Bruce Wayne
+    email: bruce@wayne.com
+    gender: 1
+- model: onboard.applicant
+  pk: 2
+  fields:
+    name: Tony Stark
+    email: tony@stark.com
+    gender: 1
+- model: onboard.applicant
+  pk: 3
+  fields:
+    name: Harley Quinn
+    email: harley@quinn.com
+    gender: 2
+- model: onboard.applicant
+  pk: 4
+  fields:
+    name: Poison Ivy
+    email: poison@ivy.com
+    gender: 2
+- model: onboard.onboard
+  pk: 1
+  fields:
+    slug: 36082d14675c11ed85cee9bddddc0d00
+- model: onboard.onboard
+  pk: 2
+  fields:
+    slug: 36082d15675c11ed85cee9bddddc0d00
+- model: onboard.onboard
+  pk: 3
+  fields:
+    slug: 36082d16675c11ed85cee9bddddc0d00
+    process_name: Vacante para estrella polar del sur
+    process_link: http://busca.aquí.dot.net
+- model: onboard.onboard
+  pk: 4
+  fields:
+    slug: 36ebf648675c11ed85cee9bddddc0d00
+- model: auth.user
+  pk: 1
+  fields:
+    password: pbkdf2_sha256$390000$rvbp4o2ckp7Ua5s60fNIQb$QvTkiXsL+x9jxk54jKv1m6PtmCeQrXxSgFxhbi5gr8E=
+    last_login: 2022-11-18 15:06:26.200982+00:00
+    is_superuser: false
+    username: admin
+    first_name: ''
+    last_name: ''
+    email: admin@neomadas.com
+    is_staff: false
+    is_active: true
+    date_joined: 2022-11-18 15:06:24.129783+00:00
+    groups:
+    - 1
+    user_permissions: []

@@ -1,0 +1,395 @@
+{% load static %}
+<script>
+  function OnSecondStepClick(input) {
+    let form = input.form
+
+    let body = {}
+
+    let isTalent = document.getElementById('recolectar').checked == true
+    let isLancer = document.getElementById('disponibility').checked == true
+
+    body['isTalent'] = isTalent
+    body['isLancer'] = isLancer
+
+
+    let minimum = form['minimum'].value
+    let maximum = form['maximum'].value
+
+    let timeDisponibility = form['time-disponibility'].value
+    let modality = form['modality-wanted'].value
+
+    if (isTalent) {
+      if (minimum == '' || maximum == '') {
+        toastr.error('Debes indicar tu rango de sueldo deseado', 'Información incompleta')
+        return
+      }
+      if (parseFloat(maximum) < parseFloat(minimum)) {
+        toastr.error('El monto máximo de sueldo debe ser mayor al mínimo', 'Información incorrecta')
+        return
+      }
+      body['minimum'] = minimum
+      body['maximum'] = maximum
+      body['timeDisponibility'] = timeDisponibility
+      body['modality'] = modality
+    }
+
+    let experienceFreelance = form['experience-freelance'].value
+    let condition = form['condition'].value
+    let isHalfTime = condition == '1'
+    let isFullTime = condition == '2'
+
+    let availability = form['horas-semanales'].value
+
+    if (isLancer) {
+      body['isHalfTime'] = isHalfTime
+      body['isFullTime'] = isFullTime
+
+      if (isHalfTime) {
+        body['experience'] = experienceFreelance
+        body['availability'] = availability
+      }
+    }
+
+    let inputExperience = document.getElementById('inputExperience');
+    let inputMinimun = document.getElementById('inputMinimun');
+    let inputDisponibility = document.getElementById('inputDisponibility');
+    let inputModality = document.getElementById('inputModality');
+
+    //let roles = form['roles'].value
+
+    let rolesChecked = document.querySelectorAll('input[name=roles]:checked');
+
+    if (rolesChecked.length == 0) {
+      toastr.error('Debes seleccionar al menos 1 rol que esperas tomar', 'Información incompleta')
+      return
+    }
+    if (!isTalent && !isLancer) {
+      toastr.error('Debes seleccionar al menos una modalidad', 'Información incompleta')
+      return
+    }
+
+    let roles = []
+
+    for (var i = 0; i < rolesChecked.length; i++) {
+      roles.push(rolesChecked[i].value)
+    }
+
+    body['roles'] = roles
+
+    RemoteUpdateSecondStep(body)
+  }
+
+  function validateField(inputName, inputValue){
+    if (inputValue === ''){
+      toastr.error(`Debe ingresar un valor en ${inputName}`, 'Información incompleta');
+      return false
+    }
+    return true
+  }
+
+  function RemoteUpdateSecondStep(body) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:second-step' %}");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        // Si todo está ok que pase a la siguiente página
+        $('#smartwizard').smartWizard("next");
+      }
+    }
+
+    data = JSON.stringify(body);
+
+    xhr.send(data);
+  }
+
+  $(function() {
+    $('input[name="roles"]').bind("click", function(role) {
+      checked = $('input[name="roles"]:checked') 
+      nonChecked = $('input[name="roles"]:not(:checked)')
+      maxAllowed = 5
+      if (checked.length == maxAllowed) {
+        nonChecked.prop("disabled", true)
+      } else {
+        nonChecked.prop("disabled", false)
+      }
+    });
+  });
+  $(function () {
+    $("#recolectar").click(function () {
+      if ($(this).is(":checked")) {
+        $(".interested-recolection-one").show();
+        $(".title-interested-recolection-one").hide();
+      } else {
+        $(".interested-recolection-one").hide();
+        $(".title-interested-recolection-one").show();
+      }
+    });
+  });
+  $(function () {
+    $("#disponibility").click(function () {
+      if ($(this).is(":checked")) {
+        $(".interested-recolection-two").show();
+        $(".title-interested-recolection-two").hide();
+      } else {
+        $(".interested-recolection-two").hide();
+        $(".title-interested-recolection-two").show();
+      }
+    });
+  });
+  $(function () {
+    $("#fulltime-job").click(function () {
+      if ($(this).is(":checked")) {
+        $(".interested-recolection-two").show();
+        $(".title-interested-recolection-two").hide();
+      } else {
+        $(".interested-recolection-two").hide();
+        $(".title-interested-recolection-two").show();
+      }
+    });
+  });
+  {# TODO: Falta hacer que se muestre el contenido en la primera renderizada #}
+  $(function () {
+    $("#condition-radio").click(function () {
+      if ($(this).is(":checked")) {
+        $(".content-fulljob-time").css('display', 'flex');
+        $(".have-job").hide();
+      }
+    });
+    $("#condition-radio-two").click(function () {
+      if ($(this).is(":checked")) {
+        console.log("checked");
+        $(".content-fulljob-time").css('display', 'none');
+        $(".have-job").show();
+      }
+    });
+  });
+</script>
+
+
+<h4>¿Qué estas buscando? 🤔</h4>
+<form>
+  <div class="looking-for">
+    <section class="first-looking-for-section">
+      <h5>Qué tipo de rol esperas tomar</h5>
+      <p>
+        Selecciona de 1 a 5 roles que se ajusten a lo que estás buscando. Esto nos
+        ayudará a escoger mejor las ofertas para ti.
+      </p>
+      <main class="first-content-looking">
+        <div class="left-role">
+          <h5>Software Development</h5>
+          <label><input name="roles" type="checkbox" id="sd1" {% if "Frontend" in profile.roles %} checked {% endif %}
+              value="Frontend" /> Frontend</label>
+          <label><input name="roles" type="checkbox" id="sd2" {% if "Backend" in profile.roles %} checked {% endif %}
+              value="Backend" /> Backend</label>
+          <label><input name="roles" type="checkbox" id="sd3" {% if "Full Stack" in profile.roles %} checked {% endif %}
+              value="Full Stack" /> Full Stack</label>
+          <label><input name="roles" type="checkbox" id="sd4" {% if "Mobile" in profile.roles %} checked {% endif %}
+              value="Mobile" /> Mobile</label>
+          <label><input name="roles" type="checkbox" id="sd5" {% if "QA Testing" in profile.roles %} checked {% endif %}
+              value="QA Testing" /> QA Testing</label>
+          <label><input name="roles" type="checkbox" id="sd6" {% if "Software Architect" in profile.roles %} checked {% endif %} value="Software Architect" /> Software Architect</label>
+          <label><input name="roles" type="checkbox" id="sd7" {% if "Enterprise Solution Developer" in profile.roles %}
+              checked {% endif %} value="Enterprise Solution Developer" />
+            Enterprise Solution Developer</label>
+          <label><input name="roles" type="checkbox" id="sd8" {% if "Business Analyst" in profile.roles %} checked {% endif %} value="Business Analyst" /> Business
+            Analyst</label>
+          <label><input name="roles" type="checkbox" id="sd9" {% if "QA Security" in profile.roles %} checked {% endif %} value="QA Security" /> QA
+            Security</label>
+          <h5>Operation Management</h5>
+          <label><input name="roles" type="checkbox" id="om1" {% if "Solution Architect" in profile.roles %} checked {% endif %} value="Solution Architect" />
+            Solution Architect</label>
+          <label><input name="roles" type="checkbox" id="om2" {% if "Arquitecto Cloud" in profile.roles %} checked {% endif %} value="Arquitecto Cloud" />
+            Arquitecto Cloud</label>
+          <label><input name="roles" type="checkbox" id="om3" {% if "Devops" in profile.roles %} checked {% endif %}
+              value="Devops" /> Devops</label>
+        </div>
+        <div class="mid-role">
+          <h5>Data Management & Exploitation</h5>
+          <label><input name="roles" type="checkbox" id="dme1" {% if "Data Engineer" in profile.roles %} checked {% endif %} value="Data Engineer" /> Data
+            Engineer</label>
+          <label><input name="roles" type="checkbox" id="dme2" {% if "Data Modeler" in profile.roles %} checked {% endif %} value="Data Modeler" /> Data
+            Modeler</label>
+          <label><input name="roles" type="checkbox" id="dme3" {% if "Data Science" in profile.roles %} checked {% endif %} value="Data Science" /> Data
+            Science</label>
+          <label><input name="roles" type="checkbox" id="dme4" {% if "Machine Learning" in profile.roles %} checked {% endif %} value="Machine Learning" /> Machine
+            Learning</label>
+          <h5>Product & Service Design</h5>
+          <label><input name="roles" type="checkbox" id="psd1" {% if "Design Research" in profile.roles %} checked {% endif %} value="Design Research" /> Design
+            Research</label>
+          <label><input name="roles" type="checkbox" id="psd2" {% if "UX/UI Designers" in profile.roles %} checked {% endif %} value="UX/UI Designers" /> UX/UI
+            Designers</label>
+          <label><input name="roles" type="checkbox" id="psd3" {% if "Service Designer" in profile.roles %} checked {% endif %} value="Service Designer" /> Service
+            Designer</label>
+          <h5>Product Management & Business Agility</h5>
+          <label><input name="roles" type="checkbox" id="pmba1" {% if "Product Manager" in profile.roles %} checked {% endif %} value="Product Manager" /> Product
+            Manager</label>
+          <label><input name="roles" type="checkbox" id="pmba2" {% if "Product Owner" in profile.roles %} checked {% endif %} value="Product Owner" /> Product
+            Owner</label>
+          <label><input name="roles" type="checkbox" id="pmba3" {% if "Scrum Master" in profile.roles %} checked {% endif %} value="Scrum Master" /> Scrum
+            Master</label>
+        </div>
+        <div class="right-role">
+          <h5>Marketing</h5>
+          <label><input name="roles" type="checkbox" id="ma1" {% if "Diseñador gráfico" in profile.roles %} checked {% endif %} value="Diseñador gráfico" />
+            Diseñador gráfico</label>
+          <label><input name="roles" type="checkbox" id="ma2" {% if "Campaign Manager" in profile.roles %} checked {% endif %} value="Campaign Manager" /> Campaign
+            Manager</label>
+          <label><input name="roles" type="checkbox" id="ma3" {% if "Redactor creativo" in profile.roles %} checked {% endif %} value="Redactor creativo" /> Redactor
+            creativo</label>
+          <label><input name="roles" type="checkbox" id="ma3" {% if "Ejecutivo de cuentas" in profile.roles %} checked
+              {% endif %} value="Ejecutivo de cuentas" /> Ejecutivo de
+            cuentas</label>
+        </div>
+      </main>
+    </section>
+    <section class="second-looking-for-section">
+      <h5>Qué te trajo por aquí</h5>
+      <p>
+        Creemos firmemente que todos tenemos un lugar en el mundo donde nuestra
+        felicidad laboral es posible. Pero si buscas, adicionalmente, generar un
+        dinero extra en proyectos adecuados a tu conocimiento y a tus tiempos,
+        también somos la solución para ti.
+      </p>
+      <main class="second-content-looking">
+        <input type="checkbox" id="recolectar" name="checkTalent" {% if profile.isTalent %} checked {% endif %} />
+        <h5 class="title-interested-recolection-one" style="{% if profile.isTalent %} display: none;  {% endif %}">Me
+          interesa recolocarme en otra empresa, a su tiempo, y con mis condiciones.</h5>
+        <div class="interested-recolection-one" style="{% if profile.isTalent %} display: block;  {% endif %}">
+          <h5>
+            Me interesa recolocarme en otra empresa, a su tiempo, y con mis
+            condiciones.
+          </h5>
+          <pre>Mantendremos máxima confidencialidad de la información brindada.</pre>
+          <div>
+            <div class="box-disponibility-wanted">
+              <div class="box-disponibility">
+                <p>
+                  Tu disponibilidad a partir del día que presentas tu carta de
+                  renuncia
+                </p>
+                <div class="disponibility-content">
+                  <img src="{% static 'img/disponibility-icon.svg' %}" />
+                  <select id="disponibilidad" name="time-disponibility">
+                    <option value="1" {% if profile.disponibility == '1' %} selected {% endif %}>1 semana</option>
+                    <option value="2" {% if profile.disponibility == "2" %} selected {% endif %}>2 semanas</option>
+                    <option value="3" {% if profile.disponibility == "3" %} selected {% endif %}>3 semanas</option>
+                  </select>
+                </div>
+              </div>
+              <div class="box-wanted">
+                <p>
+                  Tu rango de sueldo deseado en soles (negociaremos para
+                  incrementarlo al máximo posible).
+                </p>
+                <div class="wanted-content">
+                  <img src="{% static 'img/currency-icon.svg' %}" />
+                  <span>Monto minimo
+                  <input name="minimum" type="number" placeholder="Monto mínimo"
+                  {% if profile.minimum %}
+                  value="{{profile.minimum}}"
+                  {% endif %}
+                  />
+                  </span>
+                  <span>Monto máximo
+                  <input name="maximum" type="number" placeholder="Monto maximo"
+                  {% if profile.maximum %}
+                  value="{{profile.maximum}}"
+                  {% endif %}
+                  />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="work-modality">
+              <p>Modalidad de trabajo que prefiero</p>
+              <div class="modality-wanted">
+                {% comment %} <label><input type="radio" name="modality-wanted" value="1" {% if profile.modality == "1" %} checked {% endif %} /> {% endcomment %}
+                <label><input type="radio" name="modality-wanted" value="1" checked />
+                  Totalmente Remoto</label>
+                <label><input type="radio" name="modality-wanted" value="2" {% if profile.modality == "2" %} checked {% endif %} />
+                  Híbrido</label>
+                <label><input type="radio" name="modality-wanted" value="3" {% if profile.modality == "3" %} checked {% endif %} />
+                  Oficina</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <main class="second-content-disponibility">
+        <input type="checkbox" id="disponibility" name="checkFreelancer" {% if profile.isLancer %} checked {% endif %} />
+        <h5 class="title-interested-recolection-two" style="{% if profile.isLancer %} display: none;  {% endif %}">
+          Me interesa generar dinero extra con proyectos que se ajusten a mi
+          disponibilidad y conocimiento
+        </h5>
+        <div class="interested-recolection-two" style="{% if profile.isLancer %} display: block;  {% endif %}">
+          <h5>
+            Me interesa generar dinero extra con proyectos que se ajusten a mi
+            disponibilidad y conocimiento
+          </h5>
+          <div class="disponibilidad-conocimiento">
+            <div class="fulltime-job">
+              <label>
+                {% comment %} <input id="condition-radio" type="radio" name="condition" value="1" {% if profile.condition == "Halftime" %} checked {% endif %} /> {% endcomment %}
+                <input id="condition-radio" type="radio" name="condition" value="1" {% if profile.condition == "Halftime" %} checked {% endif %} />
+                <p class="have-job">Tengo un trabajo a tiempo completo</p>
+                <div class="content-fulljob-time">
+                  Tengo un trabajo a tiempo completo
+                  <p>Mi experiencia haciendo freelance</p>
+                  <div class="experience-freelance-box"  >
+                    <label>
+                      <input type="radio" name="experience-freelance" value="1"  checked  />
+                      {% comment %} <input type="radio" name="experience-freelance" value="1" {% if profile.experience == '1' %} checked {% endif %} /> {% endcomment %}
+                      <span>Estoy iniciando en el mundo freelance</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="experience-freelance" value="2" {% if profile.experience == '2' %} checked
+                        {% endif %} />
+                      <span>Lo hago de vez en cuando, estoy familiarizado</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="experience-freelance" value="3" {% if profile.experience == '3' %} checked
+                        {% endif %} />
+                      <span>Soy un experto y tengo mi propia cartera de
+                        clientes</span>
+                    </label>
+                  </div>
+                  <label>Disponibilidad aproximada de horas semanales para posible
+                    freelance</label>
+                  <select name="horas-semanales" id="">
+                    <option value="4" {% if profile.availability == 4 %} selected {% endif %}>2 a 4 horas semanales
+                    </option>
+                    <option value="6" {% if profile.availability == 6 %} selected {% endif %}>4 a 6 horas semanales
+                    </option>
+                    <option value="8" {% if profile.availability == 8 %} selected {% endif %}>6 a 8 horas semanales
+                    </option>
+                    <option value="10" {% if profile.availability == 10 %} selected {% endif %}>+10 horas semanales
+                    </option>
+                  </select>
+                </div>
+              </label>
+            </div>
+            <div class="profile-radio-input top-separation">
+              <label><input id="condition-radio-two" type="radio" name="condition" value="2" {% if profile.condition == "Fulltime" %} checked {%endif %} /> Soy freelance a
+                tiempo completo</label>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+  </div>
+  <div class="button-container">
+    <button class="btn sw-btn-prev sw-btn" type="button">Anterior</button>
+    <button class="btn btn-primary" type="button" onclick="OnSecondStepClick(this)">Siguiente</button>
+  </div>
+</form>
+<script>
+  {% if profile.condition == "Halftime" %}
+    $(window).on("load", function() {
+      let rad = document.getElementById('condition-radio')
+      rad.click()
+    })
+  {% endif %}
+</script>

@@ -1,0 +1,129 @@
+  section {
+    padding-top: 2ex;
+  }
+  .container-top-title {
+    width: 100%;
+    padding-top: 25px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--bs-primary);
+  }
+  .container-top-title h2 {
+    color: var(--bs-primary);
+    font-weight: bold;
+  }
+  .container-top-title label {
+    color: var(--bs-secondary);
+  }
+  .container-sections {
+      padding-top: 30px;
+      display: flex;
+      flex-direction: row;
+    }
+  .container-sections > div{
+    width: 50%;
+    padding: 10px;
+  }
+  @media only screen and (max-width: 900px){
+    .container-sections {
+      padding-top: 10px;
+      display: inherit;
+    }
+
+    .container-sections > div{
+      width: 100%;
+      padding: 10px;
+    }
+  }
+  .information-section h3{
+    color: var(--bs-secondary);
+    font-weight: bold;
+  }
+  .button-end {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 20%;
+  }
+  .two-rows {
+    display: flex;
+    flex-direction: row;
+  }
+  .two-rows > div{
+    width: 50%;
+    padding: 10px;
+  }
+  .two-rows > div:first-child{
+    margin-right: 20px;
+  }
+
+  .chip-text{
+    cursor: inherit;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    white-space: nowrap;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 12px;
+    text-align: center;
+  }
+  #file-section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    padding: 0 10px 0 10px;
+    border-radius: 1em;
+    border: 1px none lightgray;
+  }
+  #file-section >div{
+    width: 25%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .file-container {
+    display: grid;
+    grid-template-rows: 20px 20px;
+    grid-template-columns: 40px 20px;
+    grid-gap: 5px;
+  }
+  .file-container-icon {
+    grid-column: 1;
+    grid-row-start: 1;
+    grid-row-end: 2;
+  }
+  .file-container-icon > img{
+    width: 40px;
+    height: 40px;
+  }
+  .file-container-name {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  #cv-file-section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    padding: 0 10px 0 10px;
+    border-radius: 1em;
+    border: 1px none lightgray;
+  }
+  #cv-file-section >div{
+    width: 25%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .file-container-cv {
+    display: grid;
+    grid-template-rows: 20px 20px;
+    grid-template-columns: 40px 20px;
+    grid-gap: 5px;
+  }
+  {# End File Container #}

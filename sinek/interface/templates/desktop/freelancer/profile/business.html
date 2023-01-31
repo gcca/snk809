@@ -1,0 +1,45 @@
+{% load luci_tags %}
+
+<script>
+  function OnBusinessClick(input){
+    let form = input.form
+
+    let businessSlimSelect = form['slimselect-businesses'];
+
+    let businesses = businessSlimSelect.slim.selected();
+
+    $.LoadingOverlay('show');
+    RemoteUpdateBusinesses(businesses)
+  }
+
+  function RemoteUpdateBusinesses(body) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:business-update' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tus rubros han sido actualizados con éxito', 'Carga Completa')
+      }
+    }
+
+    data = JSON.stringify(body);
+
+    xhr.send(data);
+  }
+</script>
+
+<section id="business" class="profile-section">
+  <div class="profile-input">
+    <h3 style="margin-bottom:0px;"> Industrias que conozco </h3>
+  </div>
+  <label>Escoge los rubros/industrias de las empresas que has trabajado o que conoces. Conocer el cómo funciona un rubro es un plus que consideraremos en algunos proyectos.</label>
+  <form id="business-form">
+    {% luci_freelancer_slimselect 'businesses' businessList profile.businesses %}
+    <div class="profile-btn-section">
+      <button class="btn-primary" type="button" onclick="OnBusinessClick(this)">Guardar Información</button>
+    </div>
+  </form>
+
+</section>

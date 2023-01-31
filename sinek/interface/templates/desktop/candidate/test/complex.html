@@ -1,0 +1,147 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:candidate:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ candidate.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .card{
+    width: 760px;
+  }
+  .app-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .table:not(.table-dark):not(.table-light) thead:not(.table-dark) th, .table:not(.table-dark):not(.table-light) tfoot:not(.table-dark) th{
+    text-align: center;
+  }
+  .timer{
+    width: 80px;
+    height: 80px;
+    position: fixed;
+    right: 100px;
+    top: 100px;
+  }
+  .pie {
+    width: 100px;
+    height: 100px;
+    display: block;
+    position: relative;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    border: 2px solid var(--bs-primary);
+    float: left;
+    margin: 2em;
+  }
+  .pie .block {
+    position: absolute;
+    background: #fff;
+    width: 90px;
+    height: 90px;
+    display: block;
+    border-radius: 50%;
+    top: 5px;
+    left: 5px;
+  }
+  #time {
+    font-size: 2em;
+    position: absolute;
+    top: 28%;
+    left: 23%;
+    color: #999;
+  }
+  .degree {
+     background-image: linear-gradient(90deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="timer">
+  Te quedan:
+  <div class="pie degree">
+    <span class="block"></span>
+    <span id="time">480</span>
+  </div>
+</div>
+
+<div class="container-flex-center">
+  <div class="card">
+    <div class="container-card">
+      <strong>Instrucciones:</strong>
+
+      <br><br>> Marque en la columna ""a"" a la altura de cada seguro de incendios o de accidentes desde 1500 a 4000 soles, contratado entre el 15 de marzo de 1975 y el 10 de mayo de 1976.
+      <br><br>> Marque en la columna ""b"" a la altura de cada seguro de vida o de accidentes, hasta 3000 soles, contratado entre el 15 de octubre de 1975 y el 20 de agosto de 1976.
+      <br><br>> Marque en la columna ""c"" a la altura de cada seguro de incendios o de vida, desde 2000 a 5000 soles. contratado entre el 10 de febrero de 1975 y el 15 de junio de 1976.
+
+    </div>
+  </div>
+</div>
+
+<form method="POST" id="complexForm"  action="{% url 'site:candidate:complex' %}">
+  {% csrf_token %}
+  <div class="card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>a</th>
+          <th>b</th>
+          <th>c</th>
+        </tr>
+      </thead>
+    {% for question in questions %}
+      <tbody>
+        <tr>
+          <td>{{question.number}}.{{question.statement}}</td>
+          <td><input type="checkbox" name="answer_{{ question.number }}_a"></td>
+          <td><input type="checkbox" name="answer_{{ question.number }}_b"></td>
+          <td><input type="checkbox" name="answer_{{ question.number }}_c"></td>
+        </tr>
+      </tbody>
+    {% endfor %}
+    </table>
+  </div>
+  <div class="container-flex-center">
+    <button type="submit">Enviar</button>
+  </div>
+</form>
+<script>
+  var totaltime = 480;
+  function update(percent){
+    var deg;
+    if(percent<(totaltime/2)){
+      deg = 90 + (360*percent/totaltime);
+        $('.pie').css('background-image',
+                  'linear-gradient('+deg+'deg, transparent 50%, white 50%),linear-gradient(90deg, white 50%, transparent 50%)'
+                );
+    } else if(percent>=(totaltime/2)){
+            deg = -90 + (360*percent/totaltime);
+            $('.pie').css('background-image',
+                  'linear-gradient('+deg+'deg, transparent 50%, #0076bb 50%),linear-gradient(90deg, white 50%, transparent 50%)'
+                );
+            }
+  }
+  var count = parseInt($('#time').text());
+  myCounter = setInterval(function () {
+    count-=1;
+    $('#time').html(count);
+      update(count);
+    if(count==totaltime) clearInterval(myCounter);
+  }, 1000);
+
+  setTimeout(function(){
+    document.getElementById("complexForm").submit();
+  }, 1000 * 60 * 8 - 2);{# TODO: Resolver latencia #}
+</script>
+{% endblock %}

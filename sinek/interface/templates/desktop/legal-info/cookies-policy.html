@@ -1,0 +1,12 @@
+{% extends "desktop/legal-info/base.html" %}
+
+{% block selectCookies %}
+<li id="selected"><img src="{{ imgs.LAPTOP_ICON }}"><a href="{% url 'site:legal-info:cookies-policy' %}">Política de cookies</a></li>
+{% endblock %}
+
+{% block legal-content %}
+<h2 class="tittle">Política de Cookies</h2>
+<hr class="tittle">
+<p></p>
+{% endblock %}
+

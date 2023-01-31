@@ -1,0 +1,210 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:hunter:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ user.hunter.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .btn-back {
+    padding: 20px 0;
+  }
+  .right {
+    display: flex;
+    justify-content: flex-end;
+  }
+  #chart {
+    max-width: 350px;
+  }
+  .card-header h4{
+    margin: 0;
+  }
+  .progress-bar-primary {
+    background-color: rgba(115, 103, 240, 0.12);
+  }
+  .progress .progress-bar:last-child {
+    border-top-right-radius: 5rem;
+    border-bottom-right-radius: 5rem;
+  }
+  .progress-bar-primary .progress-bar {
+    background-color: var(--bs-primary);
+  }
+  .progress-bar-warning .progress-bar {
+    background-color: var(--bs-warning);
+  }
+  .progress-bar-success .progress-bar {
+    background-color: var(--bs-success);
+  }
+  .progress-bar-info .progress-bar {
+    background-color: var(--bs-info);
+  }
+  .progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #7367f0;
+    transition: width 0.6s ease;
+  }
+  .progress {
+    font-size: 0.857rem;
+    display: flex;
+    height: 15px;
+    overflow: hidden;
+    font-size: 0.857rem;
+    background-color: rgba(115, 103, 240, 0.12);
+    border-radius: 5rem;
+  }
+  .percentage-group {
+    width: 50%;
+  }
+  .container-graphs {
+    display: flex;
+    gap: 60px;
+    flex-wrap: warp;
+  }
+  .percentage-group-bar {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .percentage-group-bar p {
+    margin-bottom: 0;
+    margin-left: 25px;
+    font-weight: bold;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+{% endblock %}
+
+{% block content %}
+<div class="btn-back">
+  <a href="{{request.META.HTTP_REFERER}}">Volver</a>
+</div>
+<div class="card">
+  <div class="card-header"><h4>La personalidad de {{name}} es</h4> <h4>{{ result.personalityText }}</h4></div>
+</div>
+<div class="container-graphs">
+  <div id="chart"></div>
+  <div class="percentage-group">
+    <h3>Resultado del candidato {{name}}</h3>
+    <p>Porcentaje de "D"</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-primary" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.pointsUserD }}%"
+        ></div>
+      </div>
+      <p>{{ result.pointsUserD }}%</p>
+    </div>
+    <p>Porcentaje de "I"</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-warning" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.pointsUserI }}%"
+        ></div>
+      </div>
+      <p>{{ result.pointsUserI }}%</p>
+    </div>
+    <p>Porcentaje de "S"</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-success" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.pointsUserS }}%"
+        ></div>
+      </div>
+      <p>{{ result.pointsUserS }}%</p>
+    </div>
+    <p>Porcentaje de "C"</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-info" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.pointsUserC }}%"
+        ></div>
+      </div>
+      <p>{{ result.pointsUserC }}%</p>
+    </div>
+  </div>
+</div>
+<script>
+  var options = {
+      series: [
+        {
+          name: "Desktops",
+          /* # TODO: Los puntos deben sacarse del result.points #  */
+          data: [null, {{ result.pointsPersonalityD }}, {{ result.pointsPersonalityI }}, {{ result.pointsPersonalityS }}, {{ result.pointsPersonalityC }}, null],
+        },
+      ],
+      chart: {
+        height: 350,
+        type: "line",
+        zoom: {
+          enabled: false,
+        },
+      },
+      colors: [ '#7367f0' ],
+      yaxis: {
+        tickAmount: 15,
+        min: 1,
+        max: 99,
+      },
+      markers: {
+        size: 9,
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "straight",
+      },
+      title: {
+        text: "Resultado DISC",
+        align: "left",
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5,
+        },
+      },
+      xaxis: {
+        categories: [" ", "D", "I", "S", "C", " "],
+      },
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
+
+{% endblock %}

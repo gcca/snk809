@@ -1,0 +1,15 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:googleform:dashboard' 'Google Form Tests' %}
+{% neodash_nav_mark 'Lista' %}
+{% end_neodash_nav %}
+<h1>Google Forms</h1>
+<ul>
+  {% for google_test in object_list %}
+  <li><a href="{% url 'onboard:googleform:detail' google_test.id %}">{{ google_test.title }}</a></li>
+  {% endfor %}
+</ul>

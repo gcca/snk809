@@ -1,0 +1,150 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:candidate:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+    <button class="dropbtn">Hola, {{ candidate.name }}</button>
+    <div class="dropdown-content">
+      <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+    .app-content{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    .app-content:first-child:h2{
+        justify-content: flex-start;
+    }
+    .card{
+        width: 700px!important;
+    }
+    .container-card{
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+    }
+    .container-card label{
+        margin: 0 10px;
+    }
+    .container-card .number{
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .container-card-instruction{
+        padding: 1.5rem 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-flex-center">
+  <div class="card">
+    <div class="container-card-instruction">
+      <strong>Instrucciones:</strong> A continuación leerás una serie de enunciados que tendrás que puntuar del 1 al 5, donde 1 representa "nada de acuerdo" y 5 "totalmente de acuerdo".
+      <br><br>¡Éxitos!
+    </div>
+  </div>
+</div>
+<form method="POST" action="{% url 'site:candidate:tmms24' %}">
+{% csrf_token %}
+{% for question in questions %}
+
+<div class="card">
+    <div class="card-header">
+        {{ question.number }}. {{ question.statement }}
+    </div>
+    <div class="container-card">
+        <div>
+            Nada de acuerdo
+        </div>
+        <div>
+            <label>
+                <div class="number">
+                    1
+                </div>
+                <div>
+                    <input type="radio" name="answer_{{ question.number }}" value="1">
+                </div>
+            </label>
+            <label>
+                <div class="number">
+                    2
+                </div>
+                <div>
+                    <input type="radio" name="answer_{{ question.number }}" value="2">
+                </div>
+            </label>
+            <label>
+                <div class="number">
+                    3
+                </div>
+                <div>
+                    <input type="radio" name="answer_{{ question.number }}" value="3">
+                </div>
+            </label>
+            <label>
+                <div class="number">
+                    4
+                </div>
+                <div>
+                    <input type="radio" name="answer_{{ question.number }}" value="4">
+                </div>
+            </label>
+            <label>
+                <div class="number">
+                    5
+                </div>
+                <div>
+                    <input type="radio" name="answer_{{ question.number }}" value="5">
+                </div>
+            </label>
+        </div>
+        <div>
+            Totalmente de acuerdo
+        </div>
+    </div>
+</div>
+{% endfor %}
+<div class="container-flex-center">
+    <button type="submit">Enviar</button>
+  </div>
+</form>
+{% if form.errors %}
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <img
+        src="https://www.freeiconspng.com/uploads/red-circular-image-error-0.png"
+        width="100"
+        alt="Success"
+      />
+      <span class="close">×</span>
+    </div>
+    <div class="modal-body">
+      <h4>¡Hay un error!</h4>
+      <p>Vuelve a completar.</p>
+    </div>
+  </div>
+</div>
+{% endif %}
+<script>
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function () {
+      modal.style.display = "none";
+    };
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+</script>
+{% endblock %}

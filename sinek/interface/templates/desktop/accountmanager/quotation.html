@@ -1,0 +1,241 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% load static %}
+
+{% block top-menu %}
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:dashboard-freelancer' %}">Dashboard</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Proveedores</a>
+</div>
+<div class="nav-icon nav-selected">
+  <img src="{{imgs.INITIATIVE_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:initiative-list' %}" onclick="pageChange();">Iniciativas</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.PROJECT_ICON}}">
+  <a class="linked" href="#">Projectos</a>
+</div>
+<div class="dropdown menu-right">
+  <button class="dropbtn"><img src="{% static 'img/cogwheel-blue.png' %}"></button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% block head %}
+{{ block.super }}
+<style>{% include 'desktop/accountmanager/freelancer-list.css' %}</style>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .container-top-title {
+    width: 100%;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .container-top-title h2 {
+    color: var(--bs-primary);
+    font-weight: bold;
+  }
+
+  .container-top-title label {
+    color: var(--bs-secondary);
+  }
+
+  .container-sections {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #left-section, #right-section {
+    width: 48%;
+  }
+  #left-section{
+    margin-right: calc(1.5 * var(--bs-square));
+    display: flex;
+    flex-direction: column;
+  }
+  #left-section select{
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+  }
+
+  #right-section{
+    margin-left: calc(1.5 * var(--bs-square));
+    display: flex;
+    flex-direction: column;
+  }
+  #right-section textarea{
+    border: 1px solid #d8d6de;
+    border-radius: 1em;
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+    padding-top: calc(1 * var(--bs-square));
+    padding-bottom: calc(1 * var(--bs-square));
+    padding-left: calc(2 * var(--bs-square));
+    padding-right: calc(2 * var(--bs-square));
+  }
+
+  @media only screen and (max-width: 1000px){
+    #left-section, #right-section {
+      width: 90%;
+      margin-left: none;
+      margin-right: none;
+    }
+  }
+
+  a{
+    color: #18A0FB;
+    border-bottom: 1px solid #18A0FB;
+    font-weight: bold;
+  }
+
+  .panel-3 input{
+    border: 1px solid #d8d6de;
+    border-radius: 1em;
+    max-width: 190px;
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+  }
+
+  .container-sections label {
+    color: black;
+  }
+  .luci-complex-select{
+    text-align: left;
+  }
+
+  .profile-section {
+    padding-top: calc(5 * var(--bs-square));
+    padding-bottom: calc(4 * var(--bs-square));
+    padding-right: calc(7 * var(--bs-square));
+    padding-left: calc(7 * var(--bs-square));
+    border-radius: 6px;
+    border: 1px solid rgba(44, 44, 44, .2);
+    margin-bottom: 2em;
+    background-color: white;
+  }
+
+  a[class="luci-outline-btn"]{
+    color: white !important;
+    background-color: #0079BC;
+  }
+  a[class="luci-outline-btn"]:hover{
+    box-shadow: 0 8px 25px -8px var(--bs-primary);
+  }
+
+  .button-section{
+    justify-content: right;
+    gap: calc(2 * var(--bs-square));
+    margin-top: calc(2 * var(--bs-square));
+  }
+  .button-section>a, .button-section>button{
+    width: 240px;
+  }
+  .text-line{
+    margin-bottom: calc(2 * var(--bs-square));
+  }
+</style>
+
+<script>
+  function pageChange(){
+    $.LoadingOverlay('show');
+  }
+
+  $(window).unload(function() {
+    $.LoadingOverlay('hide');
+  });
+</script>
+
+<section class="profile-section">
+
+  {# subheader #}
+  <div id="loader" class="center"></div>
+  <div class="container-top-title">
+    <div id="title-separator">
+      <div style="padding-right: 15px;">
+        <h2 style="color:#FF70A9;">Información de la iniciativa</h2>
+      </div>
+    </div>
+  </div>
+  {# end subheader #}
+
+  {# TODO: Poner esta etiqueta dentro del contenedor de información de iniciativa sin que se altere el diseño #}
+  <form method="POST" action="{% url 'site:accountmanager:update-initiative' %}">
+  {% csrf_token %}
+  <div class="container-sections">
+    <input type="hidden" name="initiativeCode" value="{{initiative.code}}"/>
+    <input type="hidden" name="account" value="{{initiative.companyCode}}"/>
+    <input type="hidden" name="contact" value="{{initiative.contact}}"/>
+    <input type="hidden" name="workKind" value="{{initiative.initiative.workKind.name}}"/>
+    <input type="hidden" name="name" value="{{initiative.name}}"/>
+    <input type="hidden" name="folderId" value="{{initiative.folderId}}"/>
+
+    <div id="left-section">
+      <div class="text-line">Empresa: <b>{{initiative.company}}</b></div>
+      <div class="text-line">Contacto: <b>{{initiative.contact}}</b></div>
+      <div class="text-line">Forma de Trabajo:
+        <span class="chip"
+          {% if initiative.workKindCode == 'MP' %} style="background-color:#0079BC;"
+          {% elif initiative.workKindCode == 'DP' %} style="background-color:#FF70A9;"
+          {% elif initiative.workKindCode == 'BH' %} style="background-color:#22bc00;" {% endif %}>
+          <span class="chip-content">
+            <label style="color:white; font-weight: bold;"> {{initiative.workKind}} </label>
+          </span>
+        </span>
+      </div>
+      <div class="text-line">Link de la carpeta drive: <a href="{{initiative.driveURL}}" target="_blank">Carpeta Drive</a></div>
+      <div class="text-line">Nombre clave: <b>{{initiative.name}}</b></div>
+      <div class="text-line">Estado de la iniciativa: </div>
+      <select name="state" class="luci-complex-select" style="max-width: 320px;">
+        {% for state in states %}
+        <option value="{{state.0}}" {% if initiative.state == state.1 %} selected="selected" {% endif %}
+          >{{state.1}}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div id="right-section">
+        <div class="container-sections" style="justify-content: space-between;">
+          <div class="panel-3">
+            <label> Monto aproximado (S/) </label>
+            <input name="amount" type="text" placeholder="Escribe un monto" value="{{initiative.amount}}"/>
+          </div>
+          <div class="panel-3">
+            <label> Fecha aproximada </label>
+            <input name="submission" type="date" value="{{initiative.submissionDateRead}}"/>
+          </div>
+          <div class="panel-3">
+            <label> Probabilidad (1-100%) </label>
+            <input name="successRate" type="text" placeholder="Escribe probabilidad" value="{{initiative.successRate}}"/>
+          </div>
+        </div>
+
+        <label>Objetivo de negocio de la iniciativa</label>
+        <textarea name="goal" placeholder="Escribir objetivo" rows="4" cols="50" value=>{{initiative.goal}}</textarea>
+
+        <div class="container-sections button-section">
+          <a class="luci-outline-btn" href="{% url 'site:accountmanager:initiative-list' %}" onclick="pageChange();">Cancelar y volver</a>
+          <button type="submit" class="luci-outline-btn">Actualizar</button>
+        </div>
+    </div>
+  </div>
+  </form>
+</section>
+{% endblock %}

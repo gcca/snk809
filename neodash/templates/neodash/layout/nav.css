@@ -1,0 +1,15 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+header nav ul {
+  user-select: none;
+}
+
+header nav ul > li {
+  list-style: none;
+  display: inline-block;
+  margin-right: 1em;
+}
+
+header nav ul > li:before {
+  content: "/";
+  margin-right: 1em;
+}

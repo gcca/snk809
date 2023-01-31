@@ -1,0 +1,58 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:hunter:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ user.hunter.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .content{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+  }
+  .content label{
+    width: 130px;
+  }
+  .container-card{
+    padding-top: 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'site:hunter:affiliation' %}">
+  {% csrf_token %}
+  <div class="card">
+    <div class="card-header">
+      <h3>Registrar Nuevo Candidato</h3>
+    </div>
+    <div class="container-card">
+      <div class="content">
+        <label>Nombre</label>
+        {{form.name}}
+      </div>
+      <div class="content">
+        <label>E-mail</label>
+        {{form.email}}
+      </div>
+      <div class="content">
+        <span>Género</span>
+        M<input type="radio" name="gender" value="0"/>
+        F<input type="radio" name="gender" value="1"/>
+      </div>
+      <button type="submit" class="btn-primary w-100" tabindex="3">Registrar</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+</div>

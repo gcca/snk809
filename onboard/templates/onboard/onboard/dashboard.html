@@ -1,0 +1,114 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/onboard/base.html' %}
+
+{% load static %}
+{% load neodash_md2 %}
+{% load neom_md2 %}
+{% load onboard_md2 %}
+{% load neom_webtools %}
+
+
+{% block content %}
+{% neom_md2_style %}
+{% neom_md2_icons %}
+
+<style>
+.{% _kt 'main' %} {
+  margin-left: 200px;
+  margin-right: 200px;
+  min-width: 650px;
+}
+
+.{% _kt 'card-container' %} {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.{% _kt 'card-wrapper' %} {
+  width: 248px;
+}
+
+.{% _kt 'disclaimer-text' %} {
+  text-transform: uppercase;
+  opacity: 60%;
+  font-size: 0.7rem;
+}
+
+
+{% onboard_md2_quiz_card_style %}
+</style>
+
+<div class="{% _kt 'main' %}">
+<h3 class="{% _kt 'mdc-typography--headline3' %}">Vacante: {{ onboard.process_name }}</h1>
+<section>
+  <h4 class="{% _kt 'mdc-typography--headline4' %}">Bienvenid@, {{ onboard.applicant.name }}👋</h2>
+  <p class="{% _kt 'mdc-typography--body1' %}">¡Gracias por participar en este proceso con nosotros! A continuación te presentamos unos cuestionarios breves que nos permitirán conocernos mejor. Por favor, contesta con total sinceridad y transparencia, mantendremos confidencialidad sobre tus respuestas 🤫 a personas ajenas al proceso.</p>
+  <p class="{% _kt 'mdc-typography--body1' %}">
+    <b>¿Por qué tomamos estos cuestionarios?</b>
+    Queremos saber si esta vacante es para ti. Todos tenemos un lugar en el mundo donde levantarse a trabajar un Lunes, de gusto ¡Ayúdanos a encontrar el tuyo!💘
+  </p>
+  <p class="{% _kt 'mdc-typography--body1' %}">Podrás ver toda la información de la vacante en el <a href="{{ onboard.process_link }}" target="_blank">siguiente link 📝.</a></p>
+</section>
+
+<section>
+  <div class="{% _kt 'card-container' %}">
+    {% if onboard.show_disc %}
+      <div class="{% _kt 'card-wrapper'%}">
+      {% url 'onboard:onboard:assessment:disc' slug as disc_url %}
+      {% static 'onboard/images/inputs/1.png' as disc_thumbnail %}
+      {% onboard_md2_quiz_card "Personalidad" "10 min" disc_thumbnail "¿Introvertido o extrovertido?¿Sentimental o racional? No existe una personalidad correcta o incorrecta. Para cada personalidad existe un trabajo ideal. Ayúdanos a conocer cuál es el tuyo." disc_url %}
+      </div>
+    {% endif %}
+
+    {% if onboard.show_tmms %}
+      <div class="{% _kt 'card-wrapper'%}">
+      {% url 'onboard:onboard:assessment:tmms' slug as tmms_url %}
+      {% static 'onboard/images/inputs/2.png' as tmms_thumbnail %}
+      {% onboard_md2_quiz_card "Emociones" "10 min" tmms_thumbnail "¿Cuánta atención presto a las emociones y sentimientos? Sé muy sincero y ayúdanos a conocer cómo prefieres interactuar con las demás personas." tmms_url %}
+      </div>
+    {% endif %}
+
+    {% if onboard.show_career_anchors %}
+      <div class="{% _kt 'card-wrapper'%}">
+      {% url 'onboard:onboard:assessment:career-anchors' slug as career_anchors_url %}
+      {% static 'onboard/images/inputs/3.png' as career_anchors_thumbnail %}
+      {% onboard_md2_quiz_card "Motivadores" "10 min" career_anchors_thumbnail "¿Qué factores te motivan a aceptar y mantenerte en un trabajo? ¡Permítenos conocerlos!" career_anchors_url %}
+      </div>
+    {% endif %}
+
+    {% if onboard.show_complex_instructions %}
+      <div class="{% _kt 'card-wrapper'%}">
+      {% url 'onboard:onboard:assessment:complex' slug as complex_instructions_url %}
+      {% static 'onboard/images/inputs/4.png' as complex_instruction_thumbnail %}
+      {% onboard_md2_quiz_card "Complejidad" "10 min" complex_instruction_thumbnail "Cada persona tiene una forma diferente de manejar la complejidad. Ayúdanos a conocer un poco más sobre cómo prefieres hacerlo, a través de un escenario preparado para ti." complex_instructions_url %}
+      </div>
+    {% endif %}
+
+    {% static 'onboard/images/inputs/5.png' as gform_thumbnail %}
+    {% for gform in googleforms %}
+      <div class="{% _kt 'card-wrapper'%}">
+      {% url 'onboard:onboard:googleform' slug gform.id as gform_url %}
+      {% onboard_md2_quiz_card gform.title "10 min" gform_thumbnail gform.description gform_url %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% if onboard.show_resume %}
+<section>
+  <h4 class="{% _kt 'mdc-typography--headline4' %}">Carga de CV actualizado</h2>
+  <p class="{% _kt 'mdc-typography--body1' %}"><b>No olvides actualizar tu CV  para este proceso.</b> Por favor ayúdanos a conocer tu experiencia narrando las principales responsabilidades y/o funciones realizadas de, al menos, los últimos tres(3) puestos de trabajo, con sinceridad.</p>
+  <p class="{% _kt 'mdc-typography--body1' %} {% _kt 'disclaimer-text' %}">Nota: El archivo debe tener un tamaño menor a 10 Mb. De preferencia en PDF. Si tu archivo PDF pesa más, te recomendamos usar herramientas gratuitas, en línea, como <a href="https://ilovepdf.com">ilovepdf.</a></p>
+  <form method="post" action="{% url 'onboard:onboard:resume' slug %}" enctype="multipart/form-data">{% csrf_token %}
+    <table>{{ resume_form }}</table>
+    <input type="submit" value="Guardar"/>
+  </form>
+  {% neodash_md2_icon_button_contained 'add' 'CARGAR MI CV ACTUALIZADO' %}
+</section>
+{% endif %}
+
+
+</div>
+{% endblock %}

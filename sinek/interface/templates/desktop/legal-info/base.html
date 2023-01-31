@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{%  load static %}
+
+{% block head %}
+{{ block.super}}
+<style>{% include 'desktop/legal-info/base.css' %}</style>
+{% endblock %}
+
+{% block body %}
+
+<section id="top-menu">
+  <nav class="top-bar">
+    <img src="{% static 'img/short-logo-pinkblue.png' %}" width="100px">
+    <h2 class="logo-brand tittle"><b>Servicios de ayuda</b></h2>
+  </nav>
+</section>
+
+<div id="dashboard-content" class="two-columns">
+  <section id="documents" class="first-column">
+    <div>
+      <ul id="menu">
+        {% block selectTerms %}
+        <li><img src="{{ imgs.INFO_ICON }}"><a href="{% url 'site:legal-info:terms-and-conditions' %}">Terminos y Condiciones</a></li>
+        {% endblock %}
+        {% block selectData %}
+        <li><img src="{{ imgs.DATA_PROTECTION_ICON }}"><a href="{% url 'site:legal-info:data-policy' %}">Política de datos</a></li>
+        {% endblock %}
+        {% comment %}
+        {% block selectCookies %}
+        <li><img src="{{ imgs.LAPTOP_ICON }}"><a href="#">Política de cookies</a></li>
+        {% endblock %}
+        {% endcomment %}
+      </ul>
+    </div>
+  </section>
+
+  <section id="content" class="second-column legal-content">
+    {% block legal-content %}{% endblock %}
+  </section>
+</div>
+{% endblock %}

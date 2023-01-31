@@ -1,0 +1,72 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:hunter:affiliation' %}">
+  Afiliar Candidato</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ user.hunter.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .container-search{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 0;
+  }
+  .container-search input{
+    width: 320px;
+  }
+  .table-hover{
+    width: 70%;
+  }
+  .table-hover > tbody > tr:hover {
+    background-color: rgb(110,107,123,0.1);
+  }
+  .table-hover tbody tr {
+    cursor: pointer;
+  }
+  .search, .search:focus{
+    background-color: white;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<br/>
+<h2>Lista de candidatos</h2>
+<div class="container-search">
+  <label>Buscar</label>
+  <input type="search" placeholder="Ingresar DNI y/o Nombres" class="search"/>
+</div>
+<div>
+  {% if candidates %}
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Test Completados</th>
+        <th>Detalles</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for check in candidates %}
+      <tr>
+        <td>{{check.candidateName}}</td>
+        <td>{{check.candidateEmail}}</td>
+        <td>{{check.completedCounter}}</td>
+        <td><a href="{% url 'site:hunter:candidate-info' check.candidateEmail %}">Ver más</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  {% endif %}
+{% endblock %}
+</div>

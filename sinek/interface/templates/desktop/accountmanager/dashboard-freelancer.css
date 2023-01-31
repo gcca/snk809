@@ -1,0 +1,141 @@
+section {
+  padding-top: 2ex;
+}
+
+{# TODO: Mover a common/dashboard #}
+
+.container-top-title {
+  width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--bs-primary);
+}
+
+.container-top-title h2 {
+  color: var(--bs-primary);
+  font-weight: bold;
+}
+
+.container-top-title label {
+  color: var(--bs-secondary);
+}
+
+.container-sections {
+  display: flex;
+  flex-direction: row;
+}
+
+#left-section, #right-section {
+  width: 50%;
+}
+#left-section{ margin-right: 1em; }
+#right-section{ margin-left: 1em; }
+
+
+@media only screen and (max-width: 900px){
+  .container-sections {
+    padding-top: 10px;
+    display: inherit;
+  }
+
+  .container-sections > div{
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+.container-sections h3{
+  color: var(--bs-secondary);
+  font-weight: bold;
+}
+
+{# end TODO #}
+
+#title-separator{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.two-rows {
+  display: flex;
+  flex-direction: row;
+}
+
+.two-rows > div:first-child{
+  margin-right: 20px;
+}
+
+#radio-flex {
+  display: flex;
+  gap: 30px;
+}
+
+.remove {
+  color: var(--bs-secondary);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px;
+  background-color: transparent;
+  border: transparent;
+}
+
+.profile-section {
+  padding: 25px;
+  border-radius: 6px;
+  border: 1px solid var(--bs-primary);
+  margin-bottom: 2em;
+}
+
+label.extra-information{
+  font-size: 80%;
+  color: #888888;
+}
+label.instructions{
+  font-size: 150%;
+  background-color: yellow;
+}
+
+{# File Container #}
+.file-container {
+  display: grid;
+  grid-template-rows: 40px 40px 20px;
+  grid-template-columns: 90px 30px;
+  grid-gap: 5px;
+}
+.file-container-icon {
+  grid-column: 1;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+.file-container-icon > img{
+  width: 80px;
+  height: 80px;
+}
+.file-container-name {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row: 3;
+}
+.file-container-erase {
+  grid-column: 2;
+  grid-row: 1;
+}
+.file-container-erase>img{
+  cursor: pointer;
+}
+.file-container-glass {
+  grid-column: 2;
+  grid-row: 2;
+}
+.luci-simple-select{
+  cursor: pointer;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
+}
+{# End File Container #}
+
+{% include 'desktop/accountmanager/dashboard-freelancer/tree.css' %}

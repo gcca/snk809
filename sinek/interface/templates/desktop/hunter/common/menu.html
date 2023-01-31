@@ -1,0 +1,9 @@
+<a class="linked" href="{% url 'site:hunter:affiliation' %}"
+  >Afiliar Candidato</a
+>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{user.username}}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>

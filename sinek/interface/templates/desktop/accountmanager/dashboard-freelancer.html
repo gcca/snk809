@@ -1,0 +1,115 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% load static %}
+
+{% block top-menu %}
+<div class="nav-icon nav-selected">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:dashboard-freelancer' %}">Dashboard</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Proveedores</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.INITIATIVE_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:initiative-list' %}" onclick="pageChange();">Iniciativas</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.PROJECT_ICON}}">
+  <a class="linked" href="#">Projectos</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.EVALUATION_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Pruebas</a>
+</div>
+<div class="dropdown menu-right">
+  <button class="dropbtn"><img src="{% static 'img/cogwheel-blue.png' %}"></button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% block head %}
+{{ block.super }}
+<style>{% include 'desktop/accountmanager/dashboard-freelancer.css' %}</style>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<script>
+  function OnPeriodChange(select){
+    $.LoadingOverlay('show');
+    form = select.form
+    form.submit()
+  }
+
+  function pageChange(){
+    $.LoadingOverlay('show');
+  }
+
+  $(window).unload(function() {
+    $.LoadingOverlay('hide');
+  });
+</script>
+
+{# subheader #}
+<div id="loader" class="center"></div>
+<div class="container-top-title">
+  <div id="title-separator">
+    <div style="padding-right: 15px;">
+      <h2>Dashboard</h2>
+    </div>
+    <div>
+      <form method="POST" action="{% url 'site:accountmanager:dashboard-freelancer' %}">
+        {% csrf_token %}
+        <div style="display:flex; justify-content:center; align-items:center;">
+          <label>Inicio</label><input id="start" value="{{start}}" name="start" type="date"/>
+          <label>Fin</label><input id="end" value="{{end}}" name="end" type="date"/>
+          <input type="submit" />
+        </div>
+        {% comment %}
+        <select class="luci-simple-select" name="period" onchange="OnPeriodChange(this)">
+          <option {% if not period or period == "0" %}selected{% endif %} value="0">Anual</option>
+          <option {% if period == "1" %}selected{% endif %} value="1">Mensual</option>
+          <option {% if period == "2" %}selected{% endif %} value="2">Semanal</option>
+        </select>
+        {% endcomment %}
+        <input type="checkbox" style='display:none;' name="tree-option-4" {% if layer4 %} checked {% endif %}
+          value="1">
+        <input type="checkbox" style='display:none;' name="tree-option-3" {% if layer3 %} checked {% endif %}
+          value="1">
+        <input type="checkbox" style='display:none;' name="tree-option-2" {% if layer2 %} checked {% endif %}
+          value="1">
+        <input type="checkbox" style='display:none;' name="tree-option-1" {% if layer1 %} checked {% endif %}
+          value="1">
+      </form>
+    </div>
+  </div>
+  <label>Información por periodo de los afiliados</label>
+</div>
+{# end subheader #}
+
+<div class="container-sections">
+
+  <div id="left-section">
+
+    {# Porcentaje de cambio con respecto al periodo anterior #}
+    {% include 'desktop/accountmanager/dashboard-freelancer/period-rate.html' %}
+
+    {# ranking #}
+    {% include 'desktop/accountmanager/dashboard-freelancer/country-ranking.html' %}
+  </div>
+
+  <div id="right-section">
+    {# service-tree #}
+    {% include 'desktop/accountmanager/dashboard-freelancer/service-tree-counter.html' %}
+  </div>
+</div>
+{% endblock %}

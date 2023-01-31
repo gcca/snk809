@@ -1,0 +1,12 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+<tr>
+  <td>{{ name }}</td>
+  <td>
+    {% if has_assessment %}
+    <a href="{% url assessment_detail_path object.id %}">Completado</a>
+    {% else %}
+    Pendiente
+    {% endif %}
+  </td>
+  <td>{% include 'onboard/applicant/toggle-visibility-form.html' with assessment_name=assessment_name slug=slug show=show %}</td>
+</tr>

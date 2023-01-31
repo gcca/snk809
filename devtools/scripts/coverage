@@ -1,0 +1,5 @@
+#!/bin/sh
+coverage run --source=neodash,onboard,customers \
+  --omit='*migrations*' \
+  manage.py test neodash onboard customers
+coverage html

@@ -1,0 +1,45 @@
+{% load luci_tags %}
+
+<script>
+  function OnProjectClick(input){
+    let form = input.form
+
+    let projectsSlimSelect = form['slimselect-projects'];
+
+    let projects = projectsSlimSelect.slim.selected();
+
+    $.LoadingOverlay('show');
+    RemoteUpdateProjects(projects)
+  }
+
+  function RemoteUpdateProjects(body) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:project-update' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tus proyectos han sido actualizados con éxito', 'Carga Completa')
+      }
+    }
+
+    data = JSON.stringify(body);
+
+    xhr.send(data);
+  }
+</script>
+
+<section id="project" class="profile-section">
+  <div class="profile-input">
+    <h3 style="margin-bottom:0px;"> Tipos de proyectos en los que he participado </h3>
+  </div>
+  <label>Cada proyecto es diferente, ya sea por los procesos de negocio involucrados o áreas que participaron. Escoge aquellos en los que has llevado un aprendizaje.</label>
+  <form id="project-form">
+    {% luci_freelancer_slimselect 'projects' projectList profile.projects %}
+    <div class="profile-btn-section">
+      <button class="btn-primary" type="button" onclick="OnProjectClick(this)">Guardar Información</button>
+    </div>
+  </form>
+
+</section>

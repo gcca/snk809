@@ -1,0 +1,33 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/onboard/base.html' %}
+
+{% load neom_webtools %}
+
+{% block extra-head %}
+<style>
+
+iframe {
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0%;
+    left: 0px;
+    right: 0px;
+    bottom: 0px
+}
+
+</style>
+{% endblock %}
+
+{% block header %}
+<header id="{% _kt 'assessment-header-id' %}">
+</header>
+<hr/>
+{% endblock %}
+
+{% block content %}
+<iframe src="{{object.embed_url}}" frameborder="0" height="100%" width="100%">Cargando…</iframe>
+{% endblock %}

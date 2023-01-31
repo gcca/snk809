@@ -1,0 +1,39 @@
+{% if node.isKnowledge %}
+	<ul><li>{{ node.name }}:
+		{% if node.isUnScoredOrPremarked %}
+			<img class="not-scored" src="{{ imgs.STAR_ICON }}">
+			<img class="not-scored" src="{{ imgs.STAR_ICON }}">
+			<img class="not-scored" src="{{ imgs.STAR_ICON }}">
+			<img class="not-scored" src="{{ imgs.STAR_ICON }}">{% endif %}
+		{% if node.isBeginner %}
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="not-scored" src="{{ imgs.STAR_ICON }}">
+		<img class="not-scored" src="{{ imgs.STAR_ICON }}">
+		<img class="not-scored" src="{{ imgs.STAR_ICON }}">{% endif %}
+		{% if node.isJunior %}
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="not-scored" src="{{ imgs.STAR_ICON }}">
+		<img class="not-scored" src="{{ imgs.STAR_ICON }}">{% endif %}
+		{% if node.isMiddle %}
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="not-scored" src="{{ imgs.STAR_ICON }}">{% endif %}
+		{% if node.isSenior %}
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="scored" src="{{ imgs.STAR_ICON }}">
+		<img class="scored" src="{{ imgs.STAR_ICON }}">{% endif %}
+	</li></ul>
+{% else %}
+<ul id="menu">
+	<li><input type="checkbox" name="list" id={{ node.GetId }} checked><label for={{ node.GetId }}>{{ node.name }}</label>
+		<ul class="interior">
+			{% for child in node.children %}
+				{% include "desktop/accountmanager/tree.html" with node=child %}
+			{% endfor %}
+		</ul>
+	</li>
+ </ul>
+ {% endif %}

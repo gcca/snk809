@@ -1,0 +1,39 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load static %}
+{% load neom_webtools %}
+{% load neom_md2 %}
+{% load neodash_md2 %}
+{% load onboard_md2 %}
+<html>
+<head>
+  {% neom_md2_style_script %}
+  {% neom_md2_icons %}
+  {% neodash_md2_fonts %}
+
+  <style>
+    body {
+      margin: 0px;
+    }
+
+    {# TODO: Temporal hasta integrar el layout #}
+    #{% _kt 'onboard-content' %} {
+      padding: 20px;
+    }
+  </style>
+
+  {% block extra-head %}
+  {% endblock %}
+</head>
+<body>
+  {% block header %}
+  {% onboard_top_bar %}
+  {% endblock %}
+
+  {% neodash_md2_main_top_bar %}
+  <div id="{% _kt 'onboard-content' %}">
+    {% block content %}
+    {% endblock %}
+  </div>
+  {% end_neodash_md2_main_top_bar %}
+</body>
+</html>

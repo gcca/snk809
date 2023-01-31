@@ -1,0 +1,18 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:googleform:dashboard' 'Google Forms Tests' %}
+{% neodash_nav_item 'onboard:googleform:list' 'Lista' %}
+{% neodash_nav_mark 'Detalle' %}
+{% end_neodash_nav %}
+<table>
+  <caption><b>Google Form</b></caption>
+  <tr><td><i>Título:</i></td><td>{{ object.title }}</td></tr>
+  <tr><td><i>Descripción:</i></td><td>{{ object.description }}</td></tr>
+  <tr><td><i>Shared url:</i></td><td>{{ object.shared_url }}</td></tr>
+  <tr><td><i>View Link:</i></td><td>{{ object.view_link }}</td></tr>
+</table>
+<a href="{% url 'onboard:googleform:update' object.id %}">Update</a>

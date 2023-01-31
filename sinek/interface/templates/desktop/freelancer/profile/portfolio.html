@@ -1,0 +1,272 @@
+<style>
+  #file-section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: white;
+    padding: 0 10px 0 10px;
+    border-radius: 1em;
+    border: 1px none lightgray;
+    justify-content: left;
+  }
+  #file-section >div{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cv-disable{
+    color:lightgray;
+  }
+
+  .profile-input-select {
+    display: flex;
+    gap: 10px;
+  }
+
+  .luci-complex-select {
+    height: unset;
+  }
+
+</style>
+
+<script>
+  function OnNetworkClick(input){
+    let form = input.form
+
+    let network = form['network'].value;
+    let url = form['url'].value;
+    if (url === ""){ return; }
+
+    let body = { network, url }
+
+    $.LoadingOverlay('show');
+    RemoteUpdateNetwork(body)
+  }
+
+  function OnSelectChange(select){
+    form = select.form
+    fileInput = form['file-input']
+    cvInput = form['cv-input']
+    if (select.value == "upload"){
+      fileInput.click();
+      // TODO: Revisar cómo realizar el evento onclick a la opción del select
+      select.value = "1";
+    }
+    document.getElementById("portofolio-search-text").value=""
+  }
+
+  function OnFileChange(input){
+    let formData = new FormData();
+
+    for (const file of input.files){
+      formData.append('files[]', file)
+    }
+
+    $.LoadingOverlay('show');
+    RemoteUpdateFile(formData);
+  }
+
+
+  function RemoteUpdateFile(body) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:file-upload' %}", true);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        response = JSON.parse(xhr.response);
+        for (var upload of response['archivos']){
+          addFile(upload['name'], upload['path'], upload['id']);
+        }
+        $.LoadingOverlay('hide');
+        toastr.success('Tu información de portafolio ha sido guardada con éxito', 'Carga Completa')
+        document.getElementById("file-input").value=""
+      }
+    }
+
+    xhr.send(body);
+  }
+
+  function RemoteDeleteFile(body){
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:file-delete' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tu información de portafolio ha sido eliminada con éxito', 'Eliminación Completa')
+      }
+    }
+    data = JSON.stringify(body);
+    xhr.send(data);
+  }
+  function RemoteUpdateNetwork(body){
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:network-update' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tu información de portafolio ha sido guardada con éxito', 'Carga Completa')
+        addNetwork(body['network'], body['url']);
+        document.getElementById("portofolio-search-text").value=""
+      }
+    }
+
+    data = JSON.stringify(body);
+    xhr.send(data);
+  }
+
+  function RemoteDeleteNetwork(body){
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:network-delete' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tu información de portafolio ha sido eliminada con éxito', 'Eliminación Completa')
+      }
+    }
+
+    data = JSON.stringify(body);
+    xhr.send(data);
+  }
+
+
+  function deleteFile(boton){
+    fileSection = boton['parentElement']['parentElement']['parentElement'];
+    googleId = boton.id;
+    $.LoadingOverlay('show');
+    RemoteDeleteFile({googleId});
+    fileSection.remove();
+    let section = document.getElementById("file-section");
+    if (section.children.length == 0){
+      section.style="border-style: none";
+    }
+  }
+
+  function deleteNetwork(boton, url){
+    let body = { url }
+    fileSection = boton['parentElement']['parentElement']['parentElement'];
+    $.LoadingOverlay('show');
+    RemoteDeleteNetwork(body);
+    fileSection.remove();
+    let section = document.getElementById("file-section");
+    if (section.children.length == 0){
+      section.style="border-style: none";
+    }
+  }
+
+  function addNetwork(networkId, url) {
+    let networkMap ={
+      1: 'Github',
+      2: 'Behance',
+      3: 'Linkedin',
+      4: 'Website'
+    }
+    let networkIcon ={
+      1: '{{imgs.GITHUB_HIGH_ICON}}',
+      2: '{{imgs.BEHANCE_HIGH_ICON}}',
+      3: '{{imgs.LINKEDIN_HIGH_ICON}}',
+      4: '{{imgs.WEBSITE_HIGH_ICON}}'
+    }
+    let section = document.getElementById("file-section");
+    section.style="border-style: solid";
+    section.innerHTML +=
+      `<div><div class="file-container">
+        <div class="file-container-icon"><img src=${networkIcon[networkId]}></div>
+        <div class="file-container-erase"><img src="{{ imgs.ERASE_ICON }}" onclick="deleteNetwork(this, '${url}')"></div>
+        <div class="file-container-glass"><a href=${url} target="_blank"><img src="{{ imgs.MGLASS_ICON }}"></a></div>
+        <div class="file-container-name"><small>${networkMap[networkId]}</small></div>
+      </div></div>`
+  }
+
+  function addFile(name, url, id) {
+    let fileIcon ={
+      'pdf': '{{imgs.PDF_HIGH_ICON}}',
+      'png': '{{imgs.IMAGE_HIGH_ICON}}',
+      'jpg': '{{imgs.IMAGE_HIGH_ICON}}',
+      'jpeg': '{{imgs.IMAGE_HIGH_ICON}}',
+      'doc': '{{imgs.WORD_HIGH_ICON}}',
+      'docx': '{{imgs.WORD_HIGH_ICON}}',
+      'xls': '{{imgs.EXCEL_HIGH_ICON}}',
+      'xlsx': '{{imgs.EXCEL_HIGH_ICON}}',
+      'other': '{{imgs.FILE_HIGH_ICON}}'
+    }
+    let extension = name.substr( (name.lastIndexOf(".") + 1 - name.length) ).toLowerCase();
+    let shortName = (name.length > 11) ? name.substr(0, 10)+ '&hellip;'+ extension : name;
+    if (!fileIcon[extension])
+      extension = 'other'
+    let section = document.getElementById("file-section");
+    section.style="border-style: solid";
+    section.innerHTML +=
+      `<div><div class="file-container">
+        <div class="file-container-icon"><img src=${fileIcon[extension]}></div>
+        <div class="file-container-erase"><img id="${id}" src="{{ imgs.ERASE_ICON }}" onclick="deleteFile(this)"></div>
+        <div class="file-container-glass"><a href="${url}" target="_blank"><img src="{{ imgs.MGLASS_ICON }}"></a></div>
+        <div class="file-container-name"><small title="${name}">${shortName}</small></div>
+      </div></div>`
+  }
+
+  function getNetworks(){
+    let networkMap ={
+      "github": 1,
+      "behance": 2,
+      "linkedin": 3,
+      "other": 4
+    }
+    {% if profile.networks %}
+      {% for network in profile.networks %}
+        addNetwork(`${networkMap["{{network.name}}"]}`, "{{network.url}}");
+      {% endfor %}
+    {% endif %}
+  }
+
+  function getFiles(){
+    {% if profile.hasFiles %}
+      {% for file in profile.attachFiles %}
+        addFile(`${"{{file.name}}"}`, `https://drive.google.com/file/d/${"{{file.googleId.id}}"}/view?usp=drivesdk`, "{{file.googleId.id}}");
+      {% endfor %}
+    {% endif %}
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    getNetworks();
+    getFiles();
+  })
+
+</script>
+
+
+<section id="portfolio-section" class="profile-section">
+  <div class="profile-input">
+    <h3 style="margin-bottom:0px;"> Mi portafolio </h3>
+  </div>
+  <p>En el caso cuentes con un portafolio (diseños, resultados de campañas, etc.), o links de tus trabajos, agrégalos en esta sección. Esto nos permitirá asignarte proyectos con mayor precisión.</p>
+  <label>Agrega tu portafolio</label>
+  <label class="extra-information">(Máximo 8 evidencias. Tamaño máximo de archivo: 5 MB)</label>
+  <br/>
+  <br/>
+
+  <form id="portofolio-form">
+    <div class="profile-input-select">
+      <select id="portfolio-select" name="network" class="luci-complex-select" onchange="OnSelectChange(this)">
+        <option value="1">Link de Github</option>
+        <option value="2">Link de Behance</option>
+        <option value="3" selected>Link de Linkedin</option>
+        <option value="4">Link a otro website</option>
+        <option value="upload">Cargar Portafolio</option>
+      </select>
+      <input type="text" id= "portofolio-search-text" class="luci-text-field w-100" placeholder="Pega el link" name="url"/>
+    </div>
+    <div class="profile-btn-section">
+      <button class="btn-primary" type="button" onclick="OnNetworkClick(this)">Guardar Información</button>
+    </div>
+    <input id="file-input" type="file" multiple style="display: none;" onchange="OnFileChange(this)" />
+  </form>
+
+  <section id="file-section"></section>
+
+</section>

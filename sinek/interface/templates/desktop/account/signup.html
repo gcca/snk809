@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+<style>
+  body{
+    display: flex;
+    background-color: white;
+  }
+  .landing-page {
+    flex: 6.5;
+    background-color: #d8d8d8;
+  }
+  .auth-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    flex: 2.1;
+    background-color: white;
+    position: static;
+  }
+  .card-sign-up {
+    height: 650px;
+    position: fixed;
+    margin: 150px;
+  }
+  .card-sign-up form{
+    width: 100%;
+    max-width: 300px;
+    align-self: center;
+    margin: 0;
+  }
+  .card-sign-up .btn-google {
+    align-self: center;
+  }
+  .card-sign-up .card-body {
+    border-radius: 0;
+    height: 100%;
+    box-shadow: none;
+    max-width: none;
+  }
+  .card-body .tittle-center {
+    margin: 1rem 0 0.4rem 0;
+  }
+  .card-body .title-card-text {
+    color: #6E6B7B;
+    font-size: 14px;
+    margin: 16px 0;
+    max-width: 300px;
+    width: 100%;
+  }
+  .card-body a:nth-last-child(2) {
+    color: #6E6B7B;
+    font-size: 14px;
+    width: 280px;
+    margin: 10px 0;
+    align-self: center;
+    transition: color .5s;
+  }
+  .card-body a:nth-last-child(2):hover {
+    color: var(--bs-primary);
+  }
+  .card-body a:last-child {
+    color: var(--bs-primary);
+    margin: auto;
+  }
+  .card-body a:last-child:hover{
+    text-decoration: underline;
+  }
+  .center {
+    margin: auto;
+  }
+  .text-center{
+    text-align: center;
+  }
+  .alert{
+    color: var(--bs-danger);
+  }
+  .divider {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--bs-primary);
+  }
+  .divider::after,
+  .divider::before {
+    content: "";
+    border: thin solid var(--bs-primary);
+    flex: 1;
+  }
+  .divider:not(:empty)::before {
+    margin-right: 0.5em;
+  }
+  .divider:not(:empty)::after {
+    margin-left: 0.5em;
+  }
+  .btn-google {
+    line-height: 1;
+    border-radius: 2rem;
+    padding: 0 .5em;
+    border: 1px solid #EA4335;
+    color: #EA4335;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(4 * var(--bs-square));
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 15px;
+    max-width: 266px;
+    width: 100%;
+  }
+
+  .btn-google:hover {
+    color: #EA4335;
+    box-shadow: #EA4335 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  }
+  .eye-close {
+    display: none;
+  }
+  .password-field {
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .password-field .eye-password {
+    position: absolute;
+    right: 12;
+    top: 10;
+  }
+  .eye-password img{
+    width: 16px;
+    filter: opacity(0.5);
+  }
+  .content-landing {
+    width: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="landing-page">
+    <img class="content-landing" src="{% static 'img/landing-talento.png' %}">
+</div>
+<div class="auth-wrapper">
+    <div class="card-sign-up">
+        <div class="card-body">
+          <a class="tittle-center"><img src="{% static 'img/logo-pinkblue.png' %}" width="230px"></a>
+          <p class="title-card-text text-center">Regístrate para ser parte de la comunidad de neómadas digitales más grande del mundo.</p>
+          <form method="post" action="{% url 'site:account:signup' %}">
+              {% csrf_token %}
+              <div style="margin-bottom: 1rem">
+                  <input
+                      id="name"
+                      type="text"
+                      name="name"
+                      tabindex="1"
+                      class="luci-text-field w-100"
+                      placeholder="Nombre Completo"
+                  />
+              </div>
+              <div style="margin-bottom: 1rem">
+                  <input
+                      id="username"
+                      type="text"
+                      name="username"
+                      tabindex="2"
+                      class="luci-text-field w-100"
+                      placeholder="Correo"
+                  />
+              </div>
+              <div class="password-field">
+                  <input
+                      type="password"
+                      class="luci-text-field w-100"
+                      id="login-password"
+                      name="password"
+                      tabindex="3"
+                      placeholder="Contraseña"
+                      aria-describedby="login-password"
+                  />
+                  <div class="eye-password">
+                      <img class="eye-open" src="{% static 'img/eye.svg' %}" />
+                      <img class="eye-close" src="{% static 'img/eye-off.svg' %}" />
+                  </div>
+              </div>
+              <div class="alert">
+                  <strong>{{ errorMessage }}</strong>
+              </div>
+
+              <button type="submit" class="btn-primary w-100" tabindex="3"> Regístrate con tu correo</button>
+          </form>
+          <div class="divider">●</div>
+          <a href="{{ google_url }}" class="btn-google"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAARCAYAAAAlpHdJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIXSURBVHgBxZVNaBNREMdn1sZsg9CsEqWe0qC9iHhI41fj13oRL0rFiyerB0EEUXvwZBvqQRAK0qsgguJN92jBtqGoYLOtRSEn0aBgmoJ0qzVf+/ZN37ZNSUrZTTaU/k87s/+d3+zMWxZgC4VuBj0SaSsgu4BE6fj3X7qbn8aDwTL7d563+D62nilmnLwSuKgsWSMSwXMETH3aFx5w8v5/0h61+OI3CfHlNsamC+NyGLzC9WikjTgdqcR+2defU2OPN/LOno1eZz8CH4hglx0jgiKevQhe4fcv65Bp76rJiaJ9c2rsvRGPK5VcTu3ql0B6KsD+So6BRHcXjsngFW7r9clHMKfsr00idJf8pansuaPhnHp4CBEHqm8bfDvcMOKYMndiU/D5HXthuEeDqc5L6/jQ0WJanxHpTnU+awXgmnEK0kxxK+0Or6C0E4MwcaDXqM4SQLA6/g2tf24udEOWB6Ae1QlfkXbw9gStG/Fae4SvbkU7+2brBDcMt7Xn3WRCHKwe8d7za2CgodDY5JW/fiw1UKpx+HIDY6k35OOnxdh/it0/CI3q98CDPMGXG3g7/SVvmYdCo6lB8CjPcFsdyRkDmpAjnBWU2h0izzv5xWfHa2KCAniFJxNYBOAvVsM8Ixp28ps+PiLOQca+JqAMI645+V3/arbUh/nj3CylkwnFdczhZ1fl3fJirFxkX2d6tabWsqlaAq0cvxlFxWR4AAAAAElFTkSuQmCC" />Regístrate con tu cuenta de Google</a>
+          <a class="text-center" href="{% url 'site:legal-info:terms-and-conditions' %}" target="_blank">Al ingresar, aceptas nuestros
+              <b>Términos y Condiciones</b>, y <b>Política de datos</b>.
+          </a>
+          <a class="text-center" href="{% url 'site:account:signin' %}">¿Ya tienes cuenta?
+            <b>Inicia sesión</b>
+          </a>
+        </div>
+    </div>
+</div>
+<script>
+  const eye = document.querySelector(".eye-open");
+  const eyeoff = document.querySelector(".eye-close");
+  const passwordField = document.querySelector("input[type=password]");
+
+  eye.addEventListener("click", () =>{
+    eye.style.display = "none";
+    eyeoff.style.display = "block";
+
+    passwordField.type = "text";
+  });
+
+  eyeoff.addEventListener("click", () => {
+    eyeoff.style.display = "none";
+    eye.style.display = "block";
+
+    passwordField.type = "password";
+  });
+</script>
+{% endblock %}

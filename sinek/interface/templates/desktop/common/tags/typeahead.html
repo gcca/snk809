@@ -1,0 +1,222 @@
+<style>
+.chip{
+  display: inline-flex;
+  flex-direction: row;
+  background-color: {{ color }};
+  color: white;
+  border: none;
+  cursor: default;
+  height: 25px;
+  font-size: 12px;
+  outline: none;
+  margin-right: 10px;
+  margin-top: 10px;
+  white-space: nowrap;
+  align-items: center;
+  border-radius: 16px;
+  vertical-align: middle;
+  text-decoration: none;
+  justify-content: center;
+}
+.chip-content{
+  cursor: inherit;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  white-space: nowrap;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: 8.7pt;
+}
+.chip-content .remove{
+  color: white;
+  padding-left: 7px;
+}
+
+</style>
+{# TODO: #289 Rediseño U.I. #}
+{% if allAreas %}
+{% comment %} <div id="{{ name }}-container">
+  <input id="{{ name }}-input" name="name" class="typeahead" type="text" placeholder="Seleccione rubro" autocomplete="false" disabled>
+  {#<button class="luci-outline-btn" type="submit" disabled>Agregar</button>#}
+</div>
+<div id="{{ name }}-areas-group">
+  {% for area in areas %}
+    <div class="chip" style="background-color: {{ color }};">
+      <div class="chip-content">
+        {{ area }}
+        <a
+        class="remove"
+        {% if name|stringformat:'s' == 'business' %}
+        href="{% url 'site:freelancer:profile:business-delete' area %}"
+        {% elif name|stringformat:'s' == 'project' %}
+        href="{% url 'site:freelancer:profile:project-delete' area %}"
+        {% endif %}
+        >
+        x
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+{# typeahead styles #}
+.tt-dataset{
+  background: white;
+  border-radius: 4px;
+  border: 1px solid gray;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  text-align: left;
+}
+.tt-suggestion{
+  padding: 5px 10px;
+}
+#{{name}}-container .tt-suggestion:hover {
+  color: white;
+  background-color: {{ color }};
+}
+</style>
+<script>
+  $(document).on('ready',function(){
+    var substringMatcher = function(strs) {
+      return function findMatches(q, cb) {
+        var matches, substringRegex;
+
+        matches = [];
+        substrRegex = new RegExp(q, 'i');
+
+        $.each(strs, function(i, str) {
+          if (substrRegex.test(str)) {
+            matches.push(str);
+          }
+        });
+
+        cb(matches);
+      };
+    };
+
+    var {{name}}areas =
+      [
+      {% for area in allAreas %}
+      "{{ area }}",
+      {% endfor %}
+      ]
+
+    $('#{{ name }}-container .typeahead').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+    },
+    {
+    name: '{{name}}areas',
+    source: substringMatcher({{name}}areas)
+    });
+  })
+
+  $('#{{name}}-container .typeahead').bind('typeahead:select', function(ev, suggestion) {
+    $('#{{name}}-form').submit();
+  });
+
+  $('#{{ name }}-input').bind('enterKey', function(e){
+    $('#{{name}}-form').submit();
+  })
+  $('#{{ name }}-input').keyup(function(e){
+    if(e.keyCode == 13) $(this).trigger("enterKey");
+  })
+
+</script> {% endcomment %}
+{% else %}
+
+<style>
+  .boxContainer{
+    position: relative;
+    width: 300px;
+    height: 42px;
+    border: 1px #E3E3E3 solid;
+    padding: 0px 15px;
+    border-radius:50px;
+    color: #2C2C2C;
+    margin-bottom: 10px;
+    background-color: white;
+  }
+  .elementsContainer{
+    width: 100% !important;
+    height: 100% !important;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .search{
+    border: none !important;
+    height: 100%;
+    width: 100%;
+    padding: 0px 10px !important;
+    border-radius: 50px !important;
+    outline: none !important;
+    font-size: 9pt;
+  }
+  *:focus{
+    box-shadow: none !important;
+  }
+</style>
+
+<div class="boxContainer">
+  <div class="elementsContainer">
+      <img src="{{icon}}" width="18px" />
+      <input type="text" id="{{ name }}-search" class="search" placeholder= "Filtre {{ placeholder }}" />
+  </div>
+</div>
+
+<div id="{{ name }}-areas-group"></div>
+
+<script>
+  (function() {
+    let areasList = document.getElementById("{{ name }}-areas-group");
+    let searchBar = document.getElementById("{{ name }}-search");
+
+    const displayAreas = (areas) => {
+      const htmlString = areas
+        .map((item) => {
+          return `
+          <div class="chip"
+            style="background-color: {{color}};">
+            <div class="chip-content">
+              ${item}
+            </div>
+          </div>
+        `;
+        })
+        .join('');
+      areasList.innerHTML = htmlString;
+    };
+
+    let {{name}}areas = [
+      {% for area in areas %}
+      "{{ area }}",
+      {% endfor %}
+    ];
+
+    displayAreas({{name}}areas);
+
+    function removeTildes(s) {
+      return s.replace('á', 'a')
+              .replace('é', 'e')
+              .replace('í', 'i')
+              .replace('ó', 'o')
+              .replace('ú', 'u');
+    }
+
+
+    searchBar.addEventListener('keyup', (e) => {
+      const searchString = removeTildes(e.target.value.toLowerCase());
+      const filteredAreas = {{name}}areas.filter((area) => removeTildes(area.toLowerCase()).includes(searchString));
+
+      displayAreas(filteredAreas)
+    });
+  })();
+  </script>
+{% endif %}

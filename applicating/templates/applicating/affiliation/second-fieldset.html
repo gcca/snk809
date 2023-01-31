@@ -1,0 +1,9 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+<fieldset>
+  <legend>{{ legend }}</legend>
+  {% for field in fields %}
+    {{ field.errors }}
+    {{ field.label_tag }} {{ field }}
+    <hr/>
+  {% endfor %}
+</fieldset>

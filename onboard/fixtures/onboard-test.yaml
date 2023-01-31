@@ -1,0 +1,21 @@
+# Copyright Snk809, Inc. All rights reserved.
+- model: onboard.applicant
+  pk: 1
+  fields:
+    name: Dionisio Aguado
+    email: dionisio@aguado.com
+    gender: 1
+- model: onboard.onboard
+  pk: 1
+  fields:
+    slug: ce220ef060bb11edbbd1cf17990de5ba
+- model: onboard.applicant
+  pk: 2
+  fields:
+    name: Evangelina Mascardi
+    email: evangelina@mascardi.com
+    gender: 2
+- model: onboard.onboard
+  pk: 2
+  fields:
+    slug: ce220ef060bb11edbbd1cf17990de5bb

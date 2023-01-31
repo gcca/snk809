@@ -1,0 +1,70 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/onboard/assessment/base.html' %}
+
+{% load neom_webtools %}
+
+{% block extra-head %}
+<style>
+.{% _kt 'tmms-entry' %} {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 720px;
+}
+.{% _kt 'tmms-entry' %} div {
+    display: inline-block;
+}
+.{% _kt 'question-label' %} {
+    width: 600px;
+}
+table, th, td {
+    border: 1px solid;
+}
+</style>
+{% endblock %}
+
+{% block assessment-instructions %}
+<p>
+    ¡Felicidades por seguir avanzando en el proceso de selección!
+</p>
+<p>
+    A continuación encontrarás algunas afirmaciones sobre tus emociones y sentimientos. Lee atentamente cada frase e indica, por favor, tu grado de acuerdo o desacuerdo con respecto a las mismas.
+</p>
+<ul>
+    <li>No hay respuestas correctas o incorrectas, ni buenas o malas.</li>
+    <li>No emplee mucho tiempo en cada respuesta.</li>
+</ul>
+<p>Solo debes marcar una puntuación del 1 al 5. Recuerda que debes contestar en cuanto a la opción que mejor te parezca o con la que más afinidad tengas.</p>
+<table>
+    <tr>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+    </tr>
+    <tr>
+      <td>Nada de acuerdo</td>
+      <td>Algo de acuerdo</td>
+      <td>Bastante de acuerdo</td>
+      <td>Muy de acuerdo</td>
+      <td>Totalmente de acuerdo</td>
+    </tr>
+</table>
+{% endblock %}
+
+{% block assessment-form %}
+<div style="display: inline-flex;"><p style="padding-left: 500px;">Nada de acuerdo</p><p style="padding-left: 10px; letter-spacing: 5px;">1 2 3 4 5</p><p style="padding-left: 10px;">Totalmente de acuerdo</p></div>
+{% for field in form %}
+  <div class="{% _kt 'tmms-entry' %}">
+      {{ field.errors }}
+      <div class="{% _kt 'question-label' %}">{{ forloop.counter }}. {{ field.label_tag }}</div>
+      <div class="{% _kt 'radio-group' %}">
+      {{ field }}
+      </div>
+  </div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,136 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neom_webtools %}
+<style>
+#{% _kt 'disc-table' %} th,
+#{% _kt 'disc-table' %} td {
+  padding-right: 3em;
+  text-align: left;
+}
+</style>
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'onboard:dashboard' '🏠' %}
+{% neodash_nav_item 'onboard:applicant:dashboard' 'Candidatos' %}
+{% neodash_nav_item 'onboard:applicant:list' 'Lista' %}
+{% neodash_nav_item 'onboard:applicant:detail' 'Candidato' applicant_id=object.onboard.applicant.id %}
+{% neodash_nav_mark 'DISC' %}
+{% end_neodash_nav %}
+<h1>Respuestas del Test DISC: {{ object.applicant.name }}</h1>
+<table id="{% _kt 'disc-table' %}">
+  <tr>
+    <th>Q</th>
+    <th>Menos</th>
+    <th>Más</th>
+  </tr>
+  <tr><td>Q1</td><td>{{ object.Q1Input.labels|slice:object.q1_minus|last }}</td><td>{{ object.Q1Input.labels|slice:object.q1_plus|last }}</td></tr>
+  <tr><td>Q2</td><td>{{ object.Q2Input.labels|slice:object.q2_minus|last }}</td><td>{{ object.Q2Input.labels|slice:object.q2_plus|last }}</td></tr>
+  <tr><td>Q3</td><td>{{ object.Q3Input.labels|slice:object.q3_minus|last }}</td><td>{{ object.Q3Input.labels|slice:object.q3_plus|last }}</td></tr>
+  <tr><td>Q4</td><td>{{ object.Q4Input.labels|slice:object.q4_minus|last }}</td><td>{{ object.Q4Input.labels|slice:object.q4_plus|last }}</td></tr>
+  <tr><td>Q5</td><td>{{ object.Q5Input.labels|slice:object.q5_minus|last }}</td><td>{{ object.Q5Input.labels|slice:object.q5_plus|last }}</td></tr>
+  <tr><td>Q6</td><td>{{ object.Q6Input.labels|slice:object.q6_minus|last }}</td><td>{{ object.Q6Input.labels|slice:object.q6_plus|last }}</td></tr>
+  <tr><td>Q7</td><td>{{ object.Q7Input.labels|slice:object.q7_minus|last }}</td><td>{{ object.Q7Input.labels|slice:object.q7_plus|last }}</td></tr>
+  <tr><td>Q8</td><td>{{ object.Q8Input.labels|slice:object.q8_minus|last }}</td><td>{{ object.Q8Input.labels|slice:object.q8_plus|last }}</td></tr>
+  <tr><td>Q9</td><td>{{ object.Q9Input.labels|slice:object.q9_minus|last }}</td><td>{{ object.Q9Input.labels|slice:object.q9_plus|last }}</td></tr>
+  <tr><td>Q10</td><td>{{ object.Q10Input.labels|slice:object.q10_minus|last }}</td><td>{{ object.Q10Input.labels|slice:object.q10_plus|last }}</td></tr>
+  <tr><td>Q11</td><td>{{ object.Q11Input.labels|slice:object.q11_minus|last }}</td><td>{{ object.Q11Input.labels|slice:object.q11_plus|last }}</td></tr>
+  <tr><td>Q12</td><td>{{ object.Q12Input.labels|slice:object.q12_minus|last }}</td><td>{{ object.Q12Input.labels|slice:object.q12_plus|last }}</td></tr>
+  <tr><td>Q13</td><td>{{ object.Q13Input.labels|slice:object.q13_minus|last }}</td><td>{{ object.Q13Input.labels|slice:object.q13_plus|last }}</td></tr>
+  <tr><td>Q14</td><td>{{ object.Q14Input.labels|slice:object.q14_minus|last }}</td><td>{{ object.Q14Input.labels|slice:object.q14_plus|last }}</td></tr>
+  <tr><td>Q15</td><td>{{ object.Q15Input.labels|slice:object.q15_minus|last }}</td><td>{{ object.Q15Input.labels|slice:object.q15_plus|last }}</td></tr>
+  <tr><td>Q16</td><td>{{ object.Q16Input.labels|slice:object.q16_minus|last }}</td><td>{{ object.Q16Input.labels|slice:object.q16_plus|last }}</td></tr>
+  <tr><td>Q17</td><td>{{ object.Q17Input.labels|slice:object.q17_minus|last }}</td><td>{{ object.Q17Input.labels|slice:object.q17_plus|last }}</td></tr>
+  <tr><td>Q18</td><td>{{ object.Q18Input.labels|slice:object.q18_minus|last }}</td><td>{{ object.Q18Input.labels|slice:object.q18_plus|last }}</td></tr>
+  <tr><td>Q19</td><td>{{ object.Q19Input.labels|slice:object.q19_minus|last }}</td><td>{{ object.Q19Input.labels|slice:object.q19_plus|last }}</td></tr>
+  <tr><td>Q20</td><td>{{ object.Q20Input.labels|slice:object.q20_minus|last }}</td><td>{{ object.Q20Input.labels|slice:object.q20_plus|last }}</td></tr>
+  <tr><td>Q21</td><td>{{ object.Q21Input.labels|slice:object.q21_minus|last }}</td><td>{{ object.Q21Input.labels|slice:object.q21_plus|last }}</td></tr>
+  <tr><td>Q22</td><td>{{ object.Q22Input.labels|slice:object.q22_minus|last }}</td><td>{{ object.Q22Input.labels|slice:object.q22_plus|last }}</td></tr>
+  <tr><td>Q23</td><td>{{ object.Q23Input.labels|slice:object.q23_minus|last }}</td><td>{{ object.Q23Input.labels|slice:object.q23_plus|last }}</td></tr>
+  <tr><td>Q24</td><td>{{ object.Q24Input.labels|slice:object.q24_minus|last }}</td><td>{{ object.Q24Input.labels|slice:object.q24_plus|last }}</td></tr>
+</table>
+
+<hr>
+<h2>Resultados obtenidos:</h2>
+<div style="display: flex;">
+<table id="{% _kt 'disc-table' %}">
+  <tr>
+    <th>Dominio</th>
+    <th>Más</th>
+    <th>Menos</th>
+    <th>Compuesto</th>
+    <th>Baremo</th>
+  </tr>
+  <tr>
+    <td>Dominio</td>
+    <td>{{ object.results.positives.d }}</td>
+    <td>{{ object.results.negatives.d }}</td>
+    <td>{{ object.results.compounds.d }}</td>
+    <td>{{ object.baremos.d }}</td>
+  </tr>
+  <tr>
+    <td>Influencia</td>
+    <td>{{ object.results.positives.i }}</td>
+    <td>{{ object.results.negatives.i }}</td>
+    <td>{{ object.results.compounds.i }}</td>
+    <td>{{ object.baremos.i }}</td>
+  </tr>
+  <tr>
+    <td>Seguridad, estabilidad</td>
+    <td>{{ object.results.positives.s }}</td>
+    <td>{{ object.results.negatives.s }}</td>
+    <td>{{ object.results.compounds.s }}</td>
+    <td>{{ object.baremos.s }}</td>
+  </tr>
+  <tr>
+    <td>Competencia</td>
+    <td>{{ object.results.positives.c }}</td>
+    <td>{{ object.results.negatives.c }}</td>
+    <td>{{ object.results.compounds.c }}</td>
+    <td>{{ object.baremos.c }}</td>
+  </tr>
+</table>
+
+<canvas id="personality-chart" style="height: 500px; max-width: 200px;"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+  new Chart("personality-chart", {
+    type: "line",
+    data: {
+      labels: ['', 'D', 'I', 'S', 'C', ''],
+      datasets: [{
+        label: 'Baremos',
+        data: [null, {{ object.baremos.d }}, {{ object.baremos.i }}, {{ object.baremos.s }}, {{ object.baremos.c }}, null],
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      elements: {
+        line: {
+          borderWidth: 4,
+        },
+        point: {
+          radius: 4,
+          borderWidth: 4,
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: true,
+      layout: {
+          padding: 10
+      },
+      scales: {
+        yAxes: [{
+            display: true,
+            stacked: true,
+            ticks: {
+                min: 1,
+                max: 99
+            }
+        }],
+      }
+    },
+  });
+</script>

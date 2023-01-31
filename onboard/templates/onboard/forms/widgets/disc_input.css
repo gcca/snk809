@@ -1,0 +1,16 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neom_webtools %}
+table.{% _kt 'disc-input-table' %} td:first-child {
+  width: 6em;
+}
+
+table.{% _kt 'disc-input-table' %} th:nth-child(2),
+table.{% _kt 'disc-input-table' %} th:nth-child(3) {
+  text-align: center;
+  width: 2em;
+}
+
+table.{% _kt 'disc-input-table' %} td:nth-child(2),
+table.{% _kt 'disc-input-table' %} td:nth-child(3) {
+  text-align: center;
+}

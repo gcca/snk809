@@ -1,0 +1,20 @@
+<section id="period-rate" class="profile-section">
+  <h3>Información del Periodo</h3>
+  <div>
+    <strong>Freelancers Afiliados:</strong>
+    <div>
+      <h1>{{periodRate.cantCurrentAffiliates}}</h1>
+      <h5
+        {% if periodRate.scale.value == 0 %}
+        style="color: red;"
+        {% elif periodRate.scale.value == 1 %}
+        style="color: yellow;"
+        {% elif periodRate.scale.value == 2 %}
+        style="color: green;"
+        {% endif %}
+        >
+        {{periodRate.rate}}%
+      </h5>
+    </div>
+  </div>
+</section>

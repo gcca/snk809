@@ -1,0 +1,40 @@
+<style>
+  .two-columns{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: calc(2 * var(--bs-square));
+    margin-top: calc(2 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+    border-radius: 1em;
+    align-items: center;
+  }
+
+  .two-columns > div{
+    width: 48%;
+    vertical-align: middle;
+  }
+
+</style>
+
+<section id="process" class="profile-section">
+  <div class="profile-input">
+    <h3 style="margin-bottom:0px;"> Procesos de selección </h3>
+  </div>
+
+    <label>Creamos un mundo donde todos encontremos en el trabajo un segundo hogar, sin importar procedencia, género, etnia ni edad; por lo que nos tomamos muy en serio cada proceso de selección. Ingresa el código del proceso al que has sido invitado y te guiaremos durante todo el mismo.</label>
+    <div class="two-columns">
+      <div class="profile-input">
+        <img src="{{imgs.PERSON_ICON}}">
+        <input type="text" name="processcode" placeholder="Código del proceso" id="inputCode" class="luci-text-field w-100"/>
+      </div>
+      <div class="profile-input">
+        <button class="btn-primary" type="button" onclick="toastr.error('Debe ingresar un código válido', 'Código incorrecto');">Ver proceso</button>
+      </div>
+    </div>
+
+  <div class="profile-btn-section">
+  </div>
+
+</section>

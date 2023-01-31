@@ -1,0 +1,12 @@
+{# copyright neomadas, inc. all rights reserved. #}
+<h2>¿Enviar email al candidato?</h2>
+<p>Candidato: {{ applicant.name }}</p>
+<p>Dirección de email: {{ applicant.email }}</p>
+{% if not applicant.onboard.process_name %}
+<h3>⚠️ Nombre de la vacante no definido para el candidato.</h3>
+{% endif  %}
+<form method="post" style="margin:0" action="{% url 'onboard:applicant:email-onboard' applicant_id %}">{% csrf_token %}
+    <input type="submit" value="Enviar 📧"/>
+</form>
+<a href="{% url 'onboard:applicant:detail' applicant_id %}" style="display: inline-block; padding-top: 15px;">Volver</a>
+<hr>

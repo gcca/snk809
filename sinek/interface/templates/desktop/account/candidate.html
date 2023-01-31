@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+  body{
+    background: rgb(0,118,187);
+    background: linear-gradient(141deg, rgba(0,118,187,1) 14%, rgba(237,113,175,1) 100%);
+  }
+  .luci-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  .content{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+  }
+  .content label{
+    width: 130px;
+  }
+  .container-card{
+    padding-top: 0;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="luci-container">
+<form method="post" action="{% url 'site:account:google-candidate' %}">
+  {% csrf_token %}
+    <div class="card">
+      <div class="card-header" style="display:flex; align-items:center; justify-content: center;">
+        <h2>Registro de Candidato</h2>
+      </div>
+      <div class="container-card">
+        <div class="content">
+          <label>Nombre</label>
+          {{form.name}}
+        </div>
+        <div class="content">
+          <span>Género</span>
+          M<input type="radio" name="gender" value="0"/>
+          F<input type="radio" name="gender" value="1"/>
+        </div>
+        <button type="submit" class="btn-primary w-100" tabindex="3">Registrar</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+<style>
+td {
+  border: 1px dotted black;
+  border-collapse: collapse;
+}
+
+html * {
+  font-family: Verdana !important;
+}
+.question-group {
+  display: grid;
+  column-gap: 50px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr lfr 1fr;
+  background-color: #f2f2f2;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 600px;
+}
+.nan-input {
+  display: none;
+}
+.grid-item {
+  width: 200px;
+}
+
+{% comment %} Descomentar formulario para ver mensaje de error  {% endcomment %}
+{% comment %}
+<form method="post">{% csrf_token %}
+  <h1>Freelancer: {{ freelancer.name }}</h1>
+  <h1>{{ quiz.title }}</h1>
+  <h2>{{ quiz.description }}</h1>
+  <hr>
+  <input type="submit"/>
+  {{ form.management_form }}
+  {% for subform in form %}
+    <table>
+    {{ subform }}
+    </table>
+  {% endfor %}
+  <hr>
+</form>
+{% endcomment %}
+
+{% comment %} Style: WIP  {% endcomment %}
+</style>
+<form method="post">{% csrf_token %}
+  <h1>Freelancer: {{ freelancer.name }}</h1>
+  <h1>{{ quiz.title }}</h1>
+  <h2>{{ quiz.description }}</h1>
+  <hr>
+  <input type="submit"/>
+  {{ form.management_form }}
+  {% for subform in form %}
+  <div class="question-group question{{ forloop.counter0 }}">
+      <div class="grid-item"></div>
+      <div class="grid-item"> Más </div>
+      <div class="grid-item"> Menos </div>
+    {% for field in subform %}
+      <div class="grid-item"> {{ field.label_tag }} </div>
+      <div class="nan-input"> {{ field.0 }} </div>
+      <div class="grid-item most"> {{ field.1.tag }} </div>
+      <div class="grid-item least"> {{ field.2.tag }} </div>
+    </table>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  <hr>
+</form>

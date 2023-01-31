@@ -1,0 +1,121 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/base.html' %}
+
+{% load neodash_nav %}
+{% load neom_webtools %}
+
+{% block style %}
+{% include 'neodash/layout/nav.css' %}
+{% endblock %}
+
+{% block body %}
+
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:applicant:dashboard' 'Candidatos' %}
+{% neodash_nav_mark 'Lista' %}
+{% end_neodash_nav %}
+
+<style>
+
+table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  min-width: 800px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+
+table thead tr {
+  background-color: #1b98f7;
+  color: white;
+  font-weight: bold;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+}
+
+table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+  border-bottom: 2px solid #1b98f7;
+}
+
+</style>
+
+<h1>Candidatos</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Información Personal</th>
+      <th>Personalidad</th>
+      <th>Motivadores</th>
+      <th>Inteligencia emocional</th>
+      <th>Facilidad de aprendizaje</th>
+    </tr>
+    <tr>
+      <th>Nombres completos</th>
+      <th>Patrón DISC</th>
+      <th>Anclas de carrera</th>
+      <th>Nivel</th>
+      <th>Nivel</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for applicant in object_list %}
+    {% with disc=applicant.onboard.discinput tmms=applicant.onboard.tmmsinput complex_instructions=applicant.onboard.complexinstructionsinput career_anchors=applicant.onboard.careeranchorsinput %}
+    <tr>
+      <td><a href="{% url 'onboard:applicant:detail' applicant.id %}">{{ applicant.name }}</a></td>
+      <td>
+      {% if disc %}
+        {{ disc.personality.name }}
+      {% else %}
+        No evaluado
+      {% endif %}
+      </td>
+      <td>
+      {% if career_anchors %}
+      <ul>
+        <li>{{ career_anchors.TopThreeRanking.0.name }}</li>
+        <li>{{ career_anchors.TopThreeRanking.1.name }}</li>
+        <li>{{ career_anchors.TopThreeRanking.2.name }}</li>
+      </ul>
+      {% else %}
+      No evaluado
+      {% endif %}
+      </td>
+      <td>
+      {% if tmms %}
+      <ul>
+        <li>{{ tmms.labeled_scores.attention.label }}</li>
+        <li>{{ tmms.labeled_scores.clarity.label }}</li>
+        <li>{{ tmms.labeled_scores.repair.label }}</li>
+      </ul>
+      {% else %}
+      No evaluado
+      {% endif %}
+      </td>
+      <td>
+      {% if complex_instructions %}
+        {{ complex_instructions.LabeledScore.1 }}
+      {% else %}
+        No evaluado
+      {% endif %}
+      </td>
+    </tr>
+    {% endwith %}
+    {% endfor %}
+  </tbody>
+<table>
+{% endblock %}

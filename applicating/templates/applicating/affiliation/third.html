@@ -1,0 +1,60 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'applicating/affiliation/base.html' %}
+{% block stephead-title %}Experiencia y conocimientos{% endblock %}
+{% block stephead-subtitle %}Lorem ipsum{% endblock %}
+{% block stephead-count %}Paso 3 de 4{% endblock %}
+{% block form-mems %} enctype="multipart/form-data"{% endblock %}
+{% block stepform-body %}
+<fieldset>
+  <legend>Tus conocimientos</legend>
+  <div>
+    {{ form.resume.label_tag}} {{ form.resume }}
+    {{ form.resume.errors }}
+  </div>
+</fieldset>
+<fieldset>
+  <legend>Tus redes laborales</legend>
+  <div>
+    {{ form.network_linkedin.label_tag}} {{ form.network_linkedin }}
+    {{ form.network_linkedin.errors }}
+  </div>
+  <div>
+    {{ form.network_github.label_tag}} {{ form.network_github }}
+    {{ form.network_github.errors }}
+  </div>
+  <div>
+    {{ form.network_behance.label_tag}} {{ form.network_behance }}
+    {{ form.network_behance.errors }}
+  </div>
+  <div>
+    {{ form.network_website.label_tag}} {{ form.network_website }}
+    {{ form.network_website.errors }}
+  </div>
+</fieldset>
+<fieldset>
+  <legend>Conocimientos o intereses</legend>
+  <div>
+    {{ form.interest_industry.label_tag}} {{ form.interest_industry }}
+    {{ form.interest_industry.errors }}
+  </div>
+  <div>
+    {{ form.interest_subject.label_tag}} {{ form.interest_subject }}
+    {{ form.interest_subject.errors }}
+  </div>
+</fieldset>
+<fieldset>
+  <legend>Nivel de inglés</legend>
+  <div>
+    {{ form.english_reading.label_tag}} {{ form.english_reading }}
+    {{ form.english_reading.errors }}
+  </div>
+  <div>
+    {{ form.english_writing.label_tag}} {{ form.english_writing }}
+    {{ form.english_writing.errors }}
+  </div>
+  <div>
+    {{ form.english_talking.label_tag}} {{ form.english_talking }}
+    {{ form.english_talking.errors }}
+  </div>
+</fieldset>
+{% endblock %}

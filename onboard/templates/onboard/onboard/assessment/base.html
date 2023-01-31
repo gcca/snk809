@@ -1,0 +1,45 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/onboard/base.html' %}
+
+{% load neom_webtools %}
+{% load neom_md2 %}
+{% load neodash_md2 %}
+{% load onboard_md2 %}
+
+{% block content %}
+<section id="{% _kt 'assessment-content-id' %}">
+  <div>
+    <caption>Instrucciones:</caption>
+    {% block assessment-instructions %}{% endblock %}
+  </div>
+  <hr>
+  <form id="{% _kt 'assessment-form-id' %}" method="post" onsubmit="{% _kt 'showConfirmModal' %}(event)">{% csrf_token %}
+    {% block assessment-form %}{% endblock %}
+    <input type="submit" value="Enviar"/>
+  </form>
+  <dialog id="{% _kt 'confirm-submission-modal' %}">
+    <h2>Confirmar envío de test</h2>
+    <p>¿Estás seguro que deseas enviar estas respuestas?</p>
+    <button id="send-btn" onclick="{% _kt 'submitAssessment' %}()">Enviar</button>
+    <button id="close-btn" onclick="{% _kt 'closeConfirmModal' %}()">Cancelar</button>
+  </dialog>
+</section>
+<script>
+  function {% _kt 'showConfirmModal' %}(event) {
+    let modal = document.getElementById("{% _kt 'confirm-submission-modal' %}");
+    event.preventDefault();
+    modal.showModal();
+  }
+
+  function {% _kt 'closeConfirmModal' %}() {
+    let modal = document.getElementById("{% _kt 'confirm-submission-modal' %}");
+    modal.close();
+  }
+
+  function {% _kt 'submitAssessment' %}() {
+    let form = document.getElementById("{% _kt 'assessment-form-id' %}");
+    form.submit();
+  }
+</script>
+
+{% endblock %}

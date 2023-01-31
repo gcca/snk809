@@ -1,0 +1,225 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% load luci_tags %}
+{% load static %}
+
+{% block top-menu %}
+<div class="dropdown menu-right">
+  <button style="color: white;" onclick="window.close()">X</button>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>{% include 'desktop/accountmanager/freelancer-info.css' %}</style>
+
+<script>
+  function addNetwork(networkId, url) {
+    let networkMap ={
+      1: 'Github',
+      2: 'Behance',
+      3: 'Linkedin',
+      4: 'Website'
+    }
+    let networkIcon ={
+      1: '{{imgs.GITHUB_HIGH_ICON}}',
+      2: '{{imgs.BEHANCE_HIGH_ICON}}',
+      3: '{{imgs.LINKEDIN_HIGH_ICON}}',
+      4: '{{imgs.WEBSITE_HIGH_ICON}}'
+    }
+    let section = document.getElementById("file-section");
+    section.style="border-style: solid";
+    section.innerHTML +=
+      `<div class="file-container">
+        <div class="file-container-icon"><img src=${networkIcon[networkId]}></div>
+        <div class="file-container-name"><a href=${url} target="_blank">${networkMap[networkId]}</a></div>
+      </div>`
+  }
+
+    function addFile(name, url, id) {
+    let fileIcon ={
+      'pdf': '{{imgs.PDF_HIGH_ICON}}',
+      'png': '{{imgs.IMAGE_HIGH_ICON}}',
+      'jpg': '{{imgs.IMAGE_HIGH_ICON}}',
+      'jpeg': '{{imgs.IMAGE_HIGH_ICON}}',
+      'doc': '{{imgs.WORD_HIGH_ICON}}',
+      'docx': '{{imgs.WORD_HIGH_ICON}}',
+      'xls': '{{imgs.EXCEL_HIGH_ICON}}',
+      'xlsx': '{{imgs.EXCEL_HIGH_ICON}}',
+      'other': '{{imgs.FILE_HIGH_ICON}}'
+    }
+    let extension = name.substr( (name.lastIndexOf(".") + 1 - name.length) ).toLowerCase();
+    if (!fileIcon[extension])
+      extension = 'other'
+    let section = document.getElementById("file-section");
+    section.style="border-style: solid";
+    section.innerHTML +=
+      `<div class="file-container">
+        <div class="file-container-icon"><img src=${fileIcon[extension]}></div>
+        <div class="file-container-name"><a href="${url}" target="_blank">${extension}</a></div>
+      </div>`
+  }
+
+  function getNetworks(){
+    let networkMap ={
+      "github": 1,
+      "behance": 2,
+      "linkedin": 3,
+      "other": 4
+    }
+    {% if profile.networks %}
+      {% for network in profile.networks %}
+        addNetwork(`${networkMap["{{network.name}}"]}`, "{{network.url}}");
+      {% endfor %}
+    {% endif %}
+  }
+
+  function getFiles(){
+    {% if profile.hasFiles %}
+      {% for file in profile.attachFiles %}
+        addFile(`${"{{file.name}}"}`, `https://drive.google.com/file/d/${"{{file.googleId.id}}"}/view?usp=drivesdk`, "{{file.googleId.id}}");
+      {% endfor %}
+    {% endif %}
+  }
+
+  function addCV(name, url, id) {
+    let fileIcon ={
+      'pdf': '{{imgs.PDF_HIGH_ICON}}',
+      'png': '{{imgs.IMAGE_HIGH_ICON}}',
+      'jpg': '{{imgs.IMAGE_HIGH_ICON}}',
+      'jpeg': '{{imgs.IMAGE_HIGH_ICON}}',
+      'doc': '{{imgs.WORD_HIGH_ICON}}',
+      'docx': '{{imgs.WORD_HIGH_ICON}}',
+      'xls': '{{imgs.EXCEL_HIGH_ICON}}',
+      'xlsx': '{{imgs.EXCEL_HIGH_ICON}}',
+      'other': '{{imgs.FILE_HIGH_ICON}}'
+    }
+    let extension = name.substr( (name.lastIndexOf(".")+1 - name.length) ).toLowerCase();
+    if (!fileIcon[extension])
+      extension = 'other'
+    let section = document.getElementById("cv-file-section");
+    section.style="border-style: solid";
+    section.innerHTML +=
+      `<div class="file-container-cv">
+        <div class="file-container-icon"><img src=${fileIcon[extension]}></div>
+        <div class="file-container-name"><a href="${url}" target="_blank">CV</a></div>
+      </div>`
+  }
+
+  function getCV(){
+    {% if profile.hasCVs %}
+      console.log('tiene cvs')
+      {% for cv in profile.attachCVs %}
+        console.log('tiene 1 cv')
+        addCV(`${"{{cv.name}}"}`, `https://drive.google.com/file/d/${"{{cv.googleId.id}}"}/view?usp=drivesdk`, "{{cv.googleId.id}}");
+      {% endfor %}
+    {% endif %}
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    getCV();
+    getNetworks();
+    getFiles();
+  })
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-sections">
+  <div class="information-section">
+    {# personal #}
+    <div class="two-rows">
+      <img src="{{ imgs.FREELANCER_ICON }}">
+      <div style="margin-left:20px;">
+        <h1>{{ profile.name }}</h1>
+        freelance {{ profile.condition }}
+      </div>
+    </div>
+    &nbsp
+    <h3> Información de contacto </h3>
+
+    <div class="profile-input">
+      <span>
+      <img src="{{imgs.MAIL_ICON}}">
+      <label style="min-width: 320px;">{{profile.email}}</label></span>
+      <span class="chip" style="background-color:#BB001B; margin-top: 0px; width: 120px;"><span class="chip-text">
+        <a href="#" onclick="window.open('https://mail.google.com/mail/u/{{managerEmail}}/?view=cm&to={{profile.email}}', 'email', 'height=90%')" style="color:white;" target="_blank">Enviar Correo</a>
+      </span></span>
+    </div>
+    <div class="profile-input">
+      <span>
+      <img src="{{imgs.WPP_ICON}}">
+      <label style="min-width: 320px;">+{{profile.whatsappText}}</label></span>
+      <span class="chip" style="background-color:#25D366; margin-top: 0px; width: 120px"><span class="chip-text">
+        <a href="https://api.whatsapp.com/send?phone={{profile.whatsappText}}" style="color:white;" target="_blank">Enviar mensaje</a>
+      </span></span>
+    </div>
+
+    &nbsp
+
+    <section id="experience">
+      <h3> Experiencia </h3>
+      <section id="cv-file-section"></section>
+    </section>
+
+    <section id="portfolio">
+      <h4><b> Portafolio </b></h4>
+      <section id="file-section"></section>
+      </section>
+
+    &nbsp
+    {# business #}
+    {# TODO: Buscador filtre los tubros, projectos y que no se pueda eliminar #}
+    <section id="business">
+      <h3>Rubros que conoce</h3>
+      {% luci_typeahead 'business' profile.businesses %}
+    </section>
+    {# project #}
+    <section id="project">
+      <h3>Tipos de proyectos participado</h3>
+      {% luci_typeahead 'project' profile.projects %}
+    </section>
+  </div>
+  <div class="information-section">
+    <h3>Autoevaluación</h3>
+    <div class="two-rows">
+      <div>
+        <div>
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          Es su especialidad
+        </div>
+        <div>
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="not-scored" src="{{ imgs.STAR_ICON }}">
+          Ha hecho algunos proyectos
+        </div>
+      </div>
+      <div>
+        <div>
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="not-scored" src="{{ imgs.STAR_ICON }}">
+          <img class="not-scored" src="{{ imgs.STAR_ICON }}">
+          Solo ha hecho 1 vez
+        </div>
+        <div>
+          <img class="scored" src="{{ imgs.STAR_ICON }}">
+          <img class="not-scored" src="{{ imgs.STAR_ICON }}">
+          <img class="not-scored" src="{{ imgs.STAR_ICON }}">
+          <img class="not-scored" src="{{ imgs.STAR_ICON }}">
+          Nunca ha trabajado pero podría
+        </div>
+      </div>
+  </div>
+    {% for child in tree.children %}
+        {% include "desktop/accountmanager/tree.html" with node=child %}
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

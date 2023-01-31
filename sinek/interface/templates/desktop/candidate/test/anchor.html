@@ -1,0 +1,166 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:candidate:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ candidate.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .app-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 700px !important;
+  }
+
+  .container-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+  }
+
+  .container-card label {
+    margin: 0 10px;
+  }
+
+  .container-card .number {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .title-header{
+      padding: 10px 24px;
+  }
+
+  .input-container{
+      padding: 10px 24px;
+      margin-bottom: 10px;
+  }
+
+  .container-card-instruction{
+    padding: 1.5rem 1.5rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-flex-center">
+  <div class="card">
+    <div class="container-card-instruction">
+      <strong>Instrucciones:</strong> A continuación leerás una serie de enunciados que tendrás que puntuar del 1 al 6, donde 1 representa "nunca" y 6 "siempre". Recuerda que al finalizar debes escribir el número de los 3 enunciados que para ti tengan un mayor grado de veracidad.
+    </div>
+  </div>
+</div>
+<form method="POST" action="{% url 'site:candidate:anchor' %}">
+  {% csrf_token %} {% for question in questions %}
+
+  <div class="card">
+    <div class="card-header">
+      {{ question.number }}. {{ question.statement }}
+    </div>
+    <div class="container-card">
+      <div>Nunca</div>
+      <div>
+        <label>
+          <div class="number">1</div>
+          <div>
+            <input type="radio" name="answer_{{ question.number }}" value="1" />
+          </div>
+        </label>
+        <label>
+          <div class="number">2</div>
+          <div>
+            <input type="radio" name="answer_{{ question.number }}" value="2" />
+          </div>
+        </label>
+        <label>
+          <div class="number">3</div>
+          <div>
+            <input type="radio" name="answer_{{ question.number }}" value="3" />
+          </div>
+        </label>
+        <label>
+          <div class="number">4</div>
+          <div>
+            <input type="radio" name="answer_{{ question.number }}" value="4" />
+          </div>
+        </label>
+        <label>
+          <div class="number">5</div>
+          <div>
+            <input type="radio" name="answer_{{ question.number }}" value="5" />
+          </div>
+        </label>
+        <label>
+          <div class="number">6</div>
+          <div>
+            <input type="radio" name="answer_{{ question.number }}" value="6" />
+          </div>
+        </label>
+      </div>
+      <div>Siempre</div>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="card">
+    <div class="card-header">
+        <h4>Repasa ahora tus respuestas e identifica las frases a las cuales diste la máxima puntuación. Elige sólo TRES enunciados que para ti tengan un mayor grado de veracidad.</h4>
+    </div>
+    {% for fnumber in favourites %}
+    <div class="card-header title-header">
+        Elección {{ fnumber }} (Número del enunciado)
+    </div>
+    <div class="container-card input-container">
+        <input placeholder="Coloque el número del enunciado" name="favourite_{{ fnumber }}">
+    </div>
+    {% endfor %}
+</div>
+  <div class="container-flex-center">
+    <button type="submit">Enviar</button>
+  </div>
+</div>
+</form>
+{{form.errors}}
+{% if form.errors %}
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <img
+        src="https://www.freeiconspng.com/uploads/red-circular-image-error-0.png"
+        width="100"
+        alt="Success"
+      />
+      <span class="close">×</span>
+    </div>
+    <div class="modal-body">
+      <h4>¡Hay un error!</h4>
+      <p>Vuelve a completar.</p>
+    </div>
+  </div>
+</div>
+{% endif %}
+<script>
+  var modal = document.getElementById("myModal");
+  var btn = document.getElementById("myBtn");
+  var span = document.getElementsByClassName("close")[0];
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+</script>
+{% endblock %}

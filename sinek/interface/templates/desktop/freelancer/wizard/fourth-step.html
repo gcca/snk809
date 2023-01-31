@@ -1,0 +1,155 @@
+{% load luci_tags %}
+<head>
+{# Slim Select Start #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet"></link>
+{# Slim Select End #}
+</head>
+<script>
+  function OnFinishWizardClick(input){
+    let form = input.form
+
+    let businessesSlimSelect = form['slimselect-businesses'];
+    let businesses = businessesSlimSelect.slim.selected();
+    let projectsSlimSelect = form['slimselect-projects'];
+    let projects = projectsSlimSelect.slim.selected();
+
+    let jobPreferencesChecked = document.querySelectorAll('input[name=jobPreferences]:checked');
+    let jobPreferences = []
+
+    for (var i=0; i<jobPreferencesChecked.length; i++) {
+      jobPreferences.push(jobPreferencesChecked[i].value)
+    }
+
+    let worklifePreferencesChecked = document.querySelectorAll('input[name=worklifePreferences]:checked');
+    let worklifePreferences = []
+
+    for (var i=0; i<worklifePreferencesChecked.length; i++) {
+      worklifePreferences.push(worklifePreferencesChecked[i].value)
+    }
+
+    let body = { businesses, projects, jobPreferences, worklifePreferences }
+
+    if (jobPreferencesChecked.length > 2 || jobPreferencesChecked.length < 1) {
+      toastr.error('Escoge desde 1 hasta 2 preferencias en tu siguiente trabajo', 'Información incompleta')
+      return
+    }
+
+    if (worklifePreferencesChecked.length > 3 || worklifePreferencesChecked.length < 1) {
+      toastr.error('Escoge desde 1 hasta 3 cosas que valoras más en tu vida', 'Información incompleta')
+      return
+    }
+
+    RemoteFinishWizard(body)
+  }
+
+  function RemoteFinishWizard(body) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:fourth-step' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        // Que pueda continuar en el formulario
+        $('#smartwizard').smartWizard("next");
+      }
+    }
+
+    data = JSON.stringify(body);
+
+    xhr.send(data);
+  }
+
+  $(function() {
+    $('input[name="worklifePreferences"]').bind("click", function(role) {
+      checked = $('input[name="worklifePreferences"]:checked') 
+      nonChecked = $('input[name="worklifePreferences"]:not(:checked)')
+      maxAllowed = 3
+      if (checked.length == maxAllowed) {
+        nonChecked.prop("disabled", true)
+      } else {
+        nonChecked.prop("disabled", false)
+      }
+    });
+  });
+  $(function() {
+    $('input[name="jobPreferences"]').bind("click", function(role) {
+      checked = $('input[name="jobPreferences"]:checked') 
+      nonChecked = $('input[name="jobPreferences"]:not(:checked)')
+      maxAllowed = 2
+      if (checked.length == maxAllowed) {
+        nonChecked.prop("disabled", true)
+      } else {
+        nonChecked.prop("disabled", false)
+      }
+    });
+  });
+
+</script>
+<h4>Solo para terminar</h4>
+<form>
+<div class="end-tab-container">
+    <div class="left-end-tab">
+        <div>
+            <h6>Industrias que conozco y/ó son de mi interés</h6>
+            <p>
+                Escoge las industrias de las empresas que has trabajado o conoces.
+                Conocer el cómo funciona un rubro es un plus que las empresas
+                consideran.
+            </p>
+            {% luci_freelancer_slimselect 'businesses' businessList profile.businesses %}
+        </div>
+        <div>
+            <h6>Tipos de proyectos que conozco y/ó son de mi interés</h6>
+            <p>Escoge los tipos de proyectos</p>
+            {% luci_freelancer_slimselect 'projects' projectList profile.projects %}
+        </div>
+        <div class="checkbox-like-job">
+            <h6>¿Cómo te gustaría que sea tu siguiente trabajo?</h6>
+            <p>Escoge desde 1 hasta 2</p>
+            <div class="checkbox-next-job">
+                {% for job in jobPreferences %}
+                {% if forloop.first or forloop.counter0|divisibleby:4 %}
+                <div>
+                {% endif %}
+                <label><input type="checkbox" name="jobPreferences"
+                    {% if job in profile.jobPreferences %}
+                    checked
+                    {% endif %}
+                    value="{{job}}" />
+                    {{job}}
+                </label>
+                {% if forloop.counter|divisibleby:4 or forloop.last %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="right-end-tab">
+        <h6>¿Qué valoras más en esta etapa de tu vida?</h6>
+        <p>Escoge desde 1 hasta 3</p>
+        <div class="checkbox-life-chapter">
+            {% for worklife in worklifePreferences %}
+            {% if forloop.first or forloop.counter0|divisibleby:6 %}
+            <div>
+            {% endif %}
+            <label><input type="checkbox" name="worklifePreferences"
+                {% if worklife in profile.worklifePreferences %}
+                checked
+                {% endif %}
+                value="{{worklife}}" />
+                {{worklife}}
+            </label>
+            {% if forloop.counter|divisibleby:6 or forloop.last %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="button-container">
+    <button class="btn sw-btn-prev sw-btn" type="button">Anterior</button>
+    <button class="btn-primary" type="button" onclick="OnFinishWizardClick(this)">Siguiente</button>
+</div>
+</form>

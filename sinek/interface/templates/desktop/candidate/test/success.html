@@ -1,0 +1,62 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .app-content{
+    display:flex;
+    justify-content:center;
+  }
+  .card-header{
+    justify-content:center!important;
+    flex-direction: column;
+    gap: 45px;
+  }
+  .container-card{
+    display:flex;
+    justify-content:center;
+    flex-direction: column;
+    text-align:center;
+  }
+  .container-card a{
+    border: 1px solid transparent;
+    border-color: var(--bs-primary);
+    background-color: var(--bs-primary);
+    color: var(--bs-light) !important;
+    box-shadow: none;
+    font-weight: 500;
+    display: inline-block;
+    line-height: 1;
+    color: var(--bs-body-color);
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    padding: 0.786rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.358rem;
+    mask-image: none;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background 0s, border 0s;
+  }
+  .container-card a:hover{
+    box-shadow: 0 8px 25px -8px var(--bs-primary);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h1>¡Felicidades, {{candidate.name}}!</h1>
+    <img src="https://www.pngall.com/wp-content/uploads/2016/07/Success-PNG-Image.png" width="150px"/>
+  </div>
+  <div class="container-card">
+    <p>Haz culminado satisfactoriamente el test. <br> Dale click al siguiente enlace para volver al dashboard.</p>
+    <a href="{% url 'site:candidate:dashboard' %}">Volver al Dashboard</a>
+  </div>
+</div>
+
+{% endblock %}

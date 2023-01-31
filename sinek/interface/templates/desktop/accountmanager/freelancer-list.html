@@ -1,0 +1,230 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% load static %}
+{% load luci_tags %}
+
+{% block top-menu %}
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:dashboard-freelancer' %}">Dashboard</a>
+</div>
+<div class="nav-icon nav-selected">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Proveedores</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.INITIATIVE_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:initiative-list' %}" onclick="pageChange();">Iniciativas</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.PROJECT_ICON}}">
+  <a class="linked" href="#">Projectos</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.EVALUATION_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Pruebas</a>
+</div>
+<div class="dropdown menu-right">
+  <button class="dropbtn"><img src="{% static 'img/cogwheel-blue.png' %}"></button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>{% include 'desktop/accountmanager/freelancer-list.css' %}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet"></link>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.0/js/jquery.tablesorter.js" integrity="sha256-serXvhbeEKdQIfTFSD3wpNCGNx2+/9py7VXfwLhYTfk=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<script>
+  function pageChange(){
+    $.LoadingOverlay('show');
+  }
+
+  $(window).unload(function() {
+    $.LoadingOverlay('hide');
+  });
+</script>
+
+{# Form to search freelancers #}
+<div class="row" style="padding-top: 10px;">
+  <h2 style="color:#FF70A9;">Selecciona la tribu idónea</h2>
+  <b class="col-6">{{ numberFreelancers }} tribu{% if numberFreelancers != 1 %}s{% endif %} inscrita{% if numberFreelancers is not 1 %}s{% endif %}</b>
+</div>
+<div id="filter-form-container">
+  <form id="freelancer-find-form" method="post" action="{% url 'site:accountmanager:freelancer-list' %}">
+    {% csrf_token %}
+    <div id="filter-form">
+      <div class="field">
+        <label class="col-sm-2 no-pad">Servicios, herramientas o tecnologías<b class="field-star">*</b></label>
+        {% luci_slimselect 'knowledges' knowledges selectedKnowledges %}
+      </div>
+      <div class="field">
+        <label class="col-sm-2 no-pad">Rubro</label>
+        {% luci_slimselect 'businesses' businesses selectedBusinesses %}
+      </div>
+      <div class="field">
+        <label class="col-sm-2 no-pad">Tipo de proyectos</label>
+        {% luci_slimselect 'projects' projects selectedProjects %}
+      </div>
+        <div class="field">
+          <label class="col-sm-2 no-pad">Nombre</label>
+          <input name="name" style="min-width: 280px; border-radius: 24px;" placeholder="Escribe el nombre" value="{{freelancerName}}"/>
+          <span class="col-separator"></span>
+          <button class="luci-outline-btn" style="width: 300px;" type="submit">Buscar freelancer</button>
+      </div>
+    </div>
+    <input id="pagination-input" type="hidden" name="page" value="1"/>
+  </form>
+</div>
+{# Freelancer List #}
+
+<b>{{ numberResults }} resultado{% if numberResults is not 1 %}s{% endif %}</b>
+<div>&nbsp</div>
+
+<table class="table table-hover" id="myTable">
+  <thead>
+  <tr>
+    <th>Nombre</th>
+    <th>Dedic.</th>
+    <th>Experiencia</th>
+    <th>Portafolio</th>
+    <th>Trabajos</th>
+    <th>Compatibilidad</th>
+    <th>Contactar</th>
+    <th>Detalles</th>
+  </tr>
+</thead>
+<tbody>
+{% if freelancers %}
+    {% for freelancer in freelancers %}
+      <tr>
+        <td>{{ freelancer.name }}</td>
+        <td>{% if freelancer.isFulltime %}
+          <b style="color:#00B9AB"> {{ freelancer.condition }}</b>{% else %}
+          <b style="color:#eed9b9"> {{ freelancer.condition }}</b>{% endif %}</td>
+        <td>
+          {% if freelancer.hasExperience %}
+            {% if freelancer.hasCVs %}
+            {% for cv in freelancer.attachCVs %}
+              <span class="chip chip-interactive" style="background-color:#BB001B;"><span class="chip-content">
+                <a href="https://drive.google.com/file/d/{{cv.googleId.id}}/view?usp=drivesdk" target="_blank" style="color:white;">
+                <img src="{{imgs.PDF_ICON}}" width="15"> CV{{ forloop.counter }}</a>
+              </span></span>
+            {% endfor %}
+            {% endif %}
+            {% for network in freelancer.networks %}
+              {% if network.name == 'linkedin' %}
+              <span class="chip chip-interactive" style="background-color:#0E76A8;"><span class="chip-content">
+                <a href="{{ network.url }}" target="_blank" style="color:white;">
+                <img src="{{imgs.LINKEDIN_ICON}}"> Linkedin </a>
+              </span></span>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+          -
+          {% endif %}
+        </td>
+        <td>
+          {% for network in freelancer.networks %}
+            {% if network.name == 'github' %}
+            <span class="chip chip-interactive" style="background-color:black;"><span class="chip-content">
+              <a href="{{ network.url }}" target="_blank" style="color:white;">
+              <img src="{{imgs.GITHUB_ICON}}"> Github</a>
+            </span></span>
+
+            {% elif network.name == 'behance' %}
+            <span class="chip chip-interactive" style="background-color:#1769FF;"><span class="chip-content">
+              <a href="{{ network.url }}" target="_blank" style="color:white;">
+              <b>Bé</b>hance</a>
+            </span></span>
+
+            {% elif network.name == 'linkedin' %}
+            {% else%}
+            <span class="chip chip-interactive" style="background-color:white;"><span class="chip-content">
+              <a href="{{ network.url }}" target="_blank" style="color:black;">
+              <img src="{{imgs.WEBSITE_ICON}}"> Web</a>
+            </span></span>
+            {% endif %}
+
+          {% endfor %}
+        </td>
+        <td>
+          {% if freelancer.hasFiles %}
+            {% for file in freelancer.attachFiles %}
+            <span class="chip chip-interactive" style="background-color:#BB001B;"><span class="chip-content">
+              <a href="https://drive.google.com/file/d/{{file.googleId.id}}/view?usp=drivesdk" target="_blank" style="color:white;">
+              <img src="{{imgs.PDF_ICON}}" width="15"> Doc{{ forloop.counter }}</a>
+            </span></span>
+            {% endfor %}
+          {% else %}
+            -
+          {% endif %}</td>
+        <td>
+          {% for knowledge in freelancer.knowledgeCompatibility %}
+          <span class="chip" style="background-color:#FF70A9; {% if knowledge == 0 %}opacity:0.5{% endif %}"><span class="chip-content">
+              {{ knowledge }}
+          </span></span>
+          {% endfor %}
+          {% for business in freelancer.businessCompatibility %}
+            <span class="chip" style="background-color:#3C64B1; {% if business == 0 %}opacity:0.5{% endif %}"><span class="chip-content">
+              {{ business }}
+            </span></span>
+          {% endfor %}
+          {% for project in freelancer.projectsCompatibility %}
+            <span class="chip" style="background-color:#2CA8FF; {% if project == 0 %}opacity:0.5{% endif %}"><span class="chip-content">
+              {{ project }}
+            </span></span>
+          {% endfor %}
+        </td>
+        <td>
+          <span class="chip chip-interactive" style="background-color:#BB001B;"><span class="chip-content">
+            <a href="#" onclick="window.open('https://mail.google.com/mail/u/{{managerEmail}}/?view=cm&to={{freelancer.email}}', 'email', 'height=90%')" style="color:white;" target="_blank"><img src="{{ imgs.GMAIL_ICON }}"/> Correo</a>
+          </span></span>
+
+          <span class="chip chip-interactive" style="background-color:#25D366;"><span class="chip-content">
+            <a href="https://api.whatsapp.com/send?phone={{freelancer.whatsappText}}" style="color:white;" target="_blank"><img src="{{ imgs.WPP_ICON }}"/> whatsapp</a>
+          </span></span>
+        </td>
+        <td><a href="{% url 'site:accountmanager:freelancer-info' freelancer.email %}" target="_blank">Ver más</a></td>
+      </tr>
+    {% endfor %}
+{% endif %}
+  </tbody>
+</table>
+<div class="pagination">
+{% for index in paginations %}
+<a class="index"
+{% if currentPage == index %}
+style="pointer-events: none; color: white; background-color: #0079BC; font-weight: bold;"
+{% else %}
+style="cursor: pointer;"
+{% endif %}
+>
+  {{ index }}
+</a>
+{% endfor %}
+</div>
+
+<script>
+$(document).on('click', '.index', function(){
+  value = $(this).text()
+  $('#pagination-input').val(value)
+  $('#freelancer-find-form').submit()
+})
+
+$(document).ready(function () {
+  $("#myTable").tablesorter();
+});
+</script>
+
+{% endblock %}

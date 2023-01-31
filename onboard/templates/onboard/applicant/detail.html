@@ -1,0 +1,125 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:applicant:dashboard' 'Candidatos' %}
+{% neodash_nav_item 'onboard:applicant:list' 'Lista' %}
+{% neodash_nav_mark 'Detalle' %}
+{% end_neodash_nav %}
+{% load neom_webtools %}
+<style>
+#{% _kt 'applicant-quizzes' %} th:nth-child(n+2),
+#{% _kt 'applicant-quizzes' %} td:nth-child(n+2) {
+  text-align: center;
+}
+
+input, button {
+  cursor: pointer;
+}
+</style>
+<hr/>
+{% load neodash_options %}
+{% neodash_options %}
+{% neodash_options_edit 'onboard:applicant' applicant_id=object.id %}
+{% neodash_options_separator %}
+{% neodash_option 'onboard:applicant:onboard:cv-upload' 'Subir CV' applicant_id=object.id %}
+{% neodash_options_separator %}
+{% neodash_option 'onboard:applicant:email-onboard' 'Enviar Email' applicant_id=object.id %}
+{% end_neodash_options %}
+<hr/>
+<section>
+  <table>
+    <caption><b>Candidato</b></caption>
+    <tr><td><i>Nombre:</i></td><td>{{ object.name }}</td></tr>
+    <tr><td><i>Email:</i></td><td>{{ object.email }}</td></tr>
+    <tr>
+      <td><i>Link:</i></td>
+      <td>
+        {% url 'onboard:onboard:dashboard' object.onboard.slug as neodash_link %}
+        <a href="{{ neodash_link }}" target="_blank">{{ neodash_link }}</a><button onclick="CopyToClipboard(this, '{{ request.scheme }}://{{ request.get_host }}{{ neodash_link }}')">📋</button>
+      </td>
+    </tr>
+    <tr>
+      <td><i>CV Url:</i></td>
+      <td>
+        {% if object.onboard.resume %}
+        <a href="{% url 'onboard:applicant:resume' object.id %}" target="_blank">{{ object.onboard.resume }}</a>
+        {% else %}
+        <b>Aún no subido</b>
+        {% endif %}
+        {% if object.onboard.show_resume %}
+        (visible para el candidato 👁️)
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+</section>
+<hr/>
+<section>
+  <b style="padding-left: 180px;">Información del Proceso</b>
+  <a href="{% url 'onboard:applicant:onboard:update' object.id %}">(Actualizar)</a>
+  <table>
+    <tr>
+      <td><i>Nombre:</i></td>
+      <td>{% if object.onboard.process_name %}
+        {{ object.onboard.process_name }}
+      {% else %} - {% endif %}</td>
+    </tr>
+    <tr>
+      <td><i>Link:</i></td>
+      <td>
+      {% if object.onboard.process_link %}
+      <a href="{{ object.onboard.process_link }}" target="_blank">{{ object.onboard.process_link }}</a><button onclick="CopyToClipboard(this, '{{ request.scheme }}://{{ request.get_host }}{{ object.onboard.process_link }}')">📋</button>
+      {% else %} - {% endif %}</td>
+    </tr>
+  </table>
+  <hr/>
+<section>
+<section>
+  {% with display=object.onboard.display slug=object.onboard.slug %}
+  <table id="{% _kt 'applicant-quizzes' %}">
+    <caption><b>Cuestionarios</b></caption>
+    <tr>
+      <th></th>
+      <th>Estado</th>
+      <th>Visible</th>
+    </tr>
+    {% include 'onboard/applicant/detail-assessment-item.html' with name='DISC' assessment_detail_path='onboard:applicant:assessment:disc' has_assessment=object.onboard.discinput slug=slug assessment_name='disc' show=object.onboard.show_disc %}
+    {% include 'onboard/applicant/detail-assessment-item.html' with name='TMMS' assessment_detail_path='onboard:applicant:assessment:tmms' has_assessment=object.onboard.tmmsinput slug=slug assessment_name='tmms' show=object.onboard.show_tmms %}
+    {% include 'onboard/applicant/detail-assessment-item.html' with name='Anclas de Carrera' assessment_detail_path='onboard:applicant:assessment:career-anchors' has_assessment=object.onboard.careeranchorsinput slug=slug assessment_name='career_anchors' show=object.onboard.show_career_anchors %}
+    {% include 'onboard/applicant/detail-assessment-item.html' with name='Instrucciones Complejas' assessment_detail_path='onboard:applicant:assessment:complex' has_assessment=object.onboard.complexinstructionsinput slug=slug assessment_name='complex_instructions' show=object.onboard.show_complex_instructions %}
+  </table>
+  {% endwith %}
+  <table id="{% _kt 'applicant-googleforms' %}">
+    <caption><b>Google Forms</b></caption>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>Asignado</th>
+    </tr>
+    {% for googleform in googleforms %}
+    <tr>
+      <td>{{ googleform.title }}</td>
+      <td>
+        <a target="_blank" href="{{googleform.view_link}}">Ver Resultados</a>
+      </td>
+      <td>
+        <form method="post" style="margin:0" action="{% url 'onboard:onboard:googleform-toggle-visibility' slug=object.onboard.slug googleform_id=googleform.id %}">{% csrf_token %}
+          <input type="submit" value="{% if googleform.checked %}✅{% else %}✖{% endif %}"/>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+</section>
+
+<script>
+  function CopyToClipboard(btn, data) {
+    navigator.clipboard.writeText(data);
+    btn.innerHTML = "📋 Copiado";
+    btn.style.opacity = "0.6";
+  }
+</script>

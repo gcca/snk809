@@ -1,0 +1,16 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neom_webtools %}
+<table class="{% _kt 'disc-input-table' %}">
+  <tr>
+    <th></th>
+    <th>Menos</th>
+    <th>Más</th>
+  </tr>
+  {% for trait in widget.attrs.traits %}
+    <tr>
+      <td>{{ trait }}</td>
+      <td><input type="radio" name="{{ widget.name }}-minus" value="{% cycle 1 2 3 4 as minus_value %}"{% if minus_value == widget.value.minus %} checked{% endif %}/></td>
+      <td><input type="radio" name="{{ widget.name }}-plus" value="{% cycle 1 2 3 4 as plus_value %}"{% if plus_value == widget.value.plus %} checked{% endif %}/></td>
+    </tr>
+  {% endfor %}
+</table>

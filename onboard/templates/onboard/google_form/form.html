@@ -1,0 +1,19 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:googleform:dashboard' 'Habilidades' %}
+{% if object %}
+{% neodash_nav_item 'onboard:googleform:list' 'Lista' %}
+{% neodash_nav_item 'onboard:googleform:detail' 'Detalle' googleform_id=object.id %}
+{% endif %}
+{% neodash_nav_mark 'Google Form Test' %}
+{% end_neodash_nav %}
+<form method="post">{% csrf_token %}
+  <table>
+    {{ form }}
+  </table>
+  <input type="submit"/>
+</form>

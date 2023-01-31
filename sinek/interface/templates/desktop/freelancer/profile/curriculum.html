@@ -1,0 +1,182 @@
+<style>
+    .file-upload {
+        margin: 20px 0;
+    }
+
+    .file-upload-btn {
+        width: 100%;
+        margin: 0;
+        color: #fff;
+        background: var(--bs-primary);
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        transition: all .2s ease;
+        outline: none;
+        font-weight: 700;
+    }
+
+    .file-upload-btn:active {
+        border: 0;
+        transition: all .2s ease;
+    }
+
+    .file-upload-content {
+        display: none;
+        text-align: center;
+        background-color: rgb(0, 121, 188,0.2);
+        border: 1px solid var(--bs-primary);
+        border-radius: 6px;
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    .file-upload-input {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .image-upload-wrap {
+        width: 50%;
+        padding: 15px;
+        margin: 0 auto;
+        margin-top: 20px;
+        border: 1.5px solid var(--bs-primary);
+        border-radius: 6px;
+        background-color: rgb(230,242,249);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-title-wrap {
+        padding: 0 15px 15px 15px;
+        color: #222;
+    }
+
+    .file-upload-image {
+        max-height: 200px;
+        max-width: 200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .remove-image {
+        width: 200px;
+        margin: 0;
+        color: #fff;
+        background: var(--bs-danger);
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        transition: all .2s ease;
+        outline: none;
+        font-weight: 700;
+    }
+
+    .remove-image:active {
+        border: 0;
+        transition: all .2s ease;
+    }
+</style>
+<script>
+    function ForceCVButtonClick(boton) {
+        let fileSection = boton['parentElement']['parentElement']['parentElement'];
+        let cvInput = document.getElementById('cv-input')
+        cvInput.click()
+        {% comment %} fileSection.remove() {% endcomment %}
+    }
+
+    function OnCVChange(input){
+        let formData = new FormData();
+        formData.append("archivo", input.files[0]);
+        RemoteUpdateCV(formData);
+    }
+
+    function RemoteUpdateCV(body) {
+        DisplayLoadingModal()
+        let xhr = new XMLHttpRequest();
+        xhr.open('post', "{% url 'rc:freelancer:cv-upload-wizard' %}", true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                $.LoadingOverlay("hide");
+                response = JSON.parse(xhr.response);
+                if (response.updateTree === 'True'){
+                    let googleId = response.googleId
+                    document.getElementById('cv-container').remove()
+                    addCV(response.name, response.path, response.id)
+                    toastr.success('Conocimientos identificados en su portafolio con éxito', 'Identificación Completa');
+                    premarkedWarningDiv = document.getElementById('pre-marked-warning');
+                    premarkedWarningDiv.style.display = 'block';
+                    treeSection = document.getElementById('menu');
+                    treeSection.innerHTML = '';
+                    treeSection.innerHTML = response.tree;
+                    let toggle = document.getElementById('tree-toggle');
+                    if (toggle.checked) {toggle.click()};
+                } else {
+                    toastr.info('No se identificó ningún conocimiento', 'Identificación Completa');
+                }
+            }
+        }
+        xhr.send(body);
+    }
+
+    function removeCV() {
+        document.getElementById('cv-container').remove()
+    }
+
+    function addCV(name, url, id) {
+        let fileIcon ={
+            'pdf': '{{imgs.PDF_HIGH_ICON}}',
+            'png': '{{imgs.IMAGE_HIGH_ICON}}',
+            'jpg': '{{imgs.IMAGE_HIGH_ICON}}',
+            'jpeg': '{{imgs.IMAGE_HIGH_ICON}}',
+            'doc': '{{imgs.WORD_HIGH_ICON}}',
+            'docx': '{{imgs.WORD_HIGH_ICON}}',
+            'xls': '{{imgs.EXCEL_HIGH_ICON}}',
+            'xlsx': '{{imgs.EXCEL_HIGH_ICON}}',
+            'other': '{{imgs.FILE_HIGH_ICON}}'
+        }
+        let extension = name.substr( (name.lastIndexOf(".")+1 - name.length) ).toLowerCase();
+        if (!fileIcon[extension])
+            extension = 'other'
+        let section = document.getElementById("file-upload");
+        section.innerHTML +=
+            `<div id="cv-container"><div class="file-container">
+            <div class="file-container-icon"><img src=${fileIcon[extension]}></div>
+            <div class="file-container-erase"><img id="${id}" src="{{ imgs.UPDATE_ICON }}" onclick="ForceCVButtonClick(this)"></div>
+            <div class="file-container-glass"><a href="${url}" target="_blank"><img src="{{ imgs.MGLASS_ICON }}"></a></div>
+            <div class="file-container-name"><small title="${name}">Curriculum</small></div>
+            </div></div>`
+    }
+</script>
+
+
+<section id="portfolio-section" class="profile-section">
+    <div class="profile-input">
+        <h3 style="margin-bottom:0px;">Mi CV (Curriculum Vitae)</h3>
+    </div>
+    <label>Puedes actualizar la información de tu CV en cualquier momento. Detectaremos automáticamente los nuevos
+        conocimientos detectados y te los mostraremos en la sección “Mis conocimientos”.</label>
+    <form id="portofolio-form">
+        <div class="image-upload-wrap">
+        <div id="file-upload"></div>
+        <input id="cv-input" name="cv-input" type="file" style="display: none;" accept=".pdf" onchange="OnCVChange(this)" />
+        </div>
+    </form>
+</section>
+
+<script>
+    $(window).on("load", function() {
+    {% if profile.hasCVs %}
+        addCV(`${"{{profile.uniqueCV.name}}"}`, `https://drive.google.com/file/d/${"{{profile.uniqueCV.googleId.id}}"}/view?usp=drivesdk`, "{{profile.uniqueCV.googleId.id}}");
+    {% endif %}
+    })
+</script>

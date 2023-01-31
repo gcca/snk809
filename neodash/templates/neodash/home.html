@@ -1,0 +1,25 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'neodash/base.html' %}
+
+{% load neodash_nav %}
+
+{% block nav %}
+{% neodash_nav_mark '⌂' %}
+{% endblock %}
+
+{% block content %}
+<h1>Home</h1>
+<hr/>
+<header>
+  <span><a href="{% url 'neodash:user:password-change' %}">Cambiar contraseña</a></span>
+</header>
+<hr/>
+<section>
+  Opciones:
+  <ul>
+    <li><a href="{% url 'onboard:dashboard' %}">Onboard de candidatos</a></li>
+    <li><a href="{% url 'customers:dashboard' %}">Registro de clientes</a></li>
+    <li><a href="{% url 'neonauts:applicating:configuration:menu' %}">Afiliación</a></li>
+  </ul>
+</section>
+{% endblock %}

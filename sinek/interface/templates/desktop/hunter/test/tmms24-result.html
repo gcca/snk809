@@ -1,0 +1,57 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:hunter:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ user.hunter.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .btn-back {
+    padding: 20px 0;
+  }
+  .right {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .card-header h4 {
+    margin: 0;
+  }
+  .content {
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="btn-back">
+  <a href="{{request.META.HTTP_REFERER}}">Volver</a>
+</div>
+<div class="card">
+  <div class="card-header">
+    <h4>Los resultados del candidato {{name}} son:</h4>
+  </div>
+  <div class="container-card">
+    <div class="content">
+      <h4>Atención:</h4>
+      <h4>{{ result.atencionResultText }}</h4>
+    </div>
+    <div class="content">
+      <h4>Claridad:</h4>
+      <h4>{{ result.claridadResultText }}</h4>
+    </div>
+    <div class="content">
+      <h4>Reparación:</h4>
+      <h4>{{ result.reparacionResultText }}</h4>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'neodash/base.html' %}
+
+{% load neodash_nav %}
+
+{% block nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_mark 'Onboard' %}
+{% endblock %}
+
+{% block content %}
+<h1>Onboard de candidatos</h1>
+Opciones:
+<ul>
+  <li><a href="{% url 'onboard:applicant:dashboard' %}">Candidatos</a></li>
+  <li><a href="{% url 'onboard:googleform:dashboard' %}">Cuestionarios Google Form</a></li>
+</ul>
+{% endblock %}

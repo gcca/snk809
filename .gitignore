@@ -1,0 +1,10 @@
+__pycache__
+db.sqlite3
+venv/
+.DS_Store
+.idea/
+.vscode
+.coverage
+domain/model/*.png
+htmlcov
+uploads

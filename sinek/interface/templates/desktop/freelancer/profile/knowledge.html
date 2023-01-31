@@ -1,0 +1,461 @@
+{% load static %}
+<style>
+  .pre-marked-warning{
+    padding: 20px;
+    background-color: #FFB2361A;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 20px
+  }
+  {# Search styles #}
+  {# TODO: Hacer esto un componente #}
+  .boxContainer{
+    margin-top: 0px;
+    position: relative;
+    width: 300px;
+    height: 42px;
+    border: 1px #E3E3E3 solid;
+    padding: 0px 15px;
+    border-radius:50px;
+    color: #2C2C2C;
+    margin-bottom: 20px;
+  }
+  .elementsContainer{
+    width: 100% !important;
+    height: 100% !important;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .search{
+    border: none !important;
+    height: 100%;
+    width: 100%;
+    padding: 0px 10px !important;
+    border-radius: 50px !important;
+    outline: none !important;
+    font-size: 9pt;
+  }
+  #tree-search-bar{
+    box-shadow: none !important;
+  }
+  {# end TODO #}
+  {# end search styles #}
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  input:checked + .slider {
+    background-color: #0079BC;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px #0079BC;
+  }
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+  .slider.round {
+    border-radius: 27px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    width: 500px;
+    height: 180px;
+    padding: 30px 50px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  .modal h1 {
+    margin-top: 40px;
+    paddin-bottom: 30px;
+  }
+
+  .spinner {
+    margin: auto;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+</style>
+
+<script>
+  function OnKnowledgeClick(input, key, nombre, code){
+    let form = input.form
+    let id = form[`knowledge-key-${key}`].value
+    let name = form[`knowledge-name-${key}`].value
+    let newScore = form[`new-score-${key}`].value
+    let curScore = form[`current-score-${key}`].value
+    let emote = document.getElementById(`${key}-emote${newScore}`)
+    let text = document.getElementById(`${code}`)
+    let checkbox = document.getElementById(`${code}-box`)
+
+    if (curScore == newScore){
+      //Remove
+      RemoteRemoveKnowledge(id, nombre)
+      if (newScore == -1) {
+        document.getElementById(`knowledge-line-${key}`).classList.remove('pre-marked')
+        document.getElementById(`${key}-pre-marked-li`).remove()
+        document.getElementById(code).classList.remove('pre-marked')
+      }
+      input.checked = false;
+      emote.classList.remove('scored');
+      text.classList.remove('scored');
+      text.classList.add('no-scored');
+      checkbox.checked = false;
+      form[`current-score-${key}`].value = "0";
+    } else{
+      //Update
+      RemoteUpdateKnowledge(id, nombre, newScore)
+      if (curScore != 0 && curScore != -1){ document.getElementById(`${key}-emote${curScore}`).classList.remove('scored') }
+      if (curScore == -1) {
+        document.getElementById(`knowledge-line-${key}`).classList.remove('pre-marked')
+        document.getElementById(`${key}-pre-marked-li`).remove()
+        document.getElementById(code).classList.remove('pre-marked')
+      }
+      emote.classList.add('scored');
+      text.classList.remove('no-scored');
+      text.classList.add('scored');
+      checkbox.checked = true;
+      form[`current-score-${key}`].value = newScore;
+    }
+
+    updatePremarkedWarning()
+    HighlightParents(code);
+    CheckPremarkeds(code);
+    let toggle = document.getElementById('tree-toggle');
+    if (toggle.checked) {OnTreeToggleClick();}
+  }
+
+  function CheckPremarkeds(code) {
+    if (code.length == 1) return
+
+    let codeParent = code.slice(0, code.length - 1)
+    let premarkedChilds = document.querySelectorAll(`[id^="${ codeParent }"].pre-marked`)
+
+    if (!premarkedChilds.length > 0) {
+      let indicator = document.querySelector(`#${ codeParent }>.pre-marked-indicator`)
+      if (indicator !== null) indicator.remove()
+    }
+    CheckPremarkeds(codeParent)
+  }
+
+  function HighlightParents(code){
+    if (code.length == 1){ return;}
+
+    let codeParent = code.slice(0, code.length - 1);
+    let nodeParent = document.getElementById(`${codeParent}`);
+    let indicator = nodeParent.getElementsByClassName('pre-marked-indicator')
+    let checkbox = document.getElementById(`${codeParent}-box`);
+    let letter = 'A';
+    let node;
+
+    while(document.getElementById(`${codeParent}`+letter)){
+      node = document.getElementById(`${codeParent}`+letter);
+      if (node.classList.contains('scored')){
+        nodeParent.classList.remove('no-scored');
+        nodeParent.classList.add('scored');
+        checkbox.checked = true;
+        return HighlightParents(codeParent);
+      }
+      letter = String.fromCharCode(letter.charCodeAt()+1)
+    }
+
+    nodeParent.classList.remove('scored');
+    nodeParent.classList.add('no-scored');
+    checkbox.checked = false;
+    if (!nodeParent.classList.contains('pre-marked')) {
+      if (indicator.length > 0) indicator[0].remove()
+    }
+    HighlightParents(codeParent);
+  }
+
+  function RemoteUpdateKnowledge(key, name, score) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:knowledge-update' %}");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        toastr.success('Conocimiento ha sido actualizado con éxito', 'Actualización Completa');
+      }
+    }
+
+    data = JSON.stringify({
+        key: key,
+        name: name,
+        score: score
+    });
+    xhr.send(data);
+  }
+
+  function RemoteRemoveKnowledge(key, name) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:knowledge-delete' %}");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        toastr.success('Conocimiento ha sido actualizado con éxito', 'Actualización Completa');
+      }
+    }
+
+    data = JSON.stringify({
+        key: key,
+        name: name
+    });
+    xhr.send(data);
+  }
+
+  function DisplayLoadingModal() {
+    var customElement = $(
+      "<div class='modal'><div class='spinner'></div><h1>Estamos analizando tu portafolio, esto tomará un minuto 😉</h1></div>"
+  );
+  $.LoadingOverlay("show", {
+      image       : "",
+      custom      : customElement,
+      background  : "rgba(0, 0, 0, 0.6)",
+  });
+  }
+
+  function OnAutoSkillsClick() {
+    DisplayLoadingModal();
+    let xhr = new XMLHttpRequest();
+    xhr.open('get', "{% url 'rc:freelancer:auto-skills' %}");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        response = JSON.parse(xhr.response);
+        if (response.updateTree == 'True'){
+          toastr.success('Conocimientos identificados en su portafolio con éxito', 'Identificación Completa');
+          premarkedWarningDiv = document.getElementById('pre-marked-warning');
+          premarkedWarningDiv.style.display = 'block';
+          treeSection = document.getElementById('menu');
+          treeSection.innerHTML = '';
+          treeSection.innerHTML = response.tree;
+          let toggle = document.getElementById('tree-toggle');
+          if (toggle.checked) {OnTreeToggleClick()};
+        } else {
+          toastr.info('No se identificó ningún conocimiento', 'Identificación Completa');
+        }
+      }
+    }
+    xhr.send();
+  }
+
+  function updatePremarkedWarning() {
+    premarkedKnowledges = document.getElementsByClassName('pre-marked')
+    if (premarkedKnowledges.length === 0){
+      premarkedWarningDiv = document.getElementById('pre-marked-warning')
+      if (premarkedWarningDiv !== null) premarkedWarningDiv.style.display = 'none';
+    }
+  }
+
+  function OnTreeToggleClick() {
+    let toggle = document.getElementById('tree-toggle')
+    let groups = document.querySelectorAll('.line-group>.no-scored')
+    let lines = document.querySelectorAll('.knowledge-line>.no-scored')
+
+    if (!toggle.checked) {
+      Array.from(groups).forEach(function (n) { n.parentNode.style.display='list-item';})
+      Array.from(lines).forEach(function (n) { n.parentNode.style.display='';})
+    }
+    else {
+      Array.from(groups).forEach(function (n) { n.parentNode.style.display='none';})
+      Array.from(lines).forEach(function (n) { n.parentNode.style.display='none';})
+    }
+
+  }
+
+  function CheckCVs() {
+    let hasCV = document.getElementById('cv-container');
+    if (hasCV === null) {TogglePremarkedButton();}
+  }
+
+  function TogglePremarkedButton() {
+    let premarkedButton = document.getElementById('pre-marked-button')
+    let currState = premarkedButton.disabled
+    if (currState) {premarkedButton.removeAttribute('disabled');}
+    else {premarkedButton.setAttribute('disabled', '')}
+  }
+
+</script>
+
+<section id="skills" class="profile-section">
+  <div class="profile-input">
+    <h3 style="margin-bottom:0px;"> Mis Conocimientos</h3>
+  </div>
+  {% comment %} <div class="two-rows">
+    <div>
+      <div>
+        <img src="{{ imgs.HEART_ICON }}">
+        Soy especialista, lo hago siempre
+      </div>
+      <div>
+        <img src="{{ imgs.LIKE_ICON }}">
+        Lo he hecho solo en un proyecto
+      </div>
+    </div>
+    <div>
+      <div>
+        <img src="{{ imgs.SMILE_ICON }}">
+        Tengo varios proyectos realizándolo
+      </div>
+      <div>
+        <img src="{{ imgs.HMMM_ICON }}">
+        No he hecho ningún proyecto pero conozco bien el tema
+      </div>
+    </div>
+  </div> {% endcomment %}
+  <p><b>En esta sección selecciona tus especialidades</b>, aquellas cosas en la que la rompas de acuerdo a la leyenda de arriba. Se lo más sincer@ posible. Recuerda, nosotros te buscaremos proyectos tomando esta información como base:</p>
+{% comment %}   <div>
+    <button id="pre-marked-button" class="btn-primary" onclick="OnAutoSkillsClick()" type="button"
+    {% if not profile.hasCVs %}
+      disabled
+    {% endif %}
+    >
+      Click aquí para detectar nuevos conocimientos en Mi portafolio
+    </button>
+  </div> {% endcomment %}
+  <div id="pre-marked-warning" class="pre-marked-warning"
+    {% if not profile.hasPremarkedKnowledge %}
+    style="display:none;"
+    {% endif %}
+    >
+    <img src="{{ imgs.BELL_ICON }}">
+    *Hemos detectado los siguientes conocimientos, herramientas y frameworks en tu portafolio,
+    por favor selecciona tu nivel de experiencia por cada uno.
+  </div>
+
+  <div id="toggle-div">
+    <p style="margin-left: 10px;"><strong>Mostrar solo las habilidades que yo he marcado o el sistema LUCI ha detectado:</strong> </p>
+    <label class="switch" style="margin-left: 20px;">
+      <input type="checkbox" id="tree-toggle" onclick="OnTreeToggleClick()" unchecked/>
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="boxContainer">
+    <div class="elementsContainer">
+          <img src="{% static 'img/search-icon.svg' %}" />
+          <input type="text" id="tree-search-bar" class="search" placeholder= "Filtre sus habilidades" />
+    </div>
+  </div>
+
+  <ul id="menu">
+    {% for child in tree.children %}
+        {% include "desktop/freelancer/tree-wizard.html" with node=child %}
+    {% endfor %}
+  </ul>
+</section>
+
+<script>
+  let searchTreeBar = document.getElementById('tree-search-bar')
+
+  function removeTildes(s) {
+    return s.replace('á', 'a')
+            .replace('é', 'e')
+            .replace('í', 'i')
+            .replace('ó', 'o')
+            .replace('ú', 'u');
+  }
+
+  function cleanText(str) {return removeTildes(str.toLowerCase());}
+
+  function hide(text) {
+    let hides = document.querySelectorAll('.hide-subtree');
+      Array.from(hides).forEach(el => el.classList.remove('hide-subtree'));
+
+    let sinekTree = document.getElementById('menu');
+    let rootLis = sinekTree.children;
+
+    Array.from(rootLis).forEach(li => traverse(li, text));
+  }
+
+  searchTreeBar.addEventListener('keyup', (e) => {
+    const searchString = cleanText(e.target.value);
+    hide(searchString);
+  });
+
+  function traverse(li, text) {
+    // Si es Knowledge
+    let div = li.firstElementChild;
+    if (div.tagName == 'DIV') {
+      let labelKnowledge = div.children[1];
+      if (!cleanText(labelKnowledge.innerText).includes(text)) {
+        div.classList.add('hide-subtree');
+        return false;
+      }
+      return true;
+    }
+
+    // si es Group
+    let group = li;
+    let labelGroup = group.children[2];
+    if (!cleanText(labelGroup.innerText).includes(text)) {
+      let ul = group.lastElementChild;
+      let acc = 0;
+      Array.from(ul.children).forEach(li => {
+        let containsText = traverse(li, text);
+        if (containsText) { acc++; }
+      });
+      if (acc == 0) {
+        group.classList.add('hide-subtree');
+        return false;
+      }
+    }
+    return true;
+  }
+</script>

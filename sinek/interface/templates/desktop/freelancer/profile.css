@@ -1,0 +1,250 @@
+section {
+  padding-top: 2ex;
+}
+
+{# TODO: Mover a common/dashboard #}
+
+.container-top-title {
+  width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--bs-primary);
+}
+
+.container-top-title h2 {
+  color: var(--bs-primary);
+  font-weight: bold;
+}
+
+.container-top-title label {
+  color: var(--bs-secondary);
+}
+
+.container-sections {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: calc(3 * var(--bs-square));
+}
+
+#left-section, #right-section {
+  width: 45%;
+  flex-grow: 1;
+}
+
+
+@media only screen and (max-width: 1000px){
+  .container-sections {
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  #left-section, #right-section {
+    width: 90%;
+  }
+}
+
+.container-sections h3{
+  color: var(--bs-secondary);
+  font-weight: bold;
+}
+
+.profile-section h3{
+  color: var(--bs-secondary);
+  font-weight: bold;
+}
+
+.interest-content h3{
+  color: var(--bs-secondary);
+  font-weight: bold;
+}
+
+{# end TODO #}
+
+.profile-input{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.profile-input img {
+  margin-right: 15px;
+}
+
+.profile-radio-input {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-btn-section{
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-btn-section > button{
+  margin-left: auto;
+}
+
+.two-rows {
+  display: flex;
+  flex-direction: row;
+  gap: calc(2 * var(--bs-square));
+}
+
+.two-rows > div{
+  width: 50%;
+}
+
+.two-rows > div > div{
+  margin-bottom: calc(2 * var(--bs-square));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.remove {
+  color: var(--bs-secondary);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px;
+  background-color: transparent;
+  border: transparent;
+}
+
+.profile-section {
+  padding: 32px;
+  border-radius: 6px;
+  border: 1px solid rgba(44, 44, 44, .2);
+  margin-bottom: 2em;
+  background-color: white;
+}
+@media only screen and (max-width: 1000px){
+  .profile-section{
+    padding-right: calc(5 * var(--bs-square));
+    padding-left: calc(5 * var(--bs-square));
+  }
+}
+
+label.extra-information{
+  font-size: 80%;
+  color: #888888;
+}
+
+{# File Container #}
+.file-container {
+  display: grid;
+  grid-template-rows: 40px 40px 20px;
+  grid-template-columns: 90px 30px;
+  grid-gap: 5px;
+}
+.file-container-icon {
+  grid-column: 1;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+.file-container-icon > img{
+  width: 80px;
+  height: 80px;
+}
+.file-container-name {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row: 3;
+}
+.file-container-erase {
+  grid-column: 2;
+  grid-row: 1;
+}
+.file-container-erase>img{
+  cursor: pointer;
+}
+.file-container-glass {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+{# End File Container #}
+
+.container-information {
+  display: flex;
+  gap: 25px;
+}
+
+.left-content, .right-content {
+  flex: 1 1;
+}
+
+.number-whatsapp {
+  display: flex;
+  gap: 15px;
+}
+
+.number-whatsapp .country-code {
+  flex: 1;
+  max-width: 12%;
+}
+
+.profile-input input {
+  max-width: 250px;
+}
+
+.number-whatsapp input {
+  flex: 6;
+  max-width: 250px;
+}
+
+.profile-input label:last-child {
+  color: #c4c4c4;
+}
+
+.country-code .ss-single-selected{
+  height: 32px !important;
+}
+
+.profile-input-city-country {
+  display: flex;
+  gap: 15px;
+}
+
+.information-content h5 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.information-content h6 {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profile-section #personal-form .information-content {
+  gap: 35px;
+}
+.country-code {
+  max-width: 20% !important;
+}
+
+.country-city-container .ss-main {
+  max-width: 100%;
+}
+
+.left-information-box input[type="text"] {
+  width: 80%;
+}
+
+.left-information-box .country-city-container label {
+  flex: unset;
+  max-width: 180px;
+  width: 100%;
+}
+
+.number-container input {
+  width: 40%;
+}
+
+{% include 'desktop/freelancer/tree.css' %}

@@ -1,0 +1,232 @@
+- model: applicating.country
+  pk: 1
+  fields:
+    name: Perú
+    phonecode: 51
+- model: applicating.availability
+  pk: 1
+  fields:
+    name: 1 semana
+- model: applicating.availability
+  pk: 2
+  fields:
+    name: 1 mes
+- model: applicating.modality
+  pk: 1
+  fields:
+    name: Remoto
+- model: applicating.modality
+  pk: 2
+  fields:
+    name: Remoto y presencial
+- model: applicating.modality
+  pk: 3
+  fields:
+    name: Presencial
+- model: applicating.englishreading
+  pk: 1
+  fields:
+    name: Nativo
+- model: applicating.englishreading
+  pk: 2
+  fields:
+    name: Avanzado
+- model: applicating.englishreading
+  pk: 3
+  fields:
+    name: Intermedio
+- model: applicating.englishreading
+  pk: 4
+  fields:
+    name: Básico
+- model: applicating.englishwriting
+  pk: 1
+  fields:
+    name: Nativo
+- model: applicating.englishwriting
+  pk: 2
+  fields:
+    name: Avanzado
+- model: applicating.englishwriting
+  pk: 3
+  fields:
+    name: Intermedio
+- model: applicating.englishwriting
+  pk: 4
+  fields:
+    name: Básico
+- model: applicating.englishtalking
+  pk: 1
+  fields:
+    name: Nativo
+- model: applicating.englishtalking
+  pk: 2
+  fields:
+    name: Avanzado
+- model: applicating.englishtalking
+  pk: 3
+  fields:
+    name: Intermedio
+- model: applicating.englishtalking
+  pk: 4
+  fields:
+    name: Básico
+- model: applicating.interestindustry
+  pk: 1
+  fields:
+    name: Comercio electrónico
+- model: applicating.interestindustry
+  pk: 2
+  fields:
+    name: Media streaming
+- model: applicating.interestindustry
+  pk: 3
+  fields:
+    name: Storing
+- model: applicating.interestsubject
+  pk: 1
+  fields:
+    name: Web development
+- model: applicating.interestsubject
+  pk: 2
+  fields:
+    name: Python analytics
+- model: applicating.interestsubject
+  pk: 3
+  fields:
+    name: Java Apache tools
+- model: applicating.interestsubject
+  pk: 4
+  fields:
+    name: Vue UI
+- model: auth.group
+  fields:
+    name: applicating_applicant
+    permissions:
+    - - add_applicant
+      - applicating
+      - applicant
+    - - change_applicant
+      - applicating
+      - applicant
+    - - delete_applicant
+      - applicating
+      - applicant
+    - - view_applicant
+      - applicating
+      - applicant
+- model: auth.group
+  fields:
+    name: applicating_configuration
+    permissions:
+    - - add_availability
+      - applicating
+      - availability
+    - - change_availability
+      - applicating
+      - availability
+    - - delete_availability
+      - applicating
+      - availability
+    - - view_availability
+      - applicating
+      - availability
+    - - add_country
+      - applicating
+      - country
+    - - change_country
+      - applicating
+      - country
+    - - delete_country
+      - applicating
+      - country
+    - - view_country
+      - applicating
+      - country
+    - - add_englishreading
+      - applicating
+      - englishreading
+    - - change_englishreading
+      - applicating
+      - englishreading
+    - - delete_englishreading
+      - applicating
+      - englishreading
+    - - view_englishreading
+      - applicating
+      - englishreading
+    - - add_englishtalking
+      - applicating
+      - englishtalking
+    - - change_englishtalking
+      - applicating
+      - englishtalking
+    - - delete_englishtalking
+      - applicating
+      - englishtalking
+    - - view_englishtalking
+      - applicating
+      - englishtalking
+    - - add_englishwriting
+      - applicating
+      - englishwriting
+    - - change_englishwriting
+      - applicating
+      - englishwriting
+    - - delete_englishwriting
+      - applicating
+      - englishwriting
+    - - view_englishwriting
+      - applicating
+      - englishwriting
+    - - add_interestindustry
+      - applicating
+      - interestindustry
+    - - change_interestindustry
+      - applicating
+      - interestindustry
+    - - delete_interestindustry
+      - applicating
+      - interestindustry
+    - - view_interestindustry
+      - applicating
+      - interestindustry
+    - - add_interestsubject
+      - applicating
+      - interestsubject
+    - - change_interestsubject
+      - applicating
+      - interestsubject
+    - - delete_interestsubject
+      - applicating
+      - interestsubject
+    - - view_interestsubject
+      - applicating
+      - interestsubject
+    - - add_modality
+      - applicating
+      - modality
+    - - change_modality
+      - applicating
+      - modality
+    - - delete_modality
+      - applicating
+      - modality
+    - - view_modality
+      - applicating
+      - modality
+- model: auth.user
+  fields:
+    password: pbkdf2_sha256$390000$VK9v6u2QTzvZkZcwrgmIQH$kntid15oXAA7DIrSOmB2QR5Wm8OmP3/XlyATtkPY51c=
+    last_login: 2023-01-24 17:48:45.674750+00:00
+    is_superuser: false
+    username: cristhian@gonzales.com
+    first_name: Cristhian
+    last_name: Gonzales
+    email: cristhian@gonzales.com
+    is_staff: false
+    is_active: true
+    date_joined: 2023-01-23 20:28:48+00:00
+    groups:
+    - - applicating_applicant
+    user_permissions: []

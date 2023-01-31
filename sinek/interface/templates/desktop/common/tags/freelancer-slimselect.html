@@ -1,0 +1,54 @@
+<style>
+  .tags-widget-{{name}}{
+    background-color: {{ color }};
+    border-radius: 25px;
+    padding: 0 10px;
+    min-width: 240px;
+  }
+  .ss-main{
+    max-width: 80%;
+  }
+  .ss-main .ss-multi-selected{
+    background-color: transparent;
+    border: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-height: 36px;
+    font-size: 12px;
+  }
+  .ss-main .ss-multi-selected .ss-values .ss-disabled{
+    color: white;
+  }
+  .ss-main .ss-multi-selected .ss-add .ss-plus{
+    background: white;
+  }
+  .ss-main .ss-multi-selected .ss-add .ss-plus::after{
+    background: white;
+  }
+  .ss-main .ss-multi-selected .ss-values .ss-value{
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 12px;
+  }
+</style>
+<div class="tags-field">
+  <select id="slimselect-{{name}}" name="{{name}}" multiple class="tags-widget-{{name}}">
+    <option data-placeholder="true"></option>
+      {% for option in options %}
+      <option value="{{ option }}" {% if option in selectedOptions %}selected{% endif %}>
+        {{ option }}
+      </option>
+      {% endfor %}
+  </select>
+  <script>
+  (function() {
+    let slimSelect = new SlimSelect({
+      select: document.getElementById('slimselect-{{name}}'),
+      placeholder: '{{placeholder}}',
+      hideSelectedOption: true,
+      closeOnSelect: false,
+      searchPlaceholder: 'Buscar'
+    });
+  })();
+  </script>
+</div>

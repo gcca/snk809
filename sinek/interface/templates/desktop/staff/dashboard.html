@@ -1,0 +1,20 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, staff</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<h1>Staff dashboard</h1>
+<hr>
+<ul>
+  <li><a href="{% url 'site:staff:new-hunter' %}">Crear Hunter</a></li>
+  <li><a href="{% url 'site:staff:new-accountmanager' %}">Crear Account Manager</a></li>
+</ul>
+{% endblock %}

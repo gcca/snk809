@@ -1,0 +1,71 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ candidate.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .container-card {
+    display: flex;
+    justify-content: space-between;
+  }
+  .tittle-dashboard h2 {
+    margin: 15px 0;
+  }
+  .tittle-dashboard h4 {
+    margin: 20px 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tittle-dashboard">
+  <h2>Candidate Dashboard</h2>
+  <h4>
+    Hola, {{ candidate.name }}! En este espacio se encuentran los Test requeridos para tu proceso de selección.
+  </h4>
+  <h4>¡Buena Suerte!</h4>
+  <br/>
+</div>
+<div class="card">
+  <div class="container-card">
+    <span>Test 1</span>
+    {% if not candidateView.discCompleted %}
+    <a class="linked" href="{% url 'site:candidate:disc' %}">Ir al test</a>
+    {% else %}
+    <a disabled>Finalizado</a>
+    {% endif %}
+  </div>
+  <div class="container-card">
+    <span>Test 2</span>
+    {% if not candidateView.tmms24Completed %}
+    <a class="linked" href="{% url 'site:candidate:tmms24' %}">Ir al test</a>
+    {% else %}
+    <a disabled>Finalizado</a>
+    {% endif %}
+  </div>
+  <div class="container-card">
+    <span>Test 3</span>
+    {% if not candidateView.anchorCompleted %}
+    <a class="linked" href="{% url 'site:candidate:anchor' %}">Ir al test</a>
+    {% else %}
+    <a disabled>Finalizado</a>
+    {% endif %}
+  </div>
+  <div class="container-card">
+    <span>Test 4</span>
+    {% if not candidateView.complexCompleted %}
+    <a class="linked" href="{% url 'site:candidate:complex' %}">Ir al test</a>
+    {% else %}
+    <a disabled>Finalizado</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

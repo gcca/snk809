@@ -1,0 +1,250 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% load static %}
+
+{% block top-menu %}
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:dashboard-freelancer' %}">Dashboard</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Proveedores</a>
+</div>
+<div class="nav-icon nav-selected">
+  <img src="{{imgs.INITIATIVE_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:initiative-list' %}" onclick="pageChange();">Iniciativas</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.PROJECT_ICON}}">
+  <a class="linked" href="#">Projectos</a>
+</div>
+<div class="dropdown menu-right">
+  <button class="dropbtn"><img src="{% static 'img/cogwheel-blue.png' %}"></button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% block head %}
+{{ block.super }}
+<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .container-top-title {
+    width: 100%;
+    margin-bottom: calc(3 * var(--bs-square));
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .container-top-title h2 {
+    color: var(--bs-primary);
+    font-weight: bold;
+  }
+
+  .container-top-title label {
+    color: var(--bs-secondary);
+  }
+
+  .container-sections {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #left-section, #right-section {
+    width: 48%;
+  }
+  #left-section{
+    margin-right: calc(1.5 * var(--bs-square));
+    display: flex;
+    flex-direction: column;
+  }
+  #left-section select{
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+  }
+
+  #right-section{
+    margin-left: calc(1.5 * var(--bs-square));
+    display: flex;
+    flex-direction: column;
+  }
+  #right-section textarea{
+    border: 1px solid #d8d6de;
+    border-radius: 1em;
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+    padding-top: calc(1 * var(--bs-square));
+    padding-bottom: calc(1 * var(--bs-square));
+    padding-left: calc(2 * var(--bs-square));
+    padding-right: calc(2 * var(--bs-square));
+  }
+
+  @media only screen and (max-width: 1000px){
+    #left-section, #right-section {
+      width: 90%;
+      margin-left: none;
+      margin-right: none;
+    }
+  }
+
+  .panel-3 input{
+    border: 1px solid #d8d6de;
+    border-radius: 1em;
+    max-width: 190px;
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+  }
+
+  .container-sections label {
+    color: black;
+  }
+  .luci-complex-select{
+    text-align: left;
+  }
+
+  .profile-section {
+    padding-top: calc(5 * var(--bs-square));
+    padding-bottom: calc(4 * var(--bs-square));
+    padding-right: calc(7 * var(--bs-square));
+    padding-left: calc(7 * var(--bs-square));
+    border-radius: 6px;
+    border: 1px solid rgba(44, 44, 44, .2);
+    margin-bottom: 2em;
+    background-color: white;
+  }
+
+  .button-section{
+    justify-content: right;
+    gap: calc(2 * var(--bs-square));
+    margin-top: calc(2 * var(--bs-square));
+  }
+  .button-section>a, .button-section>button{
+    width: 180px;
+  }
+  a[class="btn-secondary"]{
+    text-align: center;
+    padding-top: 6px;
+    padding-left: 0;
+    padding-right: 0;
+    height: 24px;
+
+  }
+</style>
+
+<script>
+
+  let contactsForAccount = {
+    {% for companyWorker in companyWorkers %}
+    "{{companyWorker.company.code}}": [
+      {% for contact in companyWorker.contacts %}
+      "{{contact.name}}",
+      {% endfor %}
+    ],
+    {% endfor %}
+  }
+
+  function contactListUpdate(account) {
+
+    let section = document.getElementById("contact-selector");
+    let contacts = contactsForAccount[account]
+
+    section.innerHTML = `<option disabled selected>Escoge el cliente</option>`
+
+    contacts.map((contact) => {
+      section.innerHTML += ` <option value="${contact}">
+        ${contact}</option>`
+      }
+    )
+  }
+
+  function pageChange(){
+    $.LoadingOverlay('show');
+  }
+
+  $(window).unload(function() {
+    $.LoadingOverlay('hide');
+  });
+
+</script>
+
+<form method="post" action="{% url 'site:accountmanager:new-initiative' %}">
+  {% csrf_token %}
+  <section class="profile-section">
+
+    {# subheader #}
+    <div id="loader" class="center"></div>
+    <div class="container-top-title">
+      <div id="title-separator">
+        <div style="padding-right: 15px;">
+          <h2 style="color:#FF70A9;">Crear nueva iniciativa</h2>
+        </div>
+      </div>
+    </div>
+    {# end subheader #}
+
+    <div class="container-sections">
+      <div id="left-section">
+        <label>Escoge la empresa</label>
+        <select name="account" class="luci-complex-select" onchange="contactListUpdate(this.value)">
+          <option disabled selected>Escoge una cuenta</option>
+          {% for companyWorker in companyWorkers %}
+          <option value="{{companyWorker.company.code}}">{{companyWorker.company.ruc}} - {{companyWorker.company.name}}</option>
+          {% endfor %}
+        </select>
+
+        <label>Escoge el contacto</label>
+        <select name="contact" class="luci-complex-select" id="contact-selector">
+          <option disabled selected>Escoge el cliente</option>
+        </select>
+
+        <label>Forma de trabajo</label>
+        <select name="workKind" class="luci-complex-select" style="max-width: 320px;">
+          <option disabled selected>Elije una forma de trabajo</option>
+          {% for kind in workKinds %}
+          <option value="{{kind.0}}">{{kind.1}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div id="right-section">
+        <label>Nombre clave</label>
+        <textarea name="name" placeholder="Escribir nombre clave" rows="4" cols="50" style="height: 100px;"></textarea>
+        <br/>
+
+        <label>Objetivo de negocio de la iniciativa</label>
+        <textarea name="goal" placeholder="Escribir objetivo" rows="4" cols="50"></textarea>
+
+        <div class="container-sections" style="justify-content: space-between;">
+          <div class="panel-3">
+            <label> Monto aproximado (S/) </label>
+            <input name="amount" type="number" placeholder="Escribe un monto"/>
+          </div>
+          <div class="panel-3">
+            <label> Fecha aproximada </label>
+            <input name="submission" type="date"/>
+          </div>
+          <div class="panel-3">
+            <label> Probabilidad (1-100%) </label>
+            <input name="successRate" type="text" placeholder="Escribe probabilidad"/>
+          </div>
+        </div>
+        <div class="container-sections button-section">
+          <a class="btn-secondary" href="{% url 'site:accountmanager:initiative-list' %}" onclick="pageChange();">Cancelar y volver</a>
+          <button type="submit" class="btn-primary" onclick="pageChange();">Crear iniciativa y volver</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+{% endblock %}

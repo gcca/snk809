@@ -1,0 +1,252 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:hunter:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ user.hunter.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  .btn-back {
+    padding: 20px 0;
+  }
+  .card{
+    max-height: 230px;
+  }
+  .results-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .results-container p, h4{
+    margin-bottom: 0;
+    margin: 10px 0;
+  }
+  .progress-bar-primary {
+    background-color: rgba(115, 103, 240, 0.12);
+  }
+  .progress .progress-bar:last-child {
+    border-top-right-radius: 5rem;
+    border-bottom-right-radius: 5rem;
+  }
+  .progress-bar-primary .progress-bar {
+    background-color: var(--bs-primary);
+  }
+  .progress-bar-warning .progress-bar {
+    background-color: var(--bs-warning);
+  }
+  .progress-bar-success .progress-bar {
+    background-color: var(--bs-success);
+  }
+  .progress-bar-info .progress-bar {
+    background-color: var(--bs-info);
+  }
+  .progress-bar-danger .progress-bar{
+    background-color: var(--bs-danger);
+  }
+  .progress-bar-yellow .progress-bar{
+    background-color: #FED213;
+  }
+  .progress-bar-salmon .progress-bar{
+    background-color: #F5AF72;
+  }
+  .progress-bar-purple .progress-bar{
+    background-color: #5E1E46;
+  }
+  .progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #7367f0;
+    transition: width 0.6s ease;
+  }
+  .progress {
+    font-size: 0.857rem;
+    display: flex;
+    height: 15px;
+    overflow: hidden;
+    font-size: 0.857rem;
+    background-color: rgba(115, 103, 240, 0.12);
+    border-radius: 5rem;
+  }
+  .percentage-group {
+    width: 50%;
+  }
+  .percentage-group p{
+    margin-bottom: 5px;
+  }
+  .container-graphs {
+    display: flex;
+    gap: 60px;
+    flex-wrap: warp;
+  }
+  .percentage-group-bar {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .percentage-group-bar p {
+    margin-bottom: 0;
+    margin-left: 25px;
+    font-weight: bold;
+  }
+  .container-results{
+    display: flex;
+    gap: 50px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="btn-back">
+  <a href="{{request.META.HTTP_REFERER}}">Volver</a>
+</div>
+<h1>Anclas representativas</h1>
+<div class="container-results">
+  <div class="card">
+    <div class="card-header">
+      Resultados del test del candidato {{name}}
+    </div>
+    <div class="container-card">
+      <div class="results-container">
+        <h4>Primero: </h4>
+        <p>{{ result.firstResultText }}</p>
+      </div>
+      <div class="results-container">
+        <h4>Segundo: </h4>
+        <p>{{ result.secondResultText }}</p>
+      </div>
+      <div class="results-container">
+        <h4>Tercero: </h4>
+        <p>{{ result.thirdResultText }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="percentage-group">
+    <h3>Resultado del candidato {{name}}</h3>
+    <p>Tecnica Funcional</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-primary" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.0 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.0 }}%</p>
+    </div>
+    <p>División General</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-warning" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.1 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.1 }}%</p>
+    </div>
+    <p>Autonomía</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-success" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.2 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.2 }}%</p>
+    </div>
+    <p>Seguridad y estabilidad</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-info" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.3 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.3 }}%</p>
+    </div>
+    <p>Creatividad empresarial</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-danger" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.4 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.4 }}%</p>
+    </div>
+    <p>Servicio-dedicación</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-yellow" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.5 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.5 }}%</p>
+    </div>
+    <p>Exclusivamente desafío</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-salmon" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.6 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.6 }}%</p>
+    </div>
+    <p>Estilo de vida</p>
+    <div class="percentage-group-bar">
+      <div class="progress progress-bar-purple" style="height: 15px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="50"
+          aria-valuemin="50"
+          aria-valuemax="100"
+          style="width: {{ result.totalsResultText.7 }}%"
+        ></div>
+      </div>
+      <p>{{ result.totalsResultText.7 }}%</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

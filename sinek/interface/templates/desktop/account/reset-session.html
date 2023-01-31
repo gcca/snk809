@@ -1,0 +1,8 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+<script>
+    window.addEventListener('load', () => {
+        if (confirm("El usuario que está usando no tiene permisos. Haga click en aceptar para restaurar su sesión.")){
+            window.location.replace("{% url 'site:account:signout' %}");
+        }
+      });
+</script>

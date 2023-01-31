@@ -1,0 +1,20 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'neodash/base.html' %}
+
+{% load neodash_nav %}
+{% load neodash_options %}
+
+{% block nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'customers:dashboard' 'Clientes' %}
+{% neodash_nav_item 'customers:list' 'Lista' %}
+{% neodash_nav_mark 'Cliente' %}
+{% endblock %}
+
+{% block content %}
+{% neodash_options %}
+  {% neodash_options_edit 'customers' customer_id=object.id %}
+{% end_neodash_options %}
+<hr/>
+Cliente: {{ object.name }}
+{% endblock %}

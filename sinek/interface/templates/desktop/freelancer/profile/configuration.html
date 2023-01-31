@@ -1,0 +1,418 @@
+<style>
+  .missing-field{
+    border: 1px solid red !important;
+    box-shadow: 0 0px 6px -1px red !important;
+  }
+
+  .luci-text-field{
+    height: calc(4 * var(--bs-square));
+  }
+
+  .hidden-section{
+    margin-left: calc(4 * var(--bs-square));
+    padding-top: calc(1 * var(--bs-square));
+    color: rgba(68, 68, 68, 0.6);
+  }
+
+  .animate-big{
+    transform: scaleY(1);
+    transform-origin: top;
+    max-height: 700px;
+    transition: transform 0.3s , max-height 0.3s ;
+  }
+  .animate-small{
+    transform: scaleY(1);
+    transform-origin: top;
+    max-height: 550px;
+    transition: transform 0.3s , max-height 0.3s ;
+  }
+
+  #condition-details{
+    align-items: center;
+  }
+
+  .hidden{
+    transform: scaleY(0);
+    max-height: 0px;
+  }
+
+  .condition-detail-option{
+    color: rgba(68, 68, 68, 0.8);
+    background-color: white;
+    padding: 10px 20px 10px 20px;
+    border-radius: calc(1 * var(--bs-square));
+    border: 2px solid rgba(180, 180, 180, 0.6);
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: calc(16 * var(--bs-square));
+  }
+  .condition-detail-option:hover{
+    box-shadow: 0 0px 4px -1px var(--bs-primary);
+  }
+  .condition-detail-option label{
+    cursor: pointer;
+    line-height: 110%;
+  }
+
+  .condition-detail-option-checked{
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: white !important;
+    cursor: default !important;
+  }
+
+  .condition-detail-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+    gap: calc(2 * var(--bs-square));
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+    border-radius: 1em;
+  }
+
+  .condition-detail-container input[type="radio"]{
+    display: none;
+  }
+  #condition-details input[type="number"]{
+    margin-top: calc(1 * var(--bs-square));
+    margin-left: calc(2 * var(--bs-square));
+  }
+
+  .top-separation{
+    margin-top: calc(2 * var(--bs-square));
+  }
+
+  .profile-radio-input > label{
+    margin-left: calc(1 * var(--bs-square));
+  }
+
+  .profile-checkbox-input{
+    display: flex;
+    flex-direction: row;
+  }
+  .profile-checkbox-input > label{
+    margin-left: calc(1 * var(--bs-square));
+  }
+  .text-marked{
+    font-weight: bold;
+  }
+
+  #condition-details >input[type='number']{
+    width: 100px;
+  }
+
+  input[type="checkbox"]{
+    cursor: pointer;
+    display: inline-block;
+    background-color: transparent;
+    color: var(--bs-secondary);
+    min-width: 1.5em;
+    height: 1.5em;
+    border: 0.15em solid lightgray;
+    border-radius: 0.15em;
+    box-shadow: none;
+  }
+  input[type="checkbox"]:checked{
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+  }
+  input[class="group-checkbox"]:checked{
+    background-image: url( {{ imgs.CHECKED_GROUP_ICON }} );
+  }
+  #interest-1-details, #interest-2-details{
+    display: flex;
+    flex-direction: column;
+  }
+
+  textarea{
+    border: 1px solid rgba(44, 44, 44, 0.2);
+    border-radius: calc(1 * var(--bs-square));
+    margin-top: calc(1 * var(--bs-square));
+    padding-top: calc(1 * var(--bs-square));
+    padding-bottom: calc(1 * var(--bs-square));
+    padding-left: calc(2 * var(--bs-square));
+    padding-right: calc(2 * var(--bs-square));
+    resize: none;
+  }
+
+  .three-columns{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: calc(2 * var(--bs-square));
+    margin-top: calc(1 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+    border-radius: 1em;
+  }
+
+  .three-columns > div{
+    width: 30%;
+    vertical-align: middle;
+  }
+
+  .two-columns{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: calc(2 * var(--bs-square));
+    margin-top: calc(2 * var(--bs-square));
+    margin-bottom: calc(2 * var(--bs-square));
+    border-radius: 1em;
+  }
+
+  .two-columns > div{
+    width: 48%;
+    vertical-align: middle;
+  }
+
+</style>
+
+<script>
+  function OnConfigurationClick(input){
+    let form = input.form
+
+    let body = {}
+
+    let isTalent = document.getElementById('cb-interest-1').checked == true
+    let isLancer = document.getElementById('cb-interest-2').checked == true
+
+    body['isTalent'] = isTalent
+    body['isLancer'] = isLancer
+
+    let minimum = form['minimum'].value
+    let disponibility = form['disponibility'].value
+    let modality = form['modality'].value
+    let expectative = form['dreamjob'].value
+
+    if (isTalent){
+      body['minimum'] = minimum
+      body['disponibility'] = disponibility
+      body['modality'] = modality
+      body['expectative'] = expectative
+    }
+
+    let condition = form['condition'].value
+    let isHalfTime = condition == '2'
+    let isFullTime = condition == '1'
+
+    let experience = form['experience'].value
+    let availability = form['availability'].value
+
+    if (isLancer){
+      body['isHalfTime'] = isHalfTime
+      body['isFullTime'] = isFullTime
+
+      if(isHalfTime){
+        body['experience'] = experience
+        body['availability'] = availability
+      }
+    }
+
+    let inputExperience = document.getElementById('inputExperience');
+    let inputMinimun = document.getElementById('inputMinimun');
+    let inputDisponibility = document.getElementById('inputDisponibility');
+    let inputModality = document.getElementById('inputModality');
+
+    inputMinimun.classList.remove('missing-field');
+    inputDisponibility.classList.remove('missing-field');
+    inputModality.classList.remove('missing-field');
+
+    if (isHalfTime && experience == '' && isLancer){
+      toastr.error('Debe seleccionar uno de los 3 tipos de experiencia de freelancer', 'Información incompleta');
+      inputExperience.classList.add('missing-field');
+      return;
+    }
+
+    if (isTalent){
+      if (minimum == ''){
+        toastr.error('Debe ingresar un monto mínimo', 'Información incompleta');
+        inputMinimun.classList.add('missing-field');
+        return;
+      }
+      if (disponibility == 0){
+        toastr.error('Debe seleccionar una disponibilidad', 'Información incompleta');
+        inputDisponibility.classList.add('missing-field');
+        return;
+      }
+      if (modality == ''){
+        toastr.error('Debe seleccionar una modalidad', 'Información incompleta');
+        inputModality.classList.add('missing-field');
+        return;
+      }
+    }
+
+    $.LoadingOverlay('show');
+    RemoteUpdateConfiguration(body)
+  }
+
+  function RemoteUpdateConfiguration(body) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:configuration-update' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tu información de configuración ha sido guardada con éxito', 'Carga Completa')
+      }
+    }
+
+    data = JSON.stringify(body);
+
+    xhr.send(data);
+  }
+
+  function hideDetails(hide){
+    let section = document.getElementById("condition-details");
+    if (hide){
+      section.classList.remove("hidden")
+    } else{
+      section.classList.add("hidden")
+    }
+  }
+
+  function hideSection(idSection, idText){
+    let section = document.getElementById(idSection);
+    let textObject = document.getElementById(idText);
+    section.classList.toggle("hidden");
+    textObject.classList.toggle("text-marked");
+  }
+
+  function clickSubCondition(number){
+    let option1 = document.getElementById("condition-detail-label-1");
+    let option2 = document.getElementById("condition-detail-label-2");
+    let option3 = document.getElementById("condition-detail-label-3");
+
+    option1.classList.remove("condition-detail-option-checked");
+    option2.classList.remove("condition-detail-option-checked");
+    option3.classList.remove("condition-detail-option-checked");
+
+    let currentOption = document.getElementById(`condition-detail-label-${number}`);
+    let currentInput = document.getElementById(`condition-detail-option-${number}`);
+    currentOption.classList.add("condition-detail-option-checked");
+    currentInput.click()
+  }
+</script>
+
+<section id="personal" class="profile-section">
+  <div class="profile-input">
+    <h3 style="margin-bottom:0px;"> Configuración </h3>
+  </div>
+  <form id="configuration-form">
+    {% csrf_token %}
+    <div class="profile-checkbox-input">
+      <input type="checkbox" id="cb-interest-1" name="interest" value="1" onclick="hideSection('interest-1-details', 'checkbox-text-1')"
+        {% if profile.isTalent %} checked {% endif %}>
+        <label id="checkbox-text-1" {% if profile.isTalent %} class="text-marked" {% endif %}>
+          Me interesa recolocarme en otra empresa, con mis condiciones</label>
+    </div>
+    <div id="interest-1-details" {% if profile.isTalent %} class="hidden-section animate-big"
+       {% else %} class="hidden-section animate-big hidden" {% endif %}>
+
+      <label> Mantendremos máxima confidencialidad de la información brindada. Proporciónanos tu sueldo mínimo deseado (negociaremos para incrementarlo al máximo posible), y tu disponibilidad a partir del día que presentas tu carta de renuncia.</label>
+      <div class="two-columns">
+        <div class="profile-input">
+          <img src="{{imgs.MINIMUN_ICON}}">
+          <input type="text" name="minimum" placeholder="Mi mínimo" id="inputMinimun"
+          oninput="this.value = this.value.replace(/[^0-9\.]/g, '');"
+          class="luci-text-field w-100" value="{{profile.minimum}}"/>
+        </div>
+        <div class="profile-input">
+          <img src="{{imgs.AVAILABILITY_ICON}}">
+          <select id="inputDisponibility" name="disponibility" class="luci-complex-select w-100" onchange="OnSelectChange(this)">
+            <option value="0" disabled {% if profile.disponibility == "0" %} selected {% endif %}>Mi disponibilidad</option>
+            <option value="1" {% if profile.disponibility == "1" %} selected {% endif %}>1 semana</option>
+            <option value="2" {% if profile.disponibility == "2" %} selected {% endif %}>2 semanas</option>
+            <option value="3" {% if profile.disponibility == "3" %} selected {% endif %}>3 semanas</option>
+            <option value="4" {% if profile.disponibility == "4" %} selected {% endif %}>1 mes</option>
+          </select>
+        </div>
+      </div>
+
+      <label> Modalidades de trabajo que prefiero</label>
+      <div class="three-columns" id="inputModality">
+        <div class="profile-radio-input">
+          <input type="radio" name="modality" value="1" {% if profile.modality == "1" %} checked {% endif %}>
+          <label>Totalmente remoto</label></div>
+
+        <div class="profile-radio-input">
+          <input type="radio" name="modality" value="2" {% if profile.modality == "2" %} checked {% endif %}>
+          <label>Híbrido</label></div>
+
+        <div class="profile-radio-input">
+          <input type="radio" name="modality" value="3" {% if profile.modality == "3" %} checked {% endif %}>
+          <label>Oficina</label></div>
+        </div>
+
+      <label> Cuéntanos como te gustaría que sea tu siguiente trabajo. Nos tomaremos esto muy en serio.</label>
+      <textarea name="dreamjob" placeholder="Mi dreamjob" rows="4" colsz="z50" id="inputExperience">{{profile.expectative}}</textarea>
+    </div>
+
+    <div class="profile-checkbox-input top-separation">
+      <input type="checkbox" name="interest" id="cb-interest-2" value="2" onclick="hideSection('interest-2-details', 'checkbox-text-2')"
+        {% if profile.isLancer %} checked {% endif %}>
+      <label id="checkbox-text-2" {% if profile.isLancer %} class="text-marked" {% endif %}>
+        Me interesa generar dinero extra en proyectos que se ajusten a mis tiempos y conocimientos</label>
+    </div>
+
+    <div id="interest-2-details" {% if profile.isLancer %} class="hidden-section animate-small"
+      {% else %} class="hidden-section animate-small hidden" {% endif %}>
+      <div class="profile-radio-input">
+        <input type="radio" name="condition" value="2" onclick="hideDetails(true)"
+          {% if profile.condition == 'Halftime' %}
+          checked
+          {% endif %}/> <label>Tengo un trabajo a tiempo completo</label></div>
+
+        <div id="condition-details" {% if profile.condition == 'Halftime' %}
+          class="hidden-section animate-small" {% else %} class="hidden-section animate-small hidden" {% endif %}>
+          <label>Mi experiencia haciendo freelance</label>
+          <div class="condition-detail-container" id="inputExperience">
+            <span {% if profile.experience == '1' %} class="condition-detail-option condition-detail-option-checked"
+              {% else %} class="condition-detail-option" {% endif %} id="condition-detail-label-1"
+              onclick="clickSubCondition('1')">
+              <input type="radio" name="experience" value="1" id="condition-detail-option-1"
+              {% if profile.experience == '1' %} checked {% endif %}>
+              <label for="condition-detail-option-1" onclick="clickSubCondition('1')">
+                Estoy iniciando en el mundo freelance</label>
+            </span>
+            <span {% if profile.experience == '2' %} class="condition-detail-option condition-detail-option-checked"
+              {% else %} class="condition-detail-option" {% endif %} id="condition-detail-label-2"
+              onclick="clickSubCondition('2')">
+              <input type="radio" name="experience" value="2" id="condition-detail-option-2"
+              {% if profile.experience == '2' %} checked {% endif %}>
+              <label for="condition-detail-option-2" onclick="clickSubCondition('2')">
+                Lo hago de vez en cuando, estoy familiarizado</label>
+            </span>
+            <span {% if profile.experience == '3' %} class="condition-detail-option condition-detail-option-checked"
+              {% else %} class="condition-detail-option" {% endif %} id="condition-detail-label-3"
+              onclick="clickSubCondition('3')">
+              <input type="radio" name="experience" value="3" id="condition-detail-option-3"
+              {% if profile.experience == '3' %} checked {% endif %}>
+              <label for="condition-detail-option-3" onclick="clickSubCondition('3')">
+                Soy un experto y tengo mi propia cartera de clientes</label>
+            </span>
+          </div>
+          <label>Disponibilidad aproximada de horas semanales para posible freelance</label>
+          <input type="number" name="availability" min="1" value="{{ profile.availability }}">
+        </div>
+
+      <div class="profile-radio-input top-separation">
+        <input type="radio" name="condition" value="1" onclick="hideDetails(false)"
+          {% if profile.condition == 'Fulltime' %}
+          checked
+          {% endif %}/> <label>Soy freelance a tiempo completo</label>
+      </div>
+    </div>
+
+    <div class="profile-btn-section">
+      <button class="btn-primary" type="button" onclick="OnConfigurationClick(this)">Guardar Información</button>
+    </div>
+  </form>
+</section>

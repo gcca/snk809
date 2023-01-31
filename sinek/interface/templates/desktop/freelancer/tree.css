@@ -1,0 +1,111 @@
+#menu * { list-style:none;}
+#menu li[class="line-group"]{ margin-top: 1em; margin-bottom: 1em;}
+#menu input[class="selector-open"]:checked ~ ul{ display:none; }
+#menu input[class="selector-close"]:checked ~ ul{ display:block; }
+#menu label { cursor: pointer;}
+#menu input[type="checkbox"]{	cursor: pointer;}
+#menu .interior{ display: none; }
+
+#menu .selector-close:checked ~ .group-name::after{ content:"\025be";} 
+#menu .selector-close:not(:checked) ~ .group-name::after{ content:"\025b8";} 
+#menu .selector-open:checked ~ .group-name::after{ content:"\025b8";}
+#menu .selector-open:not(:checked) ~ .group-name::after{ content:"\025be";}
+
+#menu input[class="selector-open"] {
+	opacity: 0;
+	position: absolute;
+}
+#menu input[class="selector-close"]{
+	opacity: 0;
+	position: absolute;
+}
+
+#menu input[type="checkbox"]{
+	display: inline-block;
+	min-width: 1.5em;
+	background-color: transparent;
+	color: var(--bs-secondary);
+	width: 1.5em;
+	height: 1.5em;
+	border: 0.15em solid lightgray;
+	border-radius: 0.15em;
+	box-shadow: none;
+	margin-right: 0.8em;
+}
+#menu input[type="checkbox"]:checked{
+	background-color: var(--bs-secondary);
+	border-color: var(--bs-secondary);
+}
+#menu input[class="group-checkbox"]:checked{
+  background-image: url( {{ imgs.CHECKED_GROUP_ICON }} );
+}
+
+#menu ul[class="interior"]{
+	margin-top: 1em;
+}
+
+.input-knowledge {
+	padding-top: 2px;
+	padding-bottom: 0px;
+	padding-left: 10px;
+	padding-right: 0px;
+	border: none;
+	background-color: transparent;
+	opacity: 0.2;
+}
+.scored {
+	opacity: 1;
+}
+
+label.scored {
+	opacity: 1;
+}
+
+label.no-scored {
+	opacity: 0.2;
+}
+label.no-scored:hover {
+	opacity: 0.8;
+}
+
+.input-knowledge:hover {
+	opacity: 1;
+	box-shadow: none !important;
+}
+
+.knowledge-options{
+	list-style-type: none;
+}
+.knowledge-options li{
+	display: inline-block;
+}
+.knowledge-options input[type="radio"] {
+	display: none;
+  }
+.knowledge-options label:before{ content:none !important;}
+.knowledge-options input:checked ~ label:before{ content:none !important;}
+
+.knowledge-line{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-self: center;
+	padding-top: 12px;
+	padding-left: 10px;
+	margin-top: 5px;
+	border-radius: 6px;
+}
+.pre-marked{
+	background-color: #FFB2361A;
+}
+.hide-subtree {
+	display: none !important;
+}
+.input-trash {
+	padding-top: 2px;
+	padding-bottom: 0px;
+	padding-left: 50px;
+	padding-right: 0px;
+	border: none;
+	background-color: transparent;
+}

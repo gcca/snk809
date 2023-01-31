@@ -1,0 +1,45 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% load static %}
+
+{% block top-menu %}
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:dashboard-freelancer' %}">Dashboard</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.SUPPLIER_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Proveedores</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.INITIATIVE_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:initiative-list' %}">Iniciativas</a>
+</div>
+<div class="nav-icon nav-selected">
+  <img src="{{imgs.PROJECT_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:dashboard' %}">Projectos</a>
+</div>
+<div class="nav-icon">
+  <img src="{{imgs.EVALUATION_ICON}}">
+  <a class="linked" href="{% url 'site:accountmanager:freelancer-list' %}">Pruebas</a>
+</div>
+<div class="dropdown menu-right">
+  <button class="dropbtn"><img src="{% static 'img/cogwheel-blue.png' %}"></button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<h2>Account Manager Dashboard</h2>
+<a href="{% url 'site:accountmanager:new-project' %}">Crear proyecto</a>
+
+<hr>
+<h3>Proyectos creados:</h3>
+<ul>
+{% for project in projects %}
+  <li>Proyecto: {{ project.projectName }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

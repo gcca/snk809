@@ -1,0 +1,4 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+<form method="post" style="margin:0" action="{% url 'onboard:onboard:toggle-visibility' slug=slug assessment_name=assessment_name %}">{% csrf_token %}
+    <input type="submit" value="{% if show %}✅{% else %}✖{% endif %}"/>
+</form>

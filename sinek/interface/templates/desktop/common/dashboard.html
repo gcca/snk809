@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{%  load static %}
+
+{% block body %}
+{# Topbar #}
+<nav class="nav">
+  <div class="logo-brand"><img src="{% static 'img/logo-pinkblue.png' %}" width="206px"></div>
+  {% block top-menu %}{% endblock %}
+</nav>
+{# End Topbar #} {# Container #}
+<div id="dashboard-content" class="app-content">
+  {% block content %}{% endblock %}
+</div>
+{# End Container #}
+{% endblock %}

@@ -1,0 +1,17 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+<style>
+td {
+  border: 1px dotted black;
+  border-collapse: collapse;
+}
+</style>
+<form method="post">{% csrf_token %}
+  <input type="submit"/>
+  {{ formset.management_form }}
+  {% for form in formset %}
+    <table>
+    {{ form }}
+    </table>
+    <hr/>
+  {% endfor %}
+</form>

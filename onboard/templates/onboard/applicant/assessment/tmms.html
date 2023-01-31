@@ -1,0 +1,139 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neom_webtools %}
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:applicant:dashboard' 'Candidatos' %}
+{% neodash_nav_item 'onboard:applicant:list' 'Lista' %}
+{% neodash_nav_item 'onboard:applicant:detail' 'Candidato' applicant_id=object.onboard.applicant.id %}
+{% neodash_nav_mark 'TMMS-24' %}
+{% end_neodash_nav %}
+<h1>Respuestas del Test TMMS-24: {{ object.applicant.name }}</h1>
+<table>
+  <tr>
+    <th>Q</th>
+    <th>Respuesta</th>
+  </tr>
+  <tr>
+    <td>1. Presto mucha atención a los sentimientos.</td>
+    <td>{{ object.q1 }}</td>
+  </tr>
+ <tr>
+    <td>2. Normalmente me preocupo por lo que siento.</td>
+    <td>{{ object.q2 }}</td>
+  </tr>
+ <tr>
+    <td>3. Normalmente dedico tiempo a pensar en mis emociones.</td>
+    <td>{{ object.q3 }}</td>
+  </tr>
+ <tr>
+    <td>4. Pienso que merece la pena prestar atención a mis emociones y estado de ánimo.</td>
+    <td>{{ object.q4 }}</td>
+  </tr>
+ <tr>
+    <td>5. Dejo que mis sentimientos afecten mis pensamientos.</td>
+    <td>{{ object.q5 }}</td>
+  </tr>
+ <tr>
+    <td>6. Pienso en mi estado de ánimo constantemente.</td>
+    <td>{{ object.q6 }}</td>
+  </tr>
+ <tr>
+    <td>7. A menudo pienso en mis sentimientos.</td>
+    <td>{{ object.q7 }}</td>
+  </tr>
+ <tr>
+    <td>8. Presto mucha atención a cómo me siento.</td>
+    <td>{{ object.q8 }}</td>
+  </tr>
+ <tr>
+    <td>9. Tengo claro mis sentimientos.</td>
+    <td>{{ object.q9 }}</td>
+  </tr>
+ <tr>
+    <td>10. Frecuentemente puedo definir mis sentimientos.</td>
+    <td>{{ object.q10 }}</td>
+  </tr>
+ <tr>
+    <td>11. Casi siempre sé cómo me siento.</td>
+    <td>{{ object.q11 }}</td>
+  </tr>
+ <tr>
+    <td>12. Normalmente conozco mis sentimientos sobre las personas.</td>
+    <td>{{ object.q12 }}</td>
+  </tr>
+ <tr>
+    <td>13. A menudo me doy cuenta de mis sentimientos en diferentes situaciones.</td>
+    <td>{{ object.q13 }}</td>
+  </tr>
+ <tr>
+    <td>14. Siempre puedo decir cómo me sien.</td>
+    <td>{{ object.q14 }}</td>
+  </tr>
+ <tr>
+    <td>15. A veces puedo decir cuáles son mis emociones.</td>
+    <td>{{ object.q15 }}</td>
+  </tr>
+ <tr>
+    <td>16. Puedo llegar a comunicar mis sentimientos.</td>
+    <td>{{ object.q16 }}</td>
+  </tr>
+ <tr>
+    <td>17. Aunque a veces me siento triste, suelo tener una visión optimista.</td>
+    <td>{{ object.q17 }}</td>
+  </tr>
+ <tr>
+    <td>18. Aunque a veces me sienta mal, procuro pensar en cosas agradables.</td>
+    <td>{{ object.q18 }}</td>
+  </tr>
+ <tr>
+    <td>19. Cuando estoy triste, pienso en todos los placeres de la vida..</td>
+    <td>{{ object.q19 }}</td>
+  </tr>
+ <tr>
+    <td>20. Intento tener pensamientos positivos aunque me sienta mal.</td>
+    <td>{{ object.q20 }}</td>
+  </tr>
+ <tr>
+    <td>21. Si doy demasiadas vueltas a las cosas, complicándolas, trato de calmarme.</td>
+    <td>{{ object.q21 }}</td>
+  </tr>
+ <tr>
+    <td>22. Me preocupo por tener un buen estado de ánimo.</td>
+    <td>{{ object.q22 }}</td>
+  </tr>
+ <tr>
+    <td>23. Tengo mucha energía cuando me siento feliz.</td>
+    <td>{{ object.q23 }}</td>
+  </tr>
+ <tr>
+    <td>24. Cuando estoy enfadado intento cambiar mi estado de ánimo.</td>
+    <td>{{ object.q24 }}</td>
+  </tr>
+</table>
+<hr>
+<h3>Resultados por factor: </h3>
+<table>
+  <tr>
+    <th>Factor</th>
+    <th>Puntuación</th>
+    <th>Resultado</th>
+  </tr>
+  <tr>
+    <td>Atención:</td>
+    <td>{{ object.labeled_scores.attention.score }}</td>
+    <td>{{ object.labeled_scores.attention.label }}</td>
+  </tr>
+  <tr>
+    <td>Claridad:</td>
+    <td>{{ object.labeled_scores.clarity.score }}</td>
+    <td>{{ object.labeled_scores.clarity.label }}</td>
+  </tr>
+  <tr>
+    <td>Reparación:</td>
+    <td>{{ object.labeled_scores.repair.score }}</td>
+    <td>{{ object.labeled_scores.repair.label }}</td>
+  </tr>
+</table>

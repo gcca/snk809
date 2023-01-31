@@ -1,0 +1,11 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+<html>
+<head>
+<style>{% include 'neodash/layout/nav.css' %}</style>
+</head>
+<body>
+{% load neodash_nav %}
+{% neodash_nav %}{% block nav %}{% endblock %}{% end_neodash_nav %}
+{% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,58 @@
+# Copyright Snk809, Inc. All rights reserved.
+# skills
+- model: onboard.skill
+  pk: 1
+  fields:
+    name: Microsoft Java
+- model: onboard.skill
+  pk: 2
+  fields:
+    name: C
+- model: onboard.skill
+  pk: 3
+  fields:
+    name: Rust
+# applicant
+- model: onboard.applicant
+  pk: 1
+  fields:
+    name: Mauro Giuliani
+    email: mauro@giuliani.com
+    skills:
+    - 1
+    gender: 1
+- model: onboard.applicant
+  pk: 2
+  fields:
+    name: Fernando Sor
+    email: fernando@sor.com
+    skills:
+    - 2
+    gender: 1
+- model: onboard.applicant
+  pk: 3
+  fields:
+    name: Dionisio Aguado
+    email: dionisio@aguado.com
+    skills:
+    - 3
+    gender: 1
+# customer
+- model: onboard.customer
+  pk: 1
+  fields:
+    name: Supermercados Tottus
+# application
+- model: onboard.application
+  pk: 1
+  fields:
+    customer: 1
+    name: Generación de contenido de comunicación interna
+    min_salary: 1000
+    max_salary: 1400
+    status_tag: 1
+    created: 2022-10-25 02:08:48.087676+00:00
+    applicants: []
+    needed_skills:
+    - 1
+    - 2

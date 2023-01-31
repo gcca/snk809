@@ -1,0 +1,69 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/onboard/assessment/base.html' %}
+
+{% load neom_webtools %}
+
+{% block extra-head %}
+<style>
+.{% _kt 'career-anchors-entry' %} {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 1150px;
+}
+.{% _kt 'career-anchors-entry' %} div {
+    display: inline-block;
+}
+.{% _kt 'question-label' %} {
+    width: 1000px;
+}
+table, th, td {
+    border: 1px solid;
+}
+</style>
+{% endblock %}
+
+{% block assessment-instructions %}
+<p>¡Felicidades por seguir avanzando en el proceso de selección!</p>
+<p>Te pedimos que leas las preguntas con detenimiento, recuerda que no hay respuestas buenas ni malas. Nuestro propósito es conocerte un poco más.</p>
+<p>
+  A continuación puntúa la frase con el número con el que estés de acuerdo según esta escala:
+</p>
+<table id="{% _kt 'scale-table' %}">
+  <tr>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+  </tr>
+  <tr>
+    <td>Nunca es verdad</td>
+    <td>Muy raramente es verdad</td>
+    <td>Raramente es verdad</td>
+    <td>Frecuentemente es verdad</td>
+    <td>Muy frecuentemente es verdad</td>
+    <td>Siempre es verdad</td>
+  </tr>
+</table>
+{% endblock %}
+
+{% block assessment-form %}
+<th>Preguntas:</th>
+<div style="display: inline-flex;"><p style="padding-left: 825px;">Nada de acuerdo</p><p style="padding-left: 10px; letter-spacing: 5px;">1 2 3 4 5 6</p><p style="padding-left: 10px;">Totalmente de acuerdo</p></div>
+{% for field in form.questions %}
+<div class="{% _kt 'career-anchors-entry' %}">
+    {{ field.errors }}
+    <div class="{% _kt 'question-label' %}">{{ forloop.counter }}. {{ field.label_tag }}</div>
+    <div class="{% _kt 'radio-group' %}">
+    {{ field }}
+    </div>
+</div>
+{% endfor %}
+<h4>Repasa tus respuestas e identifica las frases a las cuales diste la máxima puntuación. Elige (3) tres enunciados que para ti tengan un mayor grado de veracidad.</h4>
+{{ form.favorites.as_div }}
+{% endblock %}

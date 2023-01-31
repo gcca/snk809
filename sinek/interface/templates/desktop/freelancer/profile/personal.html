@@ -1,0 +1,218 @@
+<style>
+  .missing-field{
+    border: 1px solid red !important;
+    box-shadow: 0 0px 6px -1px red !important;
+  }
+</style>
+
+
+<script>
+  function OnPersonalClick(input){
+    let form = input.form
+    let name = form['name'].value
+    let phone = form['phone'].value
+    let phoneCountryCode = form['phoneCountryCode'].value
+    let country = form['countryCode'].value
+    let location = form['location'].value
+    let wouldChangeCountry = form['wouldChangeCountry'].value
+    let wouldChangeCity = form['wouldChangeCity'].value
+    let interviewAvailability = form['interviewAvailability'].value
+    let jobSwitchTime = form['jobSwitchTime'].value
+    let writing = form['writing'].value
+    let speaking = form['speaking'].value
+
+    let allOk = true
+
+    allOk = allOk * validateField('Nombre Completo', name)
+    allOk = allOk * validateField('número de Whatsapp', phone)
+    allOk = allOk * validateField('Ciudad', location)
+
+    let body = { name, phone, phoneCountryCode, country,
+      location, wouldChangeCountry, wouldChangeCity,
+      interviewAvailability, jobSwitchTime, writing, speaking }
+
+    if (allOk) {
+      $.LoadingOverlay('show');
+      RemoteUpdatePersonal(body)
+    }
+  }
+
+  function RemoteUpdatePersonal(body) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:personal-update' %}");
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tu información de contacto ha sido actualizada con éxito', 'Actualización Completa')
+      }
+    }
+
+    data = JSON.stringify(body);
+
+    xhr.send(data);
+  }
+
+  function validateField(inputName, inputValue){
+    if (inputValue === ''){
+      toastr.error(`Debe ingresar un valor en ${inputName}`, 'Información incompleta');
+      return false
+    }
+    return true
+  }
+</script>
+
+<section id="personal" class="profile-section">
+  <div class="profile-input">
+    <h3>Mi información</h3>
+  </div>
+  <form id="personal-form">
+    {% csrf_token %}
+    <div class="information-content">
+      <div class="left-information-box">
+        <h5>Para empezar, identifícate con la siguiente información.</h5>
+        <label>Nombre Completo</label>
+        <input type="text" name="name" placeholder="Agrega tu nombre completo" value="{{profile.name}}" />
+        <label>Número de Whatsapp</label>
+        <div class="number-container">
+          {{personalForm.phoneCountryCode}}
+          <input type="text" name="phone" placeholder="Número de whatsapp" value="{{profile.phone.number}}" />
+        </div>
+        <label>Correo electrónico</label>
+        <input type="text" placeholder="Correo electrónico" value="{{profile.email}}" disabled/>
+        <h5>¿Dónde te encuentras viviendo actualmente?</h5>
+        <div class="country-city-container">
+          <label>País
+            {{personalForm.countryCode}}
+          </label>
+          <label>Ciudad
+            <input type="text" name="location" placeholder="Ciudad" value="{{profile.residence.location}}"/>
+          </label>
+        </div>
+        <h5>De ser una excelente oferta, ¿Viajarías a otro país?</h5>
+        <div class="radio-button-container">
+          <label><input type="radio" name="wouldChangeCountry"
+            {% if profile.wouldChangeCountry %}
+            checked
+            {% endif %}
+            value="True" /> Sí</label>
+          <label><input type="radio" name="wouldChangeCountry"
+            {% if not profile.wouldChangeCountry %}
+            checked
+            {% endif %}
+            value="False" /> No</label>
+        </div>
+        <h5>Y en tu mismo país, ¿Cambiarías de ciudad?</h5>
+        <div class="radio-button-container">
+          <label><input type="radio" name="wouldChangeCity"
+            {% if profile.wouldChangeCity %}
+            checked
+            {% endif %}
+            value="True" /> Sí</label>
+          <label><input type="radio" name="wouldChangeCity"
+            {% if not profile.wouldChangeCity %}
+            checked
+            {% endif %}
+            value="False" /> No</label>
+        </div>
+      </div>
+      <div class="right-information-box">
+        <h5>¿Podríamos tener alguna entrevista en horario laboral?</h5>
+        <div class="radio-button-container">
+          <label><input type="radio" name="interviewAvailability"
+            {% if profile.interviewAvailability %}
+            checked
+            {% endif %}
+            value="True" /> Claro!, puedo
+            hacerme un hueco
+          </label>
+          <label><input type="radio" name="interviewAvailability"
+            {% if not profile.interviewAvailability %}
+            checked
+            {% endif %}
+            value="False" />
+            Imposible, a partir de las 5-6-7 p.m.
+          </label>
+        </div>
+        <h5>Sinceramente, me veo en otro trabajo dentro de...</h5>
+        <div class="radio-button-container">
+          <label><input type="radio" name="jobSwitchTime"
+            {% if profile.jobSwitchTime ==  "BW_1M_2M" or profile.jobSwitchTime == "NOSETTLED"%}
+            checked
+            {% endif %}
+            value="BW_1M_2M" /> 1-2
+            meses</label>
+          <label><input type="radio" name="jobSwitchTime"
+            {% if profile.jobSwitchTime ==  "BW_3M_6M" %}
+            checked
+            {% endif %}
+            value="BW_3M_6M" /> 3-6
+            meses</label>
+          <label><input type="radio" name="jobSwitchTime"
+            {% if profile.jobSwitchTime ==  "BW_6M_12M" %}
+            checked
+            {% endif %}
+            value="BW_6M_12M" /> 6-12
+            meses</label>
+          <label><input type="radio" name="jobSwitchTime"
+            {% if profile.jobSwitchTime ==  "GT_12M" %}
+            checked
+            {% endif %}
+            value="GT_12M" /> +12
+            meses</label>
+        </div>
+        <h5>Tu nivel de ingles</h5>
+        <h6>Escrito</h6>
+        <div class="radio-button-container">
+          <label><input type="radio" name="writing"
+            {% if profile.writing ==  "BEGINNER" or profile.writing == "NOSETTLED"%}
+            checked
+            {% endif %}
+            value="BEGINNER" />Básico</label>
+          <label><input type="radio" name="writing"
+            {% if profile.writing ==  "INTERMEDIATE" %}
+            checked
+            {% endif %}
+            value="INTERMEDIATE" />Intermedio</label>
+          <label><input type="radio" name="writing"
+            {% if profile.writing ==  "ADVANCED" %}
+            checked
+            {% endif %}
+            value="ADVANCED" />Avanzado</label>
+          <label><input type="radio" name="writing"
+            {% if profile.writing ==  "PROFICIENT" %}
+            checked
+            {% endif %}
+            value="PROFICIENT" />Nativo</label>
+        </div>
+        <h6>Hablado</h6>
+        <div class="radio-button-container">
+          <label><input type="radio" name="speaking"
+            {% if profile.speaking ==  "BEGINNER" or profile.speaking == "NOSETTLED"%}
+            checked
+            {% endif %}
+            value="BEGINNER" />Básico</label>
+          <label><input type="radio" name="speaking"
+            {% if profile.speaking ==  "INTERMEDIATE" %}
+            checked
+            {% endif %}
+            value="INTERMEDIATE" />Intermedio</label>
+          <label><input type="radio" name="speaking"
+            {% if profile.speaking ==  "ADVANCED" %}
+            checked
+            {% endif %}
+            value="ADVANCED" />Avanzado</label>
+          <label><input type="radio" name="speaking"
+            {% if profile.speaking ==  "PROFICIENT" %}
+            checked
+            {% endif %}
+            value="PROFICIENT" />Nativo</label>
+        </div>
+      </div>
+    </div>
+    <div class="button-container">
+      <button class="btn sw-btn-next sw-btn" type="button" onclick="OnPersonalClick(this)">Actualizar</button>
+    </div>
+  </form>
+</section>

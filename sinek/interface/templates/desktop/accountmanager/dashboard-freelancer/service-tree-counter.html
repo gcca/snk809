@@ -1,0 +1,67 @@
+<script>
+  function OnSkillLevelClick(item){
+    $.LoadingOverlay('show');
+    form = item.form
+    form.submit()
+  }
+
+  function RedrawCountedTree(){
+    let treeSection = document.getElementById('menu-skill-tree');
+    treeSection.innerHTML = '';
+    treeSection.innerHTML +=
+      `
+      {% for child in tree.children %}
+        {% include "desktop/accountmanager/dashboard-freelancer/tree.html" with node=child %}
+			{% endfor %}
+      `
+  }
+
+  function toggleFreelancers(code) {
+    document.getElementById(`${code}-dropdown`).classList.toggle("show");
+  }
+
+  window.onclick = function(event) {
+    if (!(event.target.matches('.dropbtn-count-tree') || event.target.matches('.chip-content') ||
+    event.target.matches('.dropbtn-text') )) {
+      var dropdowns = document.getElementsByClassName("dropdown-content-count-tree");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+
+</script>
+
+<section id="skills" class="profile-section">
+
+  <h3>Nivel de experiencia</h3>
+  <form method="POST" action="{% url 'site:accountmanager:dashboard-freelancer' %}">
+    {% csrf_token %}
+    <ul class="knowledge-options">
+      <li><input type="checkbox" name="tree-option-4" {% if layer4 %} checked {% endif %}
+        value="1" onclick="OnSkillLevelClick(this)"> <label>Senior</label></li>
+      <li><input type="checkbox" name="tree-option-3" {% if layer3 %} checked {% endif %}
+        value="1" onclick="OnSkillLevelClick(this)"> <label>Middle</label></li>
+      <li><input type="checkbox" name="tree-option-2" {% if layer2 %} checked {% endif %}
+        value="1" onclick="OnSkillLevelClick(this)"> <label>Junior</label></li>
+      <li><input type="checkbox" name="tree-option-1" {% if layer1 %} checked {% endif %}
+        value="1" onclick="OnSkillLevelClick(this)"> <label>Beginner</label></li>
+    </ul>
+    <input name="start" type="hidden" value="{{start}}"/>
+    <input name="end" type="hidden" value="{{end}}"/>
+    <input name="period" type="hidden"
+      {% if not period or period == "0" %} value="0" {% endif %}
+      {% if period == "1" %} value="1" {% endif %}
+      {% if period == "2" %} value="2" {% endif %} >
+  </form>
+  <h3>Lista de freelancers encontrados</h3>
+  <ul id="menu-skill-tree">
+    {% for child in tree.children %}
+        {% include "desktop/accountmanager/dashboard-freelancer/tree.html" with node=child %}
+    {% endfor %}
+  </ul>
+</section>

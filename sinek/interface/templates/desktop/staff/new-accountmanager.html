@@ -1,0 +1,12 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block content %}
+<a href="{% url 'site:staff:dashboard' %}">Volver</a>
+<hr>
+<h1>Crear Account Manager</h1>
+<form method="post" action="{% url 'site:staff:new-accountmanager' %}">
+{% csrf_token %}
+<table>{{ form.as_table }}</table>
+<input type="submit">
+</form>
+{% endblock %}

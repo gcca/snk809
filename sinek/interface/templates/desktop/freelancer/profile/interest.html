@@ -1,0 +1,415 @@
+{% load static %}
+{% load luci_tags %}
+<script>
+  function OnSecondStepClick(input) {
+    let form = input.form
+
+    let body = {}
+
+    let isTalent = document.getElementById('recolectar').checked == true
+    let isLancer = document.getElementById('disponibility').checked == true
+
+    body['isTalent'] = isTalent
+    body['isLancer'] = isLancer
+
+
+    let minimum = form['minimum'].value
+    let maximum = form['maximum'].value
+
+    let timeDisponibility = form['time-disponibility'].value
+    let modality = form['modality-wanted'].value
+
+    if (isTalent) {
+      if (minimum == '' || maximum == '') {
+        toastr.error('Debes indicar tu rango de sueldo deseado', 'Información incompleta')
+        return
+      }
+      if (parseFloat(maximum) < parseFloat(minimum)) {
+        toastr.error('El monto máximo de sueldo debe ser mayor al mínimo', 'Información incorrecta')
+        return
+      }
+      body['minimum'] = minimum
+      body['maximum'] = maximum
+      body['timeDisponibility'] = timeDisponibility
+      body['modality'] = modality
+    }
+
+    let experienceFreelance = form['experience-freelance'].value
+    let condition = form['condition'].value
+    let isHalfTime = condition == '1'
+    let isFullTime = condition == '2'
+
+    let availability = form['horas-semanales'].value
+
+    if (isLancer) {
+      body['isHalfTime'] = isHalfTime
+      body['isFullTime'] = isFullTime
+
+      if (isHalfTime) {
+        body['experience'] = experienceFreelance
+        body['availability'] = availability
+      }
+    }
+
+    let inputExperience = document.getElementById('inputExperience');
+    let inputMinimun = document.getElementById('inputMinimun');
+    let inputDisponibility = document.getElementById('inputDisponibility');
+    let inputModality = document.getElementById('inputModality');
+
+    if (!isTalent && !isLancer) {
+      toastr.error('Debes seleccionar al menos una modalidad', 'Información incompleta')
+      return
+    }
+
+    let jobPreferencesChecked = document.querySelectorAll('input[name=jobPreferences]:checked');
+    let jobPreferences = []
+
+    for (var i=0; i<jobPreferencesChecked.length; i++) {
+      jobPreferences.push(jobPreferencesChecked[i].value)
+    }
+
+    let worklifePreferencesChecked = document.querySelectorAll('input[name=worklifePreferences]:checked');
+    let worklifePreferences = []
+
+    for (var i=0; i<worklifePreferencesChecked.length; i++) {
+      worklifePreferences.push(worklifePreferencesChecked[i].value)
+    }
+
+    body['jobPreferences'] = jobPreferences
+    body['worklifePreferences'] = worklifePreferences
+
+    $.LoadingOverlay('show');
+    RemoteUpdateSecondStep(body)
+  }
+
+  function validateField(inputName, inputValue){
+    if (inputValue === ''){
+      toastr.error(`Debe ingresar un valor en ${inputName}`, 'Información incompleta');
+      return false
+    }
+    return true
+  }
+
+  function RemoteUpdateSecondStep(body) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('post', "{% url 'rc:freelancer:interest-update' %}");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        $.LoadingOverlay('hide');
+        toastr.success('Tus intereses han sido actualizados con éxito', 'Actualización Completa')
+      }
+    }
+
+    data = JSON.stringify(body);
+
+    xhr.send(data);
+  }
+
+  $(function () {
+      $("#recolectar").click(function () {
+        if ($(this).is(":checked")) {
+          $(".interested-recolection-one").show();
+          $(".title-interested-recolection-one").hide();
+        } else {
+          $(".interested-recolection-one").hide();
+          $(".title-interested-recolection-one").show();
+        }
+      });
+    });
+    $(function () {
+      $("#disponibility").click(function () {
+        if ($(this).is(":checked")) {
+          $(".interested-recolection-two").show();
+          $(".title-interested-recolection-two").hide();
+        } else {
+          $(".interested-recolection-two").hide();
+          $(".title-interested-recolection-two").show();
+        }
+      });
+    });
+    $(function () {
+      $("#fulltime-job").click(function () {
+        if ($(this).is(":checked")) {
+          $(".interested-recolection-two").show();
+          $(".title-interested-recolection-two").hide();
+        } else {
+          $(".interested-recolection-two").hide();
+          $(".title-interested-recolection-two").show();
+        }
+      });
+    });
+    {# TODO: Falta hacer que se muestre el contenido en la primera renderizada #}
+    $(function () {
+      $("#condition-radio").click(function () {
+        if ($(this).is(":checked")) {
+          $(".content-fulljob-time").css('display', 'flex');
+          $(".have-job").hide();
+        }
+      });
+      $("#condition-radio-two").click(function () {
+        if ($(this).is(":checked")) {
+          console.log("checked");
+          $(".content-fulljob-time").css('display', 'none');
+          $(".have-job").show();
+        }
+      });
+    });
+
+    $(function() {
+      $('input[name="worklifePreferences"]').bind("click", function(role) {
+        checked = $('input[name="worklifePreferences"]:checked') 
+        nonChecked = $('input[name="worklifePreferences"]:not(:checked)')
+        maxAllowed = 3
+        if (checked.length == maxAllowed) {
+          nonChecked.prop("disabled", true)
+        } else {
+          nonChecked.prop("disabled", false)
+        }
+      });
+    });
+    $(function() {
+      $('input[name="jobPreferences"]').bind("click", function(role) {
+        checked = $('input[name="jobPreferences"]:checked') 
+        nonChecked = $('input[name="jobPreferences"]:not(:checked)')
+        maxAllowed = 2
+        if (checked.length == maxAllowed) {
+          nonChecked.prop("disabled", true)
+        } else {
+          nonChecked.prop("disabled", false)
+        }
+      });
+    });
+</script>
+<style>
+    .interest-content {
+        background-color: white;
+        padding: 32px;
+        border-radius: 6px;
+        border: 1px solid rgba(44, 44, 44, .2);
+        margin-bottom: 2em;
+    }
+
+    .interest-content h5 {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .disponibility-content .ss-main {
+        width: 70%;
+    }
+
+    .content-fulljob-time .disponibility-aprox {
+        margin-top: 1.8em;
+    }
+    .content-fulljob-time .ss-main {
+        width: 50%;
+    }
+    .checkbox-next-job, .checkbox-life-chapter {
+        gap: 15px;
+    }
+    .checkbox-next-job label, .checkbox-life-chapter label{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin: 10px 0;
+    }
+    .checkbox-like-job h6, .right-end-tab h6 {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .checkbox-like-job, .right-end-tab {
+        margin: 15px 0;
+    }
+</style>
+<section class="interest-content">
+    <div class="profile-input">
+      <h3>Mis intereses</h3>
+    </div>
+    <h5>Qué te trajo por aquí</h5>
+    <p>
+      Creemos firmemente que todos tenemos un lugar en el mundo donde nuestra
+      felicidad laboral es posible. Pero si buscas, adicionalmente, generar un
+      dinero extra en proyectos adecuados a tu conocimiento y a tus tiempos,
+      también somos la solución para ti.
+    </p>
+    <form>
+      <main class="second-content-looking">
+        <input type="checkbox" id="recolectar" name="checkTalent" {% if profile.isTalent %} checked {% endif %} />
+        <h5 class="title-interested-recolection-one" style="{% if profile.isTalent %} display: none;  {% endif %}">Me
+          interesa recolocarme en otra empresa, a su tiempo, y con mis condiciones.</h5>
+        <div class="interested-recolection-one" style="{% if profile.isTalent %} display: block;  {% endif %}">
+          <h5>
+            Me interesa recolocarme en otra empresa, a su tiempo, y con mis
+            condiciones.
+          </h5>
+          <pre>Mantendremos máxima confidencialidad de la información brindada.</pre>
+          <div>
+            <div class="box-disponibility-wanted">
+              <div class="box-disponibility">
+                <p>
+                  Tu disponibilidad a partir del día que presentas tu carta de
+                  renuncia
+                </p>
+                <div class="disponibility-content">
+                  <img src="{% static 'img/disponibility-icon.svg' %}" />
+                  <select id="disponibilidad" name="time-disponibility">
+                    <option value="1" {% if profile.disponibility == '1' %} selected {% endif %}>1 semana</option>
+                    <option value="2" {% if profile.disponibility == "2" %} selected {% endif %}>2 semanas</option>
+                    <option value="3" {% if profile.disponibility == "3" %} selected {% endif %}>3 semanas</option>
+                  </select>
+                </div>
+              </div>
+              <div class="box-wanted">
+                <p>
+                  Tu rango de sueldo mínimo deseado (negociaremos para
+                  incrementarlo al máximo posible).
+                </p>
+                <div class="wanted-content">
+                  <img src="{% static 'img/currency-icon.svg' %}" />
+                  <span>Monto minimo
+                  <input name="minimum" type="number" placeholder="Monto mínimo"
+                  {% if profile.minimum %}
+                  value="{{profile.minimum}}"
+                  {% endif %}
+                  />
+                  </span>
+                  <span>Monto máximo
+                  <input name="maximum" type="number" placeholder="Monto maximo"
+                  {% if profile.maximum %}
+                  value="{{profile.maximum}}"
+                  {% endif %}
+                  />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="work-modality">
+              <p>Modalidad de trabajo que prefiero</p>
+              <div class="modality-wanted">
+                <label><input type="radio" name="modality-wanted" value="1" {% if profile.modality == "1" %} checked {% endif %} />
+                  Totalmente Remoto</label>
+                <label><input type="radio" name="modality-wanted" value="2" {% if profile.modality == "2" %} checked {% endif %} />
+                  Híbrido</label>
+                <label><input type="radio" name="modality-wanted" value="3" {% if profile.modality == "3" %} checked {% endif %} />
+                  Oficina</label>
+              </div>
+            </div>
+            <br/>
+            <div class="checkbox-like-job">
+              <h6>¿Cómo te gustaría que sea tu siguiente trabajo?</h6>
+              <p>Escoge desde 1 hasta 2</p>
+              <div class="checkbox-next-job">
+                  {% for job in jobPreferences %}
+                  {% if forloop.first or forloop.counter0|divisibleby:4 %}
+                  <div>
+                  {% endif %}
+                  <label><input type="checkbox" name="jobPreferences"
+                      {% if job in profile.jobPreferences %}
+                      checked
+                      {% endif %}
+                      value="{{job}}" />
+                      {{job}}
+                  </label>
+                  {% if forloop.counter|divisibleby:4 or forloop.last %}
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+              </div>
+          </div>
+          <div class="right-end-tab">
+            <h6>¿Qué valoras más en esta etapa de tu vida?</h6>
+            <p>Escoge desde 1 hasta 3</p>
+            <div class="checkbox-life-chapter">
+                {% for worklife in worklifePreferences %}
+                {% if forloop.first or forloop.counter0|divisibleby:6 %}
+                <div>
+                {% endif %}
+                <label><input type="checkbox" name="worklifePreferences"
+                    {% if worklife in profile.worklifePreferences %}
+                    checked
+                    {% endif %}
+                    value="{{worklife}}" />
+                    {{worklife}}
+                </label>
+                {% if forloop.counter|divisibleby:6 or forloop.last %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+          </div>
+        </div>
+      </main>
+      <main class="second-content-disponibility">
+        <input type="checkbox" id="disponibility" name="checkFreelancer" {% if profile.isLancer %} checked {% endif %} />
+        <h5 class="title-interested-recolection-two" style="{% if profile.isLancer %} display: none;  {% endif %}">
+          Me interesa generar dinero extra con proyectos que se ajusten a mi
+          disponibilidad y conocimiento
+        </h5>
+        <div class="interested-recolection-two" style="{% if profile.isLancer %} display: block;  {% endif %}">
+          <h5>
+            Me interesa generar dinero extra con proyectos que se ajusten a mi
+            disponibilidad y conocimiento
+          </h5>
+          <div class="disponibilidad-conocimiento">
+            <div class="fulltime-job">
+              <label>
+                <input id="condition-radio" type="radio" name="condition" value="1" {% if profile.condition == "Halftime" %} checked {% endif %} />
+                <p class="have-job">Tengo un trabajo a tiempo completo</p>
+                <div class="content-fulljob-time">
+                  Tengo un trabajo a tiempo completo
+                  <p>Mi experiencia haciendo freelance</p>
+                  <div class="experience-freelance-box">
+                    <label>
+                      <input type="radio" name="experience-freelance" value="1" {% if profile.experience == '1' %} checked
+                        {% endif %} />
+                      <span>Estoy iniciando en el mundo freelance</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="experience-freelance" value="2" {% if profile.experience == '2' %} checked
+                        {% endif %} />
+                      <span>Lo hago de vez en cuando, estoy familiarizado</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="experience-freelance" value="3" {% if profile.experience == '3' %} checked
+                        {% endif %} />
+                      <span>Soy un experto y tengo mi propia cartera de
+                        clientes</span>
+                    </label>
+                  </div>
+                  <label class="disponibility-aprox">Disponibilidad aproximada de horas semanales para posible
+                    freelance</label>
+                  <select name="horas-semanales" id="weekly-hours">
+                    <option value="4" {% if profile.availability == 4 %} selected {% endif %}>2 a 4 horas semanales
+                    </option>
+                    <option value="6" {% if profile.availability == 6 %} selected {% endif %}>4 a 6 horas semanales
+                    </option>
+                    <option value="8" {% if profile.availability == 8 %} selected {% endif %}>6 a 8 horas semanales
+                    </option>
+                    <option value="10" {% if profile.availability == 10 %} selected {% endif %}>+10 horas semanales
+                    </option>
+                  </select>
+                </div>
+              </label>
+            </div>
+            <div class="profile-radio-input top-separation">
+              <label><input id="condition-radio-two" type="radio" name="condition" value="2" {% if profile.condition == "Fulltime" %} checked {%endif %} /> Soy freelance a
+                tiempo completo</label>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="profile-btn-section">
+        <button class="btn-primary" type="button" onclick="OnSecondStepClick(this)">Actualizar</button>
+      </div>
+    </form>
+    <script>
+      {% if profile.condition == "Halftime" %}
+        $(window).on("load", function() {
+          let rad = document.getElementById('condition-radio')
+          rad.click()
+        })
+      {% endif %}
+    </script>
+</section>

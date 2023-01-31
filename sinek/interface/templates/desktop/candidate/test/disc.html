@@ -1,0 +1,124 @@
+{% extends 'desktop/common/dashboard.html' %}
+
+{% block top-menu %}
+<a class="linked" href="{% url 'site:candidate:dashboard' %}">Dashboard</a>
+<div class="dropdown menu-right">
+  <button class="dropbtn">Hola, {{ candidate.name }}</button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>
+  #testDisc span {
+    display: flex;
+    justify-content: center;
+  }
+
+  #testDisc th {
+    text-align: center;
+  }
+
+  #testDisc th:first-child {
+    background-color: transparent;
+  }
+
+  #testDisc td {
+    text-align: center;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-flex-center">
+  <div class="card">
+    <div class="container-card">
+      <strong>Instrucciones:</strong> Lee las características de personalidad que se encuentran en la primera columna y marca dos características: UNA que MÁS se parezca a ti y UNA que MENOS se asemeje a ti (una por cada columna como figura en el ejemplo).
+    </div>
+  </div>
+</div>
+
+<form method="POST" action="{% url 'site:candidate:disc' %}">
+  <div class="container-flex-center">
+    {% csrf_token %} {% for question in discQuestions %}
+
+    <div class="card">
+      <table id="testDisc" class="table">
+        <thead>
+          <tr>
+            <th>{{ question.number }}</th>
+            <th>Más</th>
+            <th>Menos</th>
+          </tr>
+        </thead>
+        <tbody id="testDiscQuestions">
+          {% for enum, answer in question.enumeratedAnswers %}
+          <tr>
+            <td>{{ answer }}</td>
+            <td>
+              <span
+                ><input
+                  id="radio1_{{ enum }}_{{ question.number }}"
+                  type="radio"
+                  name="answer_{{ question.number }}_plus"
+                  value="{{ enum }}"
+                  onchange="process(this)"
+              /></span>
+            </td>
+            <td>
+              <span
+                ><input
+                  id="radio2_{{ enum }}_{{ question.number }}"
+                  type="radio"
+                  name="answer_{{ question.number }}_minus"
+                  value="{{ enum }}"
+              /></span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="container-flex-center">
+    <button type="submit">Enviar</button>
+  </div>
+</form>
+
+{% if form.errors %}
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <img
+        src="https://www.freeiconspng.com/uploads/red-circular-image-error-0.png"
+        width="100"
+        alt="Success"
+      />
+      <span class="close">×</span>
+    </div>
+    <div class="modal-body">
+      <h4>¡Hay un error!</h4>
+      <p>Vuelve a completar.</p>
+    </div>
+  </div>
+</div>
+{% endif %}
+<script>
+  var modal = document.getElementById("myModal");
+  var btn = document.getElementById("myBtn");
+  var span = document.getElementsByClassName("close")[0];
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+</script>
+{% endblock %}

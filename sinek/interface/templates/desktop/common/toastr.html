@@ -1,0 +1,86 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script>
+  toastr.options.closeButton = true;
+  toastr.options.showMethod = 'slideDown';
+</script>
+
+<style>
+  .toast-success{
+    border: 2px solid #00B9AB;
+    box-shadow: none;
+  }
+
+  .toast-error{
+    border: 2px solid var(--bs-danger);
+    box-shadow: none;
+  }
+
+  .toast-warning{
+    border: 2px solid var(--bs-warning);
+    box-shadow: none;
+  }
+
+  .toast-info{
+    border: 2px solid var(--bs-info);
+    box-shadow: none;
+  }
+
+  #toast-container > div {
+    padding: 0;
+    width: auto !important;
+    color: black;
+    opacity: 1;
+  }
+
+  .toast-title{
+    padding: 10px 50px 5px 15px;
+    background-color: white;
+    padding: 10px 50px 5px 15px;
+  }
+
+  .toast-success .toast-title {
+    color: #00B9AB;
+  }
+  .toast-error .toast-title {
+    color: var(--bs-danger);
+  }
+  .toast-info .toast-title {
+    color: var(--bs-info);
+  }
+
+  .toast-message{
+    background-color: var(--bs-body-bg);
+    padding: 5px 50px 10px 15px;
+  }
+
+  .toast-close-button {
+    top: 0em;
+    left: -0.2em;
+    font-size: 40px;
+    font-weight: lighter;
+    -webkit-text-shadow: 0 0px 0 gray;
+    text-shadow: 0 0px 0 gray;
+  }
+  .toast-close-button:hover{
+    box-shadow: none;
+  }
+
+  .toast-success .toast-close-button {
+    color: #00B9AB !important;
+  }
+  .toast-error .toast-close-button {
+    color: var(--bs-danger) !important;
+  }
+
+  #toast-container > div {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  #toast-container > div:hover {
+    -moz-box-shadow: 0 0 12px #999999;
+    -webkit-box-shadow: 0 0 12px #999999;
+    box-shadow: 0 0 12px #999999;
+  }
+</style>

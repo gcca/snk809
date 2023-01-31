@@ -1,0 +1,58 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neom_webtools %}
+{% load i18n %}
+<style>
+main {
+  display: flex;
+  justify-content: center;
+}
+
+#{% _kt 'container' %} {
+  width: 800px;
+}
+
+#{% _kt 'stephead' %} {
+  width: 100%;
+}
+
+#{% _kt 'stephead-left' %} {
+  width: 85%;
+  display: inline-block;
+}
+
+#{% _kt 'stephead-right' %} {
+  width: 15%;
+}
+
+#{% _kt 'stephead-left' %} h1{
+  font-size: 14pt;
+}
+
+#{% _kt 'stephead-left' %} h2{
+  font-size: 10pt;
+}
+</style>
+<header>
+  Neómadas
+</header>
+<hr/>
+<main>
+  <div id={% _kt 'container' %}>
+    <section id="{% _kt 'stephead' %}">
+      <span id="{% _kt 'stephead-left' %}">
+        <h1>{% block stephead-title %}{% endblock %}</h1>
+        <h2>{% block stephead-subtitle %}{% endblock %}</h2>
+      </span>
+      <span id="{% _kt 'stephead-right' %}">
+        {% block stephead-count %}{% endblock %}
+      </span>
+    </section>
+    <section>
+      <form method="post"{% block form-mems %}{% endblock %}>{% csrf_token %}
+        <hr/>{% block stepform-body %}{% endblock %}<hr/>
+        <input type="submit" value="{% translate 'Previous' %}"/>
+        <input type="submit" value="{% translate 'Next' %}"/>
+      </form>
+    </section>
+  </div>
+</main>

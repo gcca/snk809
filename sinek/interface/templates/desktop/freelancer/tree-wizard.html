@@ -1,0 +1,84 @@
+{% if node.isKnowledge %}
+	<li><div id="knowledge-line-{{ node.key }}" class="knowledge-line {% if node.isPremarked %}pre-marked{% endif %}" >
+		<input type="checkbox" id="{{ node.code }}-box" {% if node.isScoredOrPremarked %} checked {% endif %} disabled>
+		<label id="{{ node.code }}"
+			{% if node.isScoredOrPremarked %}
+				{% if node.isPremarked %}
+					class="scored pre-marked" style="background:none;"
+				{% else %}
+					class='scored'
+				{% endif %}
+			{% else %}
+				class="no-scored"
+			{% endif %}>{{ node.name }}:</label>
+		<ul class="knowledge-options">
+			<form>
+
+			<li>
+				<input type="hidden" name="knowledge-key-{{ node.key }}" value="{{ node.key }}"/>
+				<input type="hidden" name="knowledge-name-{{ node.key }}" value="{{ node.name }}"/>
+				<input type="hidden" name="current-score-{{ node.key }}" value="{{ node.score }}"/>
+				<input type="radio" name="new-score-{{ node.key }}" value="1" id="{{ node.key }}-score1"
+					onclick="OnKnowledgeClick(this, '{{ node.key }}', '{{ node.name }}', '{{ node.code }}' )"
+					{% if node.isBeginner %}checked{% endif %}/>
+				<label for="{{ node.key }}-score1"> <span id="{{ node.key }}-emote1"
+					{% if node.isBeginner %}class="input-knowledge scored"
+					{% else %}class="input-knowledge"{% endif %}>±1 <br> año</span></label>
+			</li>
+
+			<li>
+				<input type="radio" name="new-score-{{ node.key }}" value="2" id="{{ node.key }}-score2"
+				onclick="OnKnowledgeClick(this, '{{ node.key }}', '{{ node.name }}', '{{ node.code }}' )"
+					{% if node.isJunior %}checked{% endif %}/>
+				<label for="{{ node.key }}-score2"> <span id="{{ node.key }}-emote2"
+					{% if node.isJunior %}class="input-knowledge scored"
+					{% else %}class="input-knowledge"{% endif %}>+2 <br> años</span></label>
+			</li>
+
+			<li>
+				<input type="radio" name="new-score-{{ node.key }}" value="3" id="{{ node.key }}-score3"
+				onclick="OnKnowledgeClick(this, '{{ node.key }}', '{{ node.name }}', '{{ node.code }}' )"
+					{% if node.isMiddle %}checked{% endif %}/>
+				<label for="{{ node.key }}-score3"> <span id="{{ node.key }}-emote3"
+					{% if node.isMiddle %}class="input-knowledge scored"
+					{% else %}class="input-knowledge"{% endif %}>+3 <br> años</span></label>
+			</li>
+
+			<li>
+				<input type="radio" name="new-score-{{ node.key }}" value="4" id="{{ node.key }}-score4"
+				onclick="OnKnowledgeClick(this, '{{ node.key }}', '{{ node.name }}', '{{ node.code }}' )"
+					{% if node.isSenior %}checked{% endif %}/>
+				<label for="{{ node.key }}-score4"> <span id="{{ node.key }}-emote4"
+					{% if node.isSenior %}class="input-knowledge scored"
+					{% else %}class="input-knowledge"{% endif %}>+4 <br> años</span></label>
+			</li>
+			{% if node.isPremarked %}
+			<li id="{{node.key}}-pre-marked-li" class="trash-icon-container">
+				<input type="radio" name="new-score-{{ node.key }}" value="-1" id="{{ node.key }}-score-1"
+				onclick="OnKnowledgeClick(this, '{{ node.key }}', '{{ node.name }}', '{{ node.code }}' )"
+				/>
+				<label for="{{ node.key }}-score-1"> <img title="Remover sugerencia" id="{{ node.key }}-emote-1"
+					class="input-trash" src="{{ imgs.TRASH_ICON }}" /></label>
+			</li>
+			{% endif %}
+			</form>
+		</ul>
+
+	</div></li>
+{% else %}
+	<li class="line-group">
+		<input type="checkbox" {% if node.hasScoredOrPremarkedChild %}class="selector-open" {% else %}class="selector-close"{% endif %} id={{ node.GetId }}>
+		<input type="checkbox" class="group-checkbox" id="{{ node.code }}-box" disabled
+			{% if node.hasScoredOrPremarkedChild %} checked {% endif %}>
+		<label for={{ node.GetId }} id="{{ node.code }}"
+			{% if node.hasScoredOrPremarkedChild %} class="group-name scored"
+			{% else %} class="group-name no-scored" {% endif %}>
+			{{ node.name }}{% if node.hasPremarkedChild %}<span class="pre-marked-indicator">*</span>{% endif %}
+		</label>
+		<ul {% if not node.hasScoredOrPremarkedChild %}class="interior"{% endif %}>
+			{% for child in node.children %}
+				{% include "desktop/freelancer/tree-wizard.html" with node=child %}
+			{% endfor %}
+		</ul>
+	</li>
+ {% endif %}

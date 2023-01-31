@@ -1,0 +1,172 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% load neom_webtools %}
+{% load neodash_nav %}
+<style>{% include 'neodash/layout/nav.css' %}</style>
+{% neodash_nav %}
+{% neodash_nav_item 'neodash:home' '🏠' %}
+{% neodash_nav_item 'onboard:dashboard' 'Onboard' %}
+{% neodash_nav_item 'onboard:applicant:dashboard' 'Candidatos' %}
+{% neodash_nav_item 'onboard:applicant:list' 'Lista' %}
+{% neodash_nav_item 'onboard:applicant:detail' 'Candidato' applicant_id=object.onboard.applicant.id %}
+{% neodash_nav_mark 'Instrucciones Complejas' %}
+{% end_neodash_nav %}
+<h1>Respuestas del Test de Instrucciones Complejas: {{ object.applicant.name }}</h1>
+<h3>Cantidad de respuesta incorrectas: {{ object.LabeledScore.0 }} - Resultado: {{ object.LabeledScore.1 }}</h3>
+<table>
+  <tr>
+    <th>Q</th>
+    <th>A</th>
+    <th>B</th>
+    <th>C</th>
+  </tr>
+  <tr>
+    <td>1. 3000 soles | Incendios | 2 de enero de 1976</td>
+    <td>{% if object.q1.0 %}✅{% else %}🔲{% endif %}</td>
+    <td>{% if object.q1.1 %}✅{% else %}🔲{% endif %}</td>
+    <td>{% if object.q1.2 %}✅{% else %}🔲{% endif %}</td>
+  </tr>
+    <tr>
+        <td>2. 1000 soles | Vida | 22 de octubre de 1975</td>
+        <td>{% if object.q2.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q2.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q2.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>3. 4000 soles | Accidentes | 14 de setiembre 1975</td>
+        <td>{% if object.q3.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q3.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q3.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>4. 2000 soles | Vida | 13 de noviembre de 1976</td>
+        <td>{% if object.q4.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q4.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q4.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>5. 4000 soles | Incendios | 17 de mayo de 1976</td>
+        <td>{% if object.q5.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q5.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q5.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>6. 3000 soles | Accidentes | 12 de octubre de 1975</td>
+        <td>{% if object.q6.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q6.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q6.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>7. 5000 soles | Vida | 16 de febrero de 1976</td>
+        <td>{% if object.q7.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q7.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q7.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>8. 1000 soles | Incendios | 03 de agosto de 1976</td>
+        <td>{% if object.q8.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q8.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q8.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>9. 4000 soles | Incendios | 11 de agosto de 1976</td>
+        <td>{% if object.q9.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q9.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q9.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>10. 2000 soles | Accidentes | 21 de mayo de 1975</td>
+        <td>{% if object.q10.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q10.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q10.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>11. 5000 soles | Vida | 09 de marzo de 1975</td>
+        <td>{% if object.q11.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q11.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q11.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>12. 3000 soles | Incendios | 17 de julio de 1976</td>
+        <td>{% if object.q12.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q12.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q12.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>13. 1000 soles | Accidentes | 04 de junio de 1976</td>
+        <td>{% if object.q13.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q13.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q13.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>14. 1000 soles | Vida | 23 de noviembre de 1976</td>
+        <td>{% if object.q14.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q14.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q14.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>15. 5000 soles | Vida | 18 de abril de 1975</td>
+        <td>{% if object.q15.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q15.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q15.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>16. 2000 soles | Accidentes | 24 de diciembre de 1976</td>
+        <td>{% if object.q16.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q16.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q16.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>17. 5000 soles | Accidentes | 19 de abril de 1975</td>
+        <td>{% if object.q17.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q17.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q17.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>18. 2000 soles | Vida | 07 de diciembre de 1976</td>
+        <td>{% if object.q18.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q18.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q18.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>19. 4000 soles | Incendios | 26 de mayo de 1975</td>
+        <td>{% if object.q19.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q19.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q19.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>20. 3000 soles | Accidentes | 06 de enero de 1976</td>
+        <td>{% if object.q20.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q20.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q20.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>21. 5000 soles | Vida | 29 de marzo de 1975</td>
+        <td>{% if object.q21.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q21.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q21.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>22. 3000 soles | Vida | 28 de junio de 1975</td>
+        <td>{% if object.q22.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q22.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q22.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>23. 4000 soles | Accidentes | 08 de febrero de 1976</td>
+        <td>{% if object.q23.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q23.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q23.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>24. 1000 soles | Incendios | 27 de julio de 1975</td>
+        <td>{% if object.q24.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q24.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q24.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+    <tr>
+        <td>25. 2000 soles | Accidentes | 21 de enero de 1976</td>
+        <td>{% if object.q25.0 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q25.1 %}✅{% else %}🔲{% endif %}</td>
+        <td>{% if object.q25.2 %}✅{% else %}🔲{% endif %}</td>
+    </tr>
+</table>

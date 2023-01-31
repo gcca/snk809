@@ -1,0 +1,49 @@
+.tabs {
+  position: relative;
+  clear: both;
+}
+
+.tabs .tab {
+  float: left;
+  margin-top: 11px;
+}
+
+.tabs .tab > label {
+  background-color: white;
+  color: var(--bs-secondary);
+  margin-right: 31px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 10pt;
+  cursor: pointer;
+  width: 214px;
+  text-align: center;
+}
+
+.tabs .tab > .tab-content {
+  width: 100%;
+  display: none;
+  position: absolute;
+  top: 83px;
+  left: 0;
+}
+
+.tabs .tab > input[type="radio"] {
+  display: none;
+}
+
+.tabs .tab > input[type="radio"]:checked + label {
+  background-color: var(--bs-secondary);
+  color: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+  width: 214px;
+  text-align: center;
+}
+
+.tabs .tab > input[type="radio"]:checked ~ label ~ .tab-content {
+  display: block;
+}
+
+.tab-content td {
+  padding-left: 23px;
+}

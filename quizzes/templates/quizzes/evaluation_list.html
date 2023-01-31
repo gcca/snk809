@@ -1,0 +1,14 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+
+<h1>Articles</h1>
+<ul>
+{% for evaluation in object_list %}
+  <li>
+    <a href="{% url 'quizzes:answers' evaluation.id %}">
+      {{ evaluation.freelancer.name }}
+    </a>
+  </li>
+{% empty %}
+  <li>No hay evaluaciones.</li>
+{% endfor %}
+</ul>

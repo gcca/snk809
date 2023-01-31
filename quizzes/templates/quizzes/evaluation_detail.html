@@ -1,0 +1,21 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+
+{# object = evaluation #}
+
+<h1>Freelancer {{ object.freelancer.name }}</h1>
+<ul>
+{% for answer in object.answers.all %}
+  <li>
+    <span>{{ answer.question.text }}:</span>
+    <span>
+      Más: {{ answer.as_selectAnswer.as_discSelectAnswer.mostOption.text }}
+    </span>
+    <span>&nbsp;|&nbsp;</span>
+    <span>
+      Menos: {{ answer.as_selectAnswer.as_discSelectAnswer.leastOption.text }}
+    </span>
+  </li>
+{% empty %}
+  <li>No se registraron respuestas.</li>
+{% endfor %}
+</ul>

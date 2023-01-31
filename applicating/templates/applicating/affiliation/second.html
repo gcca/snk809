@@ -1,0 +1,41 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'applicating/affiliation/base.html' %}
+{% block stephead-title %}¿Qué estás buscando?{% endblock %}
+{% block stephead-subtitle %}Lorem ipsum{% endblock %}
+{% block stephead-count %}Paso 2 de 4{% endblock %}
+{% block stepform-body %}
+{% include 'applicating/affiliation/second-fieldset.html' with legend='Software Development' fields=softwaredevelopment_fields %}
+{% include 'applicating/affiliation/second-fieldset.html' with legend='Operation Management' fields=operationmanagement_fields %}
+{% include 'applicating/affiliation/second-fieldset.html' with legend='Marketing' fields=marketing_fields %}
+{% include 'applicating/affiliation/second-fieldset.html' with legend='Management & Business Agility' fields=managementbusinessagility_fields %}
+{% include 'applicating/affiliation/second-fieldset.html' with legend='Data Management & Exploitation' fields=datamanagementexploitation_fields %}
+{% include 'applicating/affiliation/second-fieldset.html' with legend='Product & Service Design' fields=productservicedesign_fields %}
+{% include 'applicating/affiliation/second-fieldset.html' with legend='Comercial' fields=comercial_fields %}
+<fieldset>
+  <legend>Expectativas salariales</legend>
+  <div>
+    {{ form.amount_minimum.errors }}
+    {{ form.amount_minimum.label_tag }} {{ form.amount_minimum }}
+  </div>
+  <div>
+    {{ form.amount_wished.errors }}
+    {{ form.amount_wished.label_tag }} {{ form.amount_wished }}
+  </div>
+</fieldset>
+<fieldset>
+  <legend>Disponibilidad</legend>
+  <div>
+    {{ form.availability.errors }}
+    {{ form.availability.label_tag }} {{ form.availability }}
+  </div>
+</fieldset>
+<fieldset>
+  <legend>Modalidad</legend>
+  <div>
+  <div>
+    {{ form.modality.errors }}
+    {{ form.modality.label_tag }} {{ form.modality }}
+  </div>
+  </div>
+</fieldset>
+{% endblock %}

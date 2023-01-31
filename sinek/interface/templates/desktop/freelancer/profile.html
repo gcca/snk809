@@ -1,0 +1,118 @@
+{% extends 'desktop/common/dashboard.html' %}
+{% load luci_tags %}
+{% load static %}
+
+{% block top-menu %}
+<div class="dropdown menu-right">
+  <button class="dropbtn"><img src="{% static 'img/cogwheel-blue.png' %}"></button>
+  <div class="dropdown-content">
+    <a href="{% url 'site:account:signout' %}">Cerrar Sesión</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<style>{% include 'desktop/common/tags/tab.css' %}</style>
+<style>{% include 'desktop/freelancer/profile.css' %}</style>
+<style>
+.tags-field{
+  margin: 15px 0;
+}
+.ss-main .ss-multi-selected .ss-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 !important;
+}
+</style>
+{# start dependencias slim select #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.1/slimselect.min.css" rel="stylesheet" />
+{# end dependencias slim select #}
+{# Profile-wizard Start #}
+<link href="{% static 'css/profile-wizard.css' %}" rel="stylesheet" type="text/css" />
+{# Profile-wizard End #}
+
+<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+<script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+
+<script>
+//Load Overlay
+window.addEventListener('load', () => {
+  let formsWithOverlay = document.forms;
+  for (let form of formsWithOverlay) {
+    form.addEventListener('submit', () => {
+      $.LoadingOverlay('show');
+    })
+  }
+
+  let removeIconsWithOverlay = document.querySelectorAll('a.remove');
+  for (let icon of removeIconsWithOverlay) {
+    icon.addEventListener('click', () => {
+      $.LoadingOverlay('show');
+    })
+  }
+
+});
+</script>
+
+
+{% endblock %}
+
+{% block content %}
+
+<div id="pre-marked-warning" class="pre-marked-warning">
+  <img src="{{ imgs.BELL_ICON }}">
+  <div style="display: flex; flex-direction: column;">
+    <div>
+      <h4>¡Muchas gracias por confiar en nosotros!</h4>
+    </div>
+    <div>
+      Has completado tu afiliación. Muy pronto un Talent Agent de Neómadas se pondrá en contacto contigo para darte la bienvenida.
+    </div>
+  </div>
+</div>
+
+{% luci_tabs %}
+  {% luci_tab title='Mi información' id='info-tab' selected=True %}
+      {# personal #}
+      {% include 'desktop/freelancer/profile/personal.html' %}
+  {% end_luci_tab %}
+  {% luci_tab title='Mis intereses' %}
+    {% include 'desktop/freelancer/profile/interest.html' %}
+  {% end_luci_tab %}
+  {% luci_tab title='Mi experiencia' %}
+  <div class="container-sections">
+    {% comment %} <div id="left-section">
+      {# procesos #}
+      {% include 'desktop/freelancer/profile/process.html' %}
+    </div>
+    <div id="right-section"></div> {% endcomment %}
+    <div id="left-section">
+      {# curriculum #}
+      {% include 'desktop/freelancer/profile/curriculum.html' %}
+
+      {# portfolio #}
+      {% include 'desktop/freelancer/profile/portfolio.html' %}
+
+    </div>
+
+    <div id="right-section">
+       {# business #}
+       {% include 'desktop/freelancer/profile/business.html' %}
+
+       {# project #}
+       {% include 'desktop/freelancer/profile/project.html' %}
+    </div>
+  </div>
+  {% end_luci_tab %}
+  {% luci_tab title='Mis conocimientos' %}
+  <div class="container-sections">
+    {% include 'desktop/freelancer/profile/knowledge.html' %}
+  </div>
+  {% end_luci_tab %}
+{% end_luci_tabs %}
+{% endblock %}

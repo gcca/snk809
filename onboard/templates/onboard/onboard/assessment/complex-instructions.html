@@ -1,0 +1,89 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/onboard/assessment/base.html' %}
+
+{% load neom_webtools %}
+
+{% block extra-head %}
+<style>
+table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    min-width: 800px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    text-align: left;
+}
+
+table thead tr {
+    background-color: #A9A9A9;
+    color: black;
+    font-weight: bold;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+    border-bottom: 2px solid #A9A9A9;
+}
+
+pre {
+    font-size: 1em;
+    font-family: Courier;
+}
+</style>
+{% endblock %}
+
+{% block assessment-instructions %}
+<p>
+    ¡Felicidades por seguir avanzando en el proceso de selección! Lo que continúa es realizar esta evaluación que nos permite medir el cómo te llevas con las instrucciones complejas. Para ello te pedimos que leas las instrucciones con detenimiento.
+</p>
+<p>
+    Tiempo: <b>Tienes 8 minutos para resolver este test</b>
+</p>
+<ul>
+    <li>Marque la columna 1, a la altura de cada seguro de incendios o de accidentes desde 1.500 a 4.000 soles, contratado entre el 15 de marzo de 1975 y el 10 de mayo de 1976.</li>
+    <li>Marque la columna 2, a la altura de cada seguro de vida o de accidentes, hasta 3.000 soles, contratado entre el 15 de octubre de 1975 y el 20 de agosto de 1976.</li>
+    <li>Marque la columna 3, a la altura de cada seguro de incendios o de vida, desde 2.000 a 5.000 soles. contratado entre el 10 de febrero de 1975 y el 15 de junio de 1976.</li>
+</ul>
+{% endblock %}
+
+{% block assessment-form %}
+<table>
+    <thead>
+        <tr>
+            <th>CANTIDAD ASEGURADA</th>
+            <th>CLASE DE SEGURO</th>
+            <th>FECHA</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for field in form %}
+        {% with field.field as field_data %}
+        <tr>
+            <td>{{ field_data.amount }} soles</td>
+            <td>{{ field_data.kind }}</td>
+            <td><pre>{{ field_data.day|ljust:"2" }} {{ field_data.month|ljust:"12" }} {{ field_data.year }}</pre></td>
+            <td>{{ field.0 }}</td>
+            <td>{{ field.1 }}</td>
+            <td>{{ field.2 }}</td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

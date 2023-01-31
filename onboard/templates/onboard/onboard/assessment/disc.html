@@ -1,0 +1,76 @@
+{# Copyright Snk809, Inc. All rights reserved. #}
+{% extends 'onboard/onboard/assessment/base.html' %}
+
+{% load neom_webtools %}
+
+{% block extra-head %}
+
+<script>
+  function {% _kt preventSelection %}(radio) {
+    radio.checked = false;
+  }
+</script>
+
+<style>
+{% include 'onboard/forms/widgets/disc_input.css' %}
+#{% _kt 'assessment-form-id' %} > div {
+  border: 1px solid grey;
+  margin-bottom: 1ex;
+  padding: 1ex;
+}
+
+#{% _kt 'assessment-form-id' %} label {
+  display: block;
+  padding-top: 5ex;
+}
+
+#{% _kt 'assessment-form-id' %} label:nth-of-type(1) {
+  display: inline;
+}
+</style>
+{% endblock %}
+
+{% block assessment-instructions %}
+<p>
+  ¡Felicidades por seguir avanzando en el proceso de selección!, lo que continúa es realizar este test de personalidad. Recuerda que no hay respuestas buenas ni malas, nuestro propósito es conocerte un poco más.
+</p>
+<p>
+  Cada bloque tiene cuatro características de una persona, tienes que marcar dos: UNA que MÁS se parezca a ti y UNA que MENOS se asemeje a ti. Como en el siguiente ejemplo:
+</p>
+<table class="{% _kt 'disc-input-table' %}" style="margin-left:auto;margin-right:auto;">
+  <tbody><tr>
+    <th></th>
+    <th>Menos</th>
+    <th>Más</th>
+  </tr>
+
+    <tr>
+      <td>Amarillo</td>
+      <td><input type="radio" checked></td>
+      <td><input type="radio" onclick="{% _kt preventSelection %}(this)"></td>
+    </tr>
+
+    <tr>
+      <td>Rojo</td>
+      <td><input type="radio" onclick="{% _kt preventSelection %}(this)"></td>
+      <td><input type="radio" onclick="{% _kt preventSelection %}(this)"></td>
+    </tr>
+
+    <tr>
+      <td>Verde</td>
+      <td><input type="radio" onclick="{% _kt preventSelection %}(this)"></td>
+      <td><input type="radio" checked></td>
+    </tr>
+
+    <tr>
+      <td>Azul</td>
+      <td><input type="radio" onclick="{% _kt preventSelection %}(this)"></td>
+      <td><input type="radio" onclick="{% _kt preventSelection %}(this)"></td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
+
+{% block assessment-form %}
+{{ form }}
+{% endblock %}

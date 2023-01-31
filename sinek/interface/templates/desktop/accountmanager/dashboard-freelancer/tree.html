@@ -1,0 +1,39 @@
+{% if node.isKnowledge %}
+	<li {% if  not node.scored %} style="display: none;" {% endif %}><div class="two-rows" >
+		<input type="checkbox" id="{{ node.code }}-box" {% if node.count != 0 %} checked {% endif %} disabled>
+		<label id="{{ node.code }}" {% if node.count != 0 %} class="scored" {% endif %}>{{ node.name }}:</label>
+		<div class="dropdown-count-tree">
+		<span class="chip chip-interactive dropbtn-count-tree" onclick="toggleFreelancers('{{node.code}}')" style="background-color:var(--bs-secondary);"><span class="chip-content">
+			<p class="dropbtn-text" style="color:white; font-weight: bold; margin-top: none; margin-bottom: none !important;">
+			{{ node.count }} profesionales</p>
+		</span></span>
+
+			<div id="{{ node.code }}-dropdown" class="dropdown-content-count-tree">
+				{% for freelancer in node.freelancers %}
+					<a href="{% url 'site:accountmanager:freelancer-info' freelancer.id %}" target="_blank"
+						class="{{ node.code }}-item">{{ freelancer.name }}</a>
+				{% endfor %}
+			</div>
+		</div>
+
+	</div></li>
+{% else %}
+	<li class="line-group" {% if not node.scored %} style="display: none;" {% endif %}>
+		<input type="checkbox" class="selector" id={{ node.GetId }} {% if node.scored %} checked {% endif %}>
+		<input type="checkbox" class="group-checkbox" id="{{ node.code }}-box" disabled
+			{% if node.hasScoredChild %} checked {% endif %}>
+		<label for={{ node.GetId }} id="{{ node.code }}"
+			{% if node.hasScoredChild %} class="group-name scored "
+			{% else %} class="group-name" {% endif %}>{{ node.name }}</label>
+
+			<span class="chip dropbtn-count-tree" style="background-color:white;"><span class="chip-content">
+				<p style="color:var(--bs-secondary);">{{ node.count }} profesionales</p>
+			</span></span>
+
+		<ul class="interior">
+			{% for child in node.children %}
+				  {% include "desktop/accountmanager/dashboard-freelancer/tree.html" with node=child %}
+			{% endfor %}
+		</ul>
+	</li>
+ {% endif %}

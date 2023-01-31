@@ -1,0 +1,32 @@
+# Copyright Snk809, Inc. All rights reserved.
+# NEODASH TRANSLATIONS.
+# Copyright (C) 2023
+# This file is distributed under the same license as the neompy package.
+# CRISTHIAN GONZALES <CRISTHIAN.GONZALES@NEOMADAS.COM>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-24 20:57+0000\n"
+"PO-Revision-Date: 2022-11-11 17:56+0000\n"
+"Last-Translator: CRISTHIAN GONZALES <CRISTHIAN.GONZALES@NEOMADAS.COM>\n"
+"Language-Team: Snk809 <service@neomadas.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Translators: Este texto aparecen en el board del candidato
+#: onboard/forms.py:15
+msgid "Applicant resume"
+msgstr "CV del Candidato"
+
+#: onboard/models.py:52
+#, python-format
+msgid ""
+"%(value)s has a not allowed query string. Please write this with this "
+"structure: https://docs.google.com/forms/d/e/string_code/viewform"
+msgstr ""
